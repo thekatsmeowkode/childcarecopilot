@@ -1,0 +1,2 @@
+Database rationale
+Depending on relationship types, data access patterns, and data conhesion, I will decide how to implement the data model.  This means I will decide to normalize or denormalize the data.
