@@ -17,6 +17,17 @@ connectToDb((err) => {
 
 // routes
 app.get('/students', (req, res) => {
-    res.json({messg: "Welcome to the api!"})
+    let students = []
+
+    db.collection('students')
+        .find()
+        .sort({ name: 1})
+        .forEach(student => students.push(student))
+        .then(() => {
+            res.status(200).json(students)
+        })
+        .catch(() => {
+            res.status(500).json({error: "Could not fetch the documents."})
+        })
 })
 
