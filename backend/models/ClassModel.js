@@ -14,7 +14,7 @@ const classSchema = new Schema(
 }, {timeStamp: true}
 )
 
-module.exports = mongoose.model('Class', classSchema)
+module.exports = mongoose.model('Classroom', classSchema)
 
 // {
 //     name: {

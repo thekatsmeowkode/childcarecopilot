@@ -1,4 +1,5 @@
 const express = require('express')
+const Classroom = require('../models/ClassModel')
 
 const router = express.Router()
 
@@ -13,7 +14,15 @@ router.get('/:id', (req, res) => {
 })
 
 // POST a class
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
+    const {roomName, students} = req.body
+    try {
+        const classroom = await Classroom.create({roomName, students})
+        res.status(200).json(classroom)
+    }
+    catch (error) {
+        res.status(400).json({error: error.message})
+    }
     res.json({mssg: 'POST a new workout'})
 })
 
