@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 //components
 import ClassroomDetails from '../components/ClassroomDetails'
+import ClassForm from '../components/ClassForm'
 
 const Home = () => {
     const [classrooms, setClassrooms] = useState(null)
@@ -26,6 +27,7 @@ const Home = () => {
                     <ClassroomDetails key={classroom._id} classroom={classroom}/>
                 ))}
             </div>
+            <ClassForm></ClassForm>
         </div>
     )
 }
