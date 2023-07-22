@@ -19,9 +19,15 @@ app.use('/api/classes', classRoutes)
 
 //connect to db
 mongoose.connect(process.env.CONNECTION)
-
-//listen for requests
-app.listen(process.env.PORT, () => {
+    .then(() => {
+    //listen for requests
+    app.listen(process.env.PORT, () => {
     console.log('listening on port 4000')
 })
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+
+
 
