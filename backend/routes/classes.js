@@ -4,6 +4,8 @@ const {
   createClassroom,
   getClassrooms,
   getClassroom,
+  updateClassroom,
+  deleteClassroom,
 } = require("../controllers/classController");
 
 const router = express.Router();
@@ -11,20 +13,16 @@ const router = express.Router();
 // GET all classes
 router.get("/", getClassrooms);
 
-// GET a single workout
+// GET a single class
 router.get("/:id", getClassroom);
 
 // POST a class
 router.post("/", createClassroom);
 
 // DELETE a class
-router.delete("/:id", (req, res) => {
-  res.json({ mssg: "DELETE a new workout" });
-});
+router.delete("/:id", deleteClassroom);
 
 // UPDATE PATCH a class
-router.patch("/:id", (req, res) => {
-  res.json({ mssg: "UPDATE a new workout" });
-});
+router.patch("/:id", updateClassroom);
 
 module.exports = router;
