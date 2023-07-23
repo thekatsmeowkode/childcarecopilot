@@ -1,3 +1,4 @@
+const { ObjectId } = require("bson");
 const Classroom = require("../models/ClassModel");
 const mongoose = require("mongoose");
 
@@ -35,14 +36,16 @@ const getClassroom = async (req, res) => {
 const createClassroom = async (req, res) => {
   const { roomName, students } = req.body;
   //error handling logic to make UI better for user
-  let nullFields = []
+  let nullFields = [];
 
   if (!roomName) {
-    nullFields.push('roomName')
+    nullFields.push("roomName");
   }
 
   if (nullFields.length > 0) {
-    return res.status(400).json({error: 'Please fill in all fields', nullFields})
+    return res
+      .status(400)
+      .json({ error: "Please fill in all fields", nullFields });
   }
 
   // add doc to db
@@ -91,59 +94,71 @@ const updateClassroom = async (req, res) => {
   res.status(200).json(classroom);
 };
 
-
-
-
 //UPDATE student from class
 const updateStudent = async (req, res) => {
-    const {classId, studentId} = req.params
-    const {fieldToChange, newData} = req.body
+  const { classId, studentId } = req.params;
+  const { name, birthdate, allergies, programs, phone } = req.body;
 
-    checkIdValidity(classId)
-    try {
-    const classroom = await Classroom.findOne({_id: classId})
+  checkIdValidity(classId);
+  try {
+    const classroom = await Classroom.findOne({ _id: classId });
 
     if (!classroom) {
-        return res.status(400).json({error: 'Class id does not exist'})
+      return res.status(400).json({ error: "Class id does not exist" });
     }
     // find student in class's student array
-    const studentIndex = classroom.students.findIndex((student) => student._id.toString() === studentId)
+    const studentIndex = classroom.students.findIndex(
+      (student) => student.id && student.id.toString() === studentId.toString()
+    );
     //check if student exists
     if (studentIndex === -1) {
-        return res.status(404).json({error: 'Student not found'})
+      return res.status(404).json({ error: "Student not found" });
     }
 
-    classroom.students[studentIndex].fieldToChange = newData
-    await classroom.save()
-    return res.status(200).json(classroom)
-}
-    catch (error) {
-        res.status(500).json({error: 'Internal server error'})
-    }
-}
+    classroom.students[studentIndex].name = name
+    classroom.students[studentIndex].birthdate = birthdate
+    classroom.students[studentIndex].allergies = allergies
+    classroom.students[studentIndex].programs = programs
+    classroom.students[studentIndex].phone = phone
+
+    await classroom.save();
+    return res.status(200).json(classroom);
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: "Internal server error"});
+  }
+};
 
 //Add student to class
 const addStudent = async (req, res) => {
-    const {classId} = req.params;
-    const {name, birthdate, phone, allergies, programs} = req.body
-    try {
-        const classroom = await Classroom.findOne({_id: classId})
+  const { classId } = req.params;
+  const { name, birthdate, phone, allergies, programs } = req.body;
+  try {
+    const classroom = await Classroom.findOne({ _id: classId });
 
-        if (!classroom) {
-            return res.status(404).json({ error: 'Classroom not found'})
-        }
-
-        const newStudent = {
-            name, birthdate, phone, allergies, programs
-        }
-
-        classroom.students.push(newStudent)
-        await classroom.save()
-        return res.json(classroom)
+    if (!classroom) {
+      return res.status(404).json({ error: "Classroom not found" });
     }
-    catch (error) {
-        res.status(500).json({error: 'Internal server error'})
-    }
+
+    const newStudent = {
+      id: new ObjectId(),
+      name,
+      birthdate,
+      phone,
+      allergies,
+      programs,
+    };
+
+    classroom.students.push(newStudent);
+    await classroom.save();
+    return res.json(classroom);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const deleteStudent = async (req, res) => {
+    
 }
 
 module.exports = {
@@ -153,5 +168,5 @@ module.exports = {
   deleteClassroom,
   updateClassroom,
   updateStudent,
-  addStudent
+  addStudent,
 };
