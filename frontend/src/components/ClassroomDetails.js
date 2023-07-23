@@ -19,7 +19,7 @@ const ClassroomDetails = ({classroom}) => {
         <div className="classroom-details">
             <h4>{classroom.roomName}</h4>
             {classroom.students.map((student) => (<p>{student.name}</p>))}
-            <span onClick= {handleClick}>delete</span>
+            <span onClick= {handleClick} className='material-symbols-outlined'>delete</span>
         </div>
     )
 }
