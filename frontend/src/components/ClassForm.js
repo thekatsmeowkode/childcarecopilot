@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useClassroomContext } from '../hooks/useClassroomContext'
 
 const ClassForm = () => {
+    const {dispatch} = useClassroomContext()
     const [roomName, setRoomName] = useState('')
     const [students, setStudents] = useState([])
     const [error, setError] = useState(null)
@@ -23,6 +25,7 @@ const ClassForm = () => {
             setRoomName('')
             setError(null)
             console.log('new class added')
+            dispatch({type:'CREATE_CLASSROOM', payload: json})
         }
     }
 

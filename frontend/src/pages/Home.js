@@ -1,35 +1,38 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from "react";
+import { useClassroomContext } from "../hooks/useClassroomContext";
+
 //components
-import ClassroomDetails from '../components/ClassroomDetails'
-import ClassForm from '../components/ClassForm'
+import ClassroomDetails from "../components/ClassroomDetails";
+import ClassForm from "../components/ClassForm";
 
 const Home = () => {
-    const [classrooms, setClassrooms] = useState(null)
+  const { classrooms, dispatch } = useClassroomContext();
 
-    useEffect(() => {
-        const fetchClass = async () => {
-            //in production this needs to be changed to correct endpoint
-            const response = await fetch('/api/classes')
-            const json = await response.json()
+  useEffect(() => {
+    const fetchClass = async () => {
+      //in production this needs to be changed to correct endpoint
+      const response = await fetch("/api/classes");
+      const json = await response.json();
 
-            if (response.ok) {
-                setClassrooms(json)
-            }
-        }
+      if (response.ok) {
+        dispatch({ type: "SET_CLASSROOMS", payload: json });
+      }
+    };
 
-        fetchClass()
-    }, [])
+    fetchClass();
+  }, [dispatch]);
 
-    return (
-        <div className="home">
-            <div className='classrooms'>
-                {classrooms && classrooms.map((classroom) => (
-                    <ClassroomDetails key={classroom._id} classroom={classroom}/>
-                ))}
-            </div>
-            <ClassForm></ClassForm>
-        </div>
-    )
-}
+  return (
+    <div className="home">
+      <div className="classrooms">
+        {classrooms &&
+          classrooms.map((classroom) => (
+            <ClassroomDetails key={classroom._id} classroom={classroom} />
+          ))}
+      </div>
+      <ClassForm></ClassForm>
+    </div>
+  );
+};
 
-export default Home
+export default Home;
