@@ -8,7 +8,8 @@ const {
   deleteClassroom,
   updateStudent,
   addStudent,
-  deleteStudent
+  deleteStudent,
+  getStudent
 } = require("../controllers/classController");
 
 const router = express.Router();
@@ -36,5 +37,8 @@ router.post('/:classId/students', addStudent)
 
 //DELETE a student in a class
 router.delete('/:classId/students/:studentId', deleteStudent)
+
+//GET one student
+router.get('/:classId/students/:studentId', getStudent)
 
 module.exports = router;

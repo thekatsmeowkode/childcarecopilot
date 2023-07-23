@@ -115,17 +115,17 @@ const updateStudent = async (req, res) => {
       return res.status(404).json({ error: "Student not found" });
     }
 
-    classroom.students[studentIndex].name = name
-    classroom.students[studentIndex].birthdate = birthdate
-    classroom.students[studentIndex].allergies = allergies
-    classroom.students[studentIndex].programs = programs
-    classroom.students[studentIndex].phone = phone
+    classroom.students[studentIndex].name = name;
+    classroom.students[studentIndex].birthdate = birthdate;
+    classroom.students[studentIndex].allergies = allergies;
+    classroom.students[studentIndex].programs = programs;
+    classroom.students[studentIndex].phone = phone;
 
     await classroom.save();
     return res.status(200).json(classroom);
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: "Internal server error"});
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -158,8 +158,53 @@ const addStudent = async (req, res) => {
 };
 
 const deleteStudent = async (req, res) => {
-    
-}
+  const { classId, studentId } = req.params;
+  try {
+    const classroom = await Classroom.findOne({ _id: classId });
+
+    if (!classroom) {
+      return res.status(404).json({ error: "Class not found" });
+    }
+
+    const studentIndex = classroom.students.findIndex(
+      (student) => student.id && student.id.toString() === studentId
+    );
+    if (studentIndex === -1) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    classroom.students.splice(studentIndex, 1);
+
+    await classroom.save();
+    return res.status(200).json(classroom);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getStudent = async (req, res) => {
+  const { classId, studentId } = req.params;
+  try {
+    const classroom = Classroom.findOne({ _id: classId });
+
+    if (!classroom) {
+      res.status(400).json({ error: "Classroom does not exist" });
+    }
+
+    const studentIndex = classroom.students.findIndex(
+      (student) => studentId && student.id.toString() === studentId
+    );
+    if (studentIndex === -1) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    return res.status(200).json(classroom[studentIndex]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 module.exports = {
   createClassroom,
@@ -169,4 +214,6 @@ module.exports = {
   updateClassroom,
   updateStudent,
   addStudent,
+  deleteStudent,
+  getStudent,
 };
