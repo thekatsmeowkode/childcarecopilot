@@ -124,7 +124,26 @@ const updateStudent = async (req, res) => {
 
 //Add student to class
 const addStudent = async (req, res) => {
+    const {classID} = req.params;
+    const {name, birthdate, phone, allergies, programs} = req.body
+    try {
+        const classroom = await Classroom.findOne({_id: classId})
 
+        if (!classroom) {
+            return res.status(404).json({ error: 'Classroom not found'})
+        }
+
+        const newStudent = {
+            name, birthdate, phone, allergies, programs
+        }
+
+        classroom.students.push(newStudent)
+        await classroom.save()
+        return res.json(classroom)
+    }
+    catch (error) {
+        res.status(500).json({error: 'Internal server error'})
+    }
 }
 
 module.exports = {
