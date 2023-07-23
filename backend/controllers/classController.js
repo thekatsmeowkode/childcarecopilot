@@ -124,7 +124,7 @@ const updateStudent = async (req, res) => {
 
 //Add student to class
 const addStudent = async (req, res) => {
-    const {classID} = req.params;
+    const {classId} = req.params;
     const {name, birthdate, phone, allergies, programs} = req.body
     try {
         const classroom = await Classroom.findOne({_id: classId})

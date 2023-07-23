@@ -31,7 +31,7 @@ router.patch("/:id", updateClassroom);
 router.put('/:classId/students/:studentId', updateStudent)
 
 //POST a student to a class
-router.put('/:classId/students', addStudent)
+router.post('/:classId/students', addStudent)
 
 
 module.exports = router;
