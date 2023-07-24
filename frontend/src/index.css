@@ -37,7 +37,7 @@ header a {
 .home {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
-  gap: 100px;
+  gap: 1rem;
 }
 
 .classroom-details {
@@ -104,4 +104,16 @@ div.error {
 
 input.error {
   border: 1px solid var(--error);
+}
+
+.students-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(1fr, 2fr));
+  gap: .25rem;
+}
+
+.student-details {
+  background-color:#f0f0f0;
+  padding:20px;
+  border:1px solid #ccc;
 }

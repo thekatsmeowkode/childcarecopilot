@@ -10,7 +10,7 @@ const StudentForm = () => {
   const [phone, setPhone] = useState("");
   //   const [programs, setPrograms] = useState("");
   const [error, setError] = useState(null);
-//   const [nullFields, setNullFields] = useState([]);
+  //   const [nullFields, setNullFields] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,12 +23,14 @@ const StudentForm = () => {
 
     const classroomJson = await allClassroomsResponse.json();
 
-    const classroom = classroomJson.find((classroom) => classroom.roomName === student.classroomName)
-    const classroomId = classroom._id.toString()
-    
+    const classroom = classroomJson.find(
+      (classroom) => classroom.roomName === student.classroomName
+    );
+    const classroomId = classroom._id.toString();
+
     if (!classroomId) {
-        console.log("Classroom not found")
-        return
+      console.log("Classroom not found");
+      return;
     }
     //this post response returns complete json of the updated classroom {_id:3423, roomName: infants, students:[{}{}]
     const response = await fetch("/api/classes/" + classroomId + "/students", {
@@ -40,7 +42,7 @@ const StudentForm = () => {
 
     if (!response.ok) {
       setError(json.error);
-    //   setNullFields(json.nullFields);
+      //   setNullFields(json.nullFields);
     }
     if (response.ok) {
       setName("");
@@ -49,7 +51,7 @@ const StudentForm = () => {
       setPhone("");
       setClassroomName("");
       setError(null);
-    //   setNullFields([]);
+      //   setNullFields([]);
       console.log("new student added");
       dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: json });
     }
@@ -77,7 +79,9 @@ const StudentForm = () => {
         value={classroomName}
         onChange={(e) => setClassroomName(e.target.value)}
         // className={nullFields.includes(classroomName) ? "error" : ""}
-      > <option value=""></option>
+      >
+        {" "}
+        <option value=""></option>
         <option value="infants">Infants</option>
         <option value="crawlers">Crawlers</option>
         <option value="toddlers">Toddlers</option>

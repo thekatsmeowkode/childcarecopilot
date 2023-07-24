@@ -24,9 +24,9 @@ export const classroomReducer = (state, action) => {
     //     ),
     //   };
     case "ADD_STUDENT_TO_CLASSROOM":
-    console.log({"1":action.payload})
+    // console.log({"1":action.payload})
     //action.payload = {roomName: 'infants', students: []}
-    console.log({"2":state.classrooms})
+    // console.log({"2":state.classrooms})
     //state.classrooms = [{},{}]
       const newState = state.classrooms.map((classroom) =>
       classroom.roomName === action.payload.roomName
@@ -36,7 +36,7 @@ export const classroomReducer = (state, action) => {
          }
        : classroom
     )
-    console.log({"3":newState})
+    // console.log({"3":newState})
       return {
          classrooms: newState
       };

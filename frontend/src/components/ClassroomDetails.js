@@ -1,6 +1,6 @@
 import { useClassroomContext } from "../hooks/useClassroomContext"
 
-const ClassroomDetails = ({classroom}) => {
+const ClassroomDetails = ({classroom, handleButtonClick}) => {
     const {dispatch} = useClassroomContext()
 
     const handleDeleteClick = async() => {
@@ -17,10 +17,9 @@ const ClassroomDetails = ({classroom}) => {
 
     return (
         <div className="classroom-details">
-            <h4>{classroom.roomName}</h4>
+            <h4><button onClick={(e) => {handleButtonClick(e)}}>{classroom.roomName}</button></h4>
             {classroom.students.map((student) => (<p>{student && student.name}</p>))}
-            <span onClick= {handleDeleteClick} className='material-symbols-outlined'>delete</span>
-        </div>
+            <span onClick= {handleDeleteClick} className='material-symbols-outlined'>delete</span>        </div>
     )
 }
 
