@@ -4,6 +4,7 @@ import { useClassroomContext } from "../hooks/useClassroomContext";
 //components
 import ClassroomDetails from "../components/ClassroomDetails";
 import ClassForm from "../components/ClassForm";
+import StudentForm from "../components/StudentForm";
 
 const Home = () => {
   const { classrooms, dispatch } = useClassroomContext();
@@ -31,9 +32,10 @@ const Home = () => {
           ))}
       </div>
       <div className="students">
-        
+
       </div>
       <ClassForm></ClassForm>
+      <StudentForm></StudentForm>
     </div>
   );
 };

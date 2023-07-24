@@ -25,7 +25,7 @@ export const classroomReducer = (state, action) => {
     case "ADD_STUDENT_TO_CLASSROOM":
       return {
         classrooms: state.classrooms.map((classroom) =>
-          classroom._id === action.payload.classroomId
+          classroom.roomName === action.payload.classroomName
             ? {
                 ...classroom,
                 students: [...classroom.students, action.payload.newStudent],
