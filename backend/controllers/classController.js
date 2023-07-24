@@ -25,6 +25,7 @@ const getClassrooms = async (req, res) => {
   res.status(200).json(classrooms);
 };
 
+
 //GET class by id
 const getClassroom = async (req, res) => {
   const { id } = req.params;
@@ -116,7 +117,7 @@ const updateStudent = async (req, res) => {
       return res.status(400).json({ error: "Class id does not exist" });
     }
     // find student in class's student array
-    const studentIndex = findIndex(classroom, studentId)
+    const studentIndex = findIndex(classroom, studentId);
 
     classroom.students[studentIndex].name = name;
     classroom.students[studentIndex].birthdate = birthdate;
@@ -135,7 +136,7 @@ const updateStudent = async (req, res) => {
 //POST student to class
 const addStudent = async (req, res) => {
   const { classId } = req.params;
-  const { name, birthdate, phone, allergies, programs } = req.body;
+  const { name, birthdate, phone, allergies, programs, classroomName} = req.body;
   try {
     const classroom = await Classroom.findOne({ _id: classId });
 
@@ -150,11 +151,13 @@ const addStudent = async (req, res) => {
       phone,
       allergies,
       programs,
+      classroomName
     };
 
     classroom.students.push(newStudent);
     await classroom.save();
     return res.json(classroom);
+    console.log(classroom)
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -170,7 +173,7 @@ const deleteStudent = async (req, res) => {
       return res.status(404).json({ error: "Class not found" });
     }
 
-    const studentIndex = findIndex(classroom, studentId)
+    const studentIndex = findIndex(classroom, studentId);
 
     classroom.students.splice(studentIndex, 1);
 
@@ -192,7 +195,7 @@ const getStudent = async (req, res) => {
       res.status(400).json({ error: "Classroom does not exist" });
     }
 
-    const studentIndex = findIndex(classroom, studentId)
+    const studentIndex = findIndex(classroom, studentId);
 
     return res.status(200).json(classroom[studentIndex]);
   } catch (error) {
