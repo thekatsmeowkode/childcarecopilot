@@ -1,15 +1,15 @@
 /* google font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800&family=VT323&display=swap');
 
 /* layout */
 :root {
-  --primary: #1aac83;
+  --primary: #055ec3;
   --error: #e7195a;
 }
 body {
   background: #f1f1f1;
   margin: 0;
-  font-family: "Poppins";
+  font-family: "Montserrat";
 }
 header {
   background: #fff;
@@ -23,9 +23,10 @@ header .container {
   justify-content: space-between;
 }
 header a {
-  color: #333;
+  color: #2e2c2c;
   text-decoration: none;
 }
+
 .pages{
   max-width: 1400px;
   padding: 20px;
@@ -35,7 +36,7 @@ header a {
 /* homepage */
 .home {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
   gap: 100px;
 }
 
@@ -47,25 +48,28 @@ header a {
   position: relative;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
 }
+
 .classroom-details h4 {
   margin: 0 0 10px 0;
   font-size: 1.2em;
   color: var(--primary);
 }
+
 .classroom-details p {
   margin: 0;
   font-size: 0.9em;
-  color: #555;
+  color: #6b6a6a;
 }
+
 .classroom-details span {
   position: absolute;
   top: 20px;
   right: 20px;
   cursor: pointer;
-  background: #f1f1f1;
+  background: #e2e1e1;
   padding: 6px;
   border-radius: 50%;
-  color: #333;
+  color: #252525;
 }
 
 label, input {

@@ -30,6 +30,9 @@ const Home = () => {
             <ClassroomDetails key={classroom._id} classroom={classroom} />
           ))}
       </div>
+      <div className="students">
+        
+      </div>
       <ClassForm></ClassForm>
     </div>
   );
