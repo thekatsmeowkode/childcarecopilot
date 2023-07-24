@@ -15,12 +15,10 @@ const ClassroomDetails = ({classroom}) => {
         }
     }
 
-
-
     return (
         <div className="classroom-details">
             <h4>{classroom.roomName}</h4>
-            {classroom.students.map((student) => (<p>{student.name}</p>))}
+            {classroom.students.map((student) => (<p>{student && student.name}</p>))}
             <span onClick= {handleDeleteClick} className='material-symbols-outlined'>delete</span>
         </div>
     )

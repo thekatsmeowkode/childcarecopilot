@@ -6,6 +6,7 @@ export const classroomReducer = (state, action) => {
   switch (action.type) {
     case "SET_CLASSROOMS":
       return { classrooms: action.payload };
+    //adds new class to the classrooms array in context state
     case "CREATE_CLASSROOM":
       return { classrooms: [action.payload, ...state.classrooms] };
     case "DELETE_CLASSROOM":
@@ -14,24 +15,30 @@ export const classroomReducer = (state, action) => {
           (classroom) => classroom._id !== action.payload._id
         ),
       };
-    case "UPDATE_CLASSROOM_NAME":
-      return {
-        classrooms: state.classrooms.map((classroom) =>
-          classroom._id === action.payload._id
-            ? { ...classroom, roomName: action.payload.roomName }
-            : classroom
-        ),
-      };
+    // case "UPDATE_CLASSROOM_NAME":
+    //   return {
+    //     classrooms: state.classrooms.map((classroom) =>
+    //       classroom._id === action.payload._id
+    //         ? { ...classroom, roomName: action.payload.roomName }
+    //         : classroom
+    //     ),
+    //   };
     case "ADD_STUDENT_TO_CLASSROOM":
+    console.log({"1":action.payload})
+    //action.payload = {roomName: 'infants', students: []}
+    console.log({"2":state.classrooms})
+    //state.classrooms = [{},{}]
+      const newState = state.classrooms.map((classroom) =>
+      classroom.roomName === action.payload.roomName
+        ? {
+           ...classroom,
+           students: [...action.payload.students],
+         }
+       : classroom
+    )
+    console.log({"3":newState})
       return {
-        classrooms: state.classrooms.map((classroom) =>
-          classroom.roomName === action.payload.classroomName
-            ? {
-                ...classroom,
-                students: [...classroom.students, action.payload.newStudent],
-              }
-            : classroom
-        ),
+         classrooms: newState
       };
     default:
       return state;

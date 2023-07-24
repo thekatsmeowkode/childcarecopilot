@@ -11,12 +11,12 @@ const ClassForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const classroom = { roomName, students };
-
     const response = await fetch("/api/classes", {
       method: "POST",
       body: JSON.stringify(classroom),
       headers: { "Content-Type": "application/json" },
     });
+
     const json = await response.json();
 
     if (!response.ok) {

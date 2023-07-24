@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useClassroomContext } from "../hooks/useClassroomContext";
 
 const StudentForm = () => {
-  const { state, dispatch } = useClassroomContext();
+  const { dispatch } = useClassroomContext();
   const [name, setName] = useState("");
   const [birthdate, setBirthdate] = useState("");
   const [classroomName, setClassroomName] = useState("");
@@ -10,12 +10,12 @@ const StudentForm = () => {
   const [phone, setPhone] = useState("");
   //   const [programs, setPrograms] = useState("");
   const [error, setError] = useState(null);
-  const [nullFields, setNullFields] = useState([]);
+//   const [nullFields, setNullFields] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const student = { name, birthdate, phone, classroomName, allergies };
-    console.log(student)
+    // console.log(student)
     const allClassroomsResponse = await fetch("/api/classes/", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -30,7 +30,7 @@ const StudentForm = () => {
         console.log("Classroom not found")
         return
     }
-
+    //this post response returns complete json of the updated classroom {_id:3423, roomName: infants, students:[{}{}]
     const response = await fetch("/api/classes/" + classroomId + "/students", {
       method: "POST",
       body: JSON.stringify(student),
@@ -40,7 +40,7 @@ const StudentForm = () => {
 
     if (!response.ok) {
       setError(json.error);
-      setNullFields(json.nullFields);
+    //   setNullFields(json.nullFields);
     }
     if (response.ok) {
       setName("");
@@ -49,7 +49,7 @@ const StudentForm = () => {
       setPhone("");
       setClassroomName("");
       setError(null);
-      setNullFields([]);
+    //   setNullFields([]);
       console.log("new student added");
       dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: json });
     }
@@ -77,7 +77,7 @@ const StudentForm = () => {
         value={classroomName}
         onChange={(e) => setClassroomName(e.target.value)}
         // className={nullFields.includes(classroomName) ? "error" : ""}
-      >
+      > <option value=""></option>
         <option value="infants">Infants</option>
         <option value="crawlers">Crawlers</option>
         <option value="toddlers">Toddlers</option>
