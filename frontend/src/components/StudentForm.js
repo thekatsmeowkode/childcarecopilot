@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useClassroomContext } from "../hooks/useClassroomContext";
 
-const StudentForm = () => {
+const StudentForm = ({setSelectedStudents}) => {
   const { dispatch } = useClassroomContext();
   const [name, setName] = useState("");
   const [birthdate, setBirthdate] = useState("");
@@ -45,6 +45,7 @@ const StudentForm = () => {
       //   setNullFields(json.nullFields);
     }
     if (response.ok) {
+      setSelectedStudents(json.students)
       setName("");
       setBirthdate("");
       setAllergies("");
