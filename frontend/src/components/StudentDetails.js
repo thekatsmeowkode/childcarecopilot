@@ -12,6 +12,56 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
     setIsModalOpen(true);
   };
 
+  const handleDeleteClick = async (studentId, classroomName) => {
+    const allClassroomsResponse = await fetch("/api/classes/", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const classroomJson = await allClassroomsResponse.json();
+
+    const targetClassroom = classroomJson.find(
+      (classroom) => classroom.roomName === classroomName
+    );
+
+    const classroomId = targetClassroom._id.toString();
+
+    if (!classroomId) {
+      console.log("Classroom not found");
+      return;
+    }
+
+    const response = await fetch(
+      "/api/classes/" +
+        classroomId +
+        "/students/" +
+        studentId.toString(),
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    const json = await response.json();
+
+    if (!response.ok) {
+      console.log("bad response in Delete route");
+    }
+
+    setSelectedStudents(json.students)
+
+    const updatedAllClassroomsResponse = await fetch("/api/classes/", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const updatedJson = await updatedAllClassroomsResponse.json();
+
+    if (updatedAllClassroomsResponse.ok) {
+      dispatch({ type: "DELETE_STUDENT", payload: updatedJson }); // await dispatch({type:"UPDATE_STUDENT", payload:classroomWithUpdatedStudentInside})
+    }
+  };
+
   //     const allClassroomsResponse = await fetch("/api/classes/", {
   //       method: "GET",
   //       headers: { "Content-Type": "application/json" },
@@ -58,6 +108,12 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
         className="material-symbols-outlined"
       >
         Edit
+      </button>
+      <button
+        onClick={() => handleDeleteClick(student.id, student.classroomName)}
+        className="material-symbols-outlined"
+      >
+        Delete
       </button>
       {selectedStudent && (
         <EditStudentModal

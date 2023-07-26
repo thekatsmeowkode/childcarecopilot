@@ -6,12 +6,12 @@ import ClassroomDetails from "../components/ClassroomDetails";
 import ClassForm from "../components/ClassForm";
 import StudentForm from "../components/StudentForm";
 import StudentDetails from "../components/StudentDetails";
-import EditStudentModal from "../components/EditStudentModal";
+import AddStudentModal from "../components/AddStudentModal";
 
 const Home = () => {
   const { classrooms, dispatch } = useClassroomContext();
-  const [selectedClass, setSelectedClass] = useState("");
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchClass = async () => {
@@ -63,6 +63,16 @@ const Home = () => {
   return (
     <div className="home">
       <div className="classrooms">
+        <div className="button add">
+          <button onClick={() => setIsAddModalOpen(true)}>add student</button>
+          {isAddModalOpen && (
+            <AddStudentModal
+              isOpen={isAddModalOpen}
+              onClose={() => setIsAddModalOpen(false)}
+              setSelectedStudents={setSelectedStudents}
+            />
+          )}
+        </div>
         {classrooms &&
           classrooms.map((classroom) => (
             <ClassroomDetails
@@ -83,7 +93,7 @@ const Home = () => {
           ))}
       </div>
       <ClassForm></ClassForm>
-      <StudentForm setSelectedStudents={setSelectedStudents}></StudentForm>
+      {/* <StudentForm setSelectedStudents={setSelectedStudents}></StudentForm> */}
     </div>
   );
 };

@@ -15,6 +15,9 @@ export const classroomReducer = (state, action) => {
           (classroom) => classroom._id !== action.payload._id
         ),
       };
+    case "DELETE_STUDENT":
+      return { classrooms: action.payload };
+
     // case "UPDATE_CLASSROOM_NAME":
     //   return {
     //     classrooms: state.classrooms.map((classroom) =>

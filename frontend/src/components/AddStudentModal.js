@@ -16,7 +16,6 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents}) => {
   const handleSubmit = async (e) => {
         e.preventDefault();
         const student = { name, birthdate, phone, classroomName, allergies };
-        // console.log(student)
         const allClassroomsResponse = await fetch("/api/classes/", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
