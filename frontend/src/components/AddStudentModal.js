@@ -99,7 +99,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
           <Form.Group>
             <Form.Label>Birthdate</Form.Label>
             <Form.Control
-              type="text"
+              type="date"
               onChange={(e) => setBirthdate(e.target.value)}
               value={birthdate}
             />

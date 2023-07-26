@@ -15,7 +15,7 @@ const EditStudentModal = ({
   const [allergies, setAllergies] = useState(student.allergies);
   const [phone, setPhone] = useState(student.phone);
   const [id, setId] = useState(student.id);
-  const [programs, setPrograms] = useState([]);
+  const [programs, setPrograms] = useState(student.programs);
   //this remembers the classroom that the student was previously enrolled into
   const incomingDataClassroomMemory = student.classroomName;
 
@@ -86,14 +86,15 @@ const EditStudentModal = ({
   };
 
   const handleProgramChange = (e) => {
-    const {value, checked} = e.target
+    const { value, checked } = e.target;
     if (checked) {
-      setPrograms((prevPrograms) => [...prevPrograms, value])
+      setPrograms((prevPrograms) => [...prevPrograms, value]);
+    } else {
+      setPrograms((prevPrograms) =>
+        prevPrograms.filter((program) => program !== value)
+      );
     }
-    else {
-      setPrograms((prevPrograms) => prevPrograms.filter((program) => program !== value))
-    }
-  }
+  };
 
   return (
     <Modal show={isOpen} onHide={onClose}>
@@ -115,14 +116,15 @@ const EditStudentModal = ({
           <Form.Group>
             <Form.Label>Birthdate</Form.Label>
             <Form.Control
-              type="text"
+              type="date"
               onChange={(e) => setBirthdate(e.target.value)}
               value={birthdate}
             />
           </Form.Group>
           <Form.Group>
             <Form.Label>Classroom:</Form.Label>
-            <Form.Select aria-label="Choose a classroom"
+            <Form.Select
+              aria-label="Choose a classroom"
               name="classroomName"
               value={classroomName}
               onChange={(e) => setClassroomName(e.target.value)}
@@ -151,6 +153,29 @@ const EditStudentModal = ({
               onChange={(e) => setPhone(e.target.value)}
               // className={nullFields.includes(phone) ? "error" : ""}
             />
+          </Form.Group>
+          <Form.Group>
+            <Form.Check
+              type="checkbox"
+              value="earlyMorning"
+              onChange={handleProgramChange}
+              label="Early morning 7:30-8:30"
+              checked={programs.includes("earlyMorning")}
+            ></Form.Check>
+            <Form.Check
+              type="checkbox"
+              value="extendedDay"
+              label="Extended Day 3:30-4:30"
+              onChange={handleProgramChange}
+              checked={programs.includes("extendedDay")}
+            ></Form.Check>
+            <Form.Check
+              type="checkbox"
+              value="lateDay"
+              label="Late Day 4:30-5:30"
+              onChange={handleProgramChange}
+              checked={programs.includes("lateDay")}
+            ></Form.Check>
           </Form.Group>
         </Form>
       </Modal.Body>
