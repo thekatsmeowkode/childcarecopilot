@@ -1,26 +1,39 @@
-import { useClassroomContext } from "../hooks/useClassroomContext"
+import { useClassroomContext } from "../hooks/useClassroomContext";
 
-const ClassroomDetails = ({classroom, handleButtonClick}) => {
-    const {dispatch} = useClassroomContext()
+const ClassroomDetails = ({ classroom, handleButtonClick }) => {
+  const { dispatch } = useClassroomContext();
 
-    const handleDeleteClick = async() => {
-        const response = await fetch('/api/classes/' + classroom._id, {
-            method: 'DELETE'
-        })
-        //document that was just deleted
-        const json = await response.json()
+  const handleDeleteClick = async () => {
+    const response = await fetch("/api/classes/" + classroom._id, {
+      method: "DELETE",
+    });
+    //document that was just deleted
+    const json = await response.json();
 
-        if (response.ok) {
-            dispatch({type:'DELETE_CLASSROOM', payload:json})
-        }
+    if (response.ok) {
+      dispatch({ type: "DELETE_CLASSROOM", payload: json });
     }
+  };
 
-    return (
-        <div className="classroom-details">
-            <h4><button onClick={(e) => {handleButtonClick(e)}}>{classroom.roomName}</button></h4>
-            {classroom.students.map((student) => (<p>{student && student.name}</p>))}
-            <span onClick= {handleDeleteClick} className='material-symbols-outlined'>delete</span>        </div>
-    )
-}
+  return (
+    <div className="classroom-details">
+      <h4>
+        <button
+          onClick={(e) => {
+            handleButtonClick(e);
+          }}
+        >
+          {classroom.roomName}
+        </button>
+      </h4>
+      {classroom.students.map((student) => (
+        <p>{student && student.name}</p>
+      ))}
+      <span onClick={handleDeleteClick} className="material-symbols-outlined">
+        delete
+      </span>{" "}
+    </div>
+  );
+};
 
-export default ClassroomDetails
+export default ClassroomDetails;

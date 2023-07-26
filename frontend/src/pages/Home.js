@@ -6,7 +6,8 @@ import ClassroomDetails from "../components/ClassroomDetails";
 import ClassForm from "../components/ClassForm";
 import StudentForm from "../components/StudentForm";
 import StudentDetails from "../components/StudentDetails";
-import EditStudentForm from "../components/EditStudentForm";
+import EditStudentForm from "../components/EditStudentModal";
+import EditStudentModal from "../components/EditStudentModal";
 
 const Home = () => {
   const { classrooms, dispatch } = useClassroomContext();
@@ -81,7 +82,6 @@ const Home = () => {
       </div>
       <ClassForm></ClassForm>
       <StudentForm setSelectedStudents={setSelectedStudents}></StudentForm>
-      <EditStudentForm students={classrooms}></EditStudentForm>
     </div>
   );
 };

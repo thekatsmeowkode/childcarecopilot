@@ -23,22 +23,62 @@ export const classroomReducer = (state, action) => {
     //         : classroom
     //     ),
     //   };
-    case "ADD_STUDENT_TO_CLASSROOM":
-    // console.log({"1":action.payload})
-    //action.payload = {roomName: 'infants', students: []}
-    // console.log({"2":state.classrooms})
-    //state.classrooms = [{},{}]
-      const newState = state.classrooms.map((classroom) =>
-      classroom.roomName === action.payload.roomName
-        ? {
-           ...classroom,
-           students: [...action.payload.students],
-         }
-       : classroom
-    )
-    // console.log({"3":newState})
+    // case "UPDATE_STUDENT":
+    //   //input is one student {student}
+    //   const targetClassroom = state.classrooms.find(
+    //     (oneClassroom) => oneClassroom.roomName === action.payload.classroomName
+    //   );
+    //   const newClassState = targetClassroom.students.map((student) =>
+    //     student.id === action.payload.id ? { ...action.payload } : student
+    //   );
+    //   const newStateClassrooms = state.classrooms.map((classroom) =>
+    //     classroom.roomName === targetClassroom.roomName
+    //       ? {
+    //           ...classroom,
+    //           students: [...newClassState],
+    //         }
+    //       : classroom
+    //   );
+    //   return {
+    //     classrooms: newStateClassrooms,
+    //   };
+
+    case "UPDATE_STUDENT":
+      console.log(action.payload)
+      const { id, classroomName, ...updatedData } = action.payload;
+
+      // Update the student details in the client-side state
+      const updatedClassrooms = state.classrooms.map((classroom) =>
+        classroom.roomName === classroomName
+          ? {
+              ...classroom,
+              students: classroom.students.map((student) =>
+                student.id === id ? { ...student, ...updatedData } : student
+              ),
+            }
+          : classroom
+      );
+      console.log(updatedClassrooms)
       return {
-         classrooms: newState
+        classrooms: updatedClassrooms
+      };
+
+    case "ADD_STUDENT_TO_CLASSROOM":
+      // console.log({"1":action.payload})
+      //action.payload = {roomName: 'infants', students: []}
+      // console.log({"2":state.classrooms})
+      //state.classrooms = [{},{}]
+      const newState = state.classrooms.map((classroom) =>
+        classroom.roomName === action.payload.roomName
+          ? {
+              ...classroom,
+              students: [...action.payload.students],
+            }
+          : classroom
+      );
+      // console.log({"3":newState})
+      return {
+        classrooms: newState,
       };
     default:
       return state;
