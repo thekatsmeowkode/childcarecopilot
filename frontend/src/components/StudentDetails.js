@@ -1,51 +1,51 @@
 import { useContext, useState } from "react";
-import { ClassroomContext } from '../context/ClassroomContext'
-import EditStudentModal from './EditStudentModal'
+import { ClassroomContext } from "../context/ClassroomContext";
+import EditStudentModal from "./EditStudentModal";
 
-const StudentDetails = ({ student }) => {
+const StudentDetails = ({ student, setSelectedStudents }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const {dispatch} = useContext(ClassroomContext)
+  const { dispatch } = useContext(ClassroomContext);
 
   const handleEditClick = async (studentId, classroomName) => {
-    setSelectedStudent(student)
+    setSelectedStudent(student);
     setIsModalOpen(true);
-  }
+  };
 
-//     const allClassroomsResponse = await fetch("/api/classes/", {
-//       method: "GET",
-//       headers: { "Content-Type": "application/json" },
-//     });
+  //     const allClassroomsResponse = await fetch("/api/classes/", {
+  //       method: "GET",
+  //       headers: { "Content-Type": "application/json" },
+  //     });
 
-//     const classroomJson = await allClassroomsResponse.json();
-//     const classroom = classroomJson.find(
-//       (classroom) => classroom.roomName === classroomName
-//     );
-//     const classroomId = classroom._id.toString();
+  //     const classroomJson = await allClassroomsResponse.json();
+  //     const classroom = classroomJson.find(
+  //       (classroom) => classroom.roomName === classroomName
+  //     );
+  //     const classroomId = classroom._id.toString();
 
-//     if (!classroomId) {
-//       console.log("Classroom not found");
-//       return;
-//     }
+  //     if (!classroomId) {
+  //       console.log("Classroom not found");
+  //       return;
+  //     }
 
-//     const getOneClassroomResponse = await fetch("/api/classes/" + classroomId, {
-//       method: "GET",
-//       headers: { "Content-Type": "application/json" },
-//     });
+  //     const getOneClassroomResponse = await fetch("/api/classes/" + classroomId, {
+  //       method: "GET",
+  //       headers: { "Content-Type": "application/json" },
+  //     });
 
-//     const oneClassJson = await getOneClassroomResponse.json();
+  //     const oneClassJson = await getOneClassroomResponse.json();
 
-//     if (!oneClassJson) {
-//       console.log("One class not found");
-//       return;
-//     }
+  //     if (!oneClassJson) {
+  //       console.log("One class not found");
+  //       return;
+  //     }
 
-//     const targetStudent = oneClassJson.students.find(
-//       (allStudents) => allStudents.id === studentId
-//     );
-//     setSelectedStudent(targetStudent);
-//     return targetStudent;
-//   };
+  //     const targetStudent = oneClassJson.students.find(
+  //       (allStudents) => allStudents.id === studentId
+  //     );
+  //     setSelectedStudent(targetStudent);
+  //     return targetStudent;
+  //   };
 
   return (
     <div className="student-details">
@@ -65,6 +65,7 @@ const StudentDetails = ({ student }) => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           setSelectedStudent={setSelectedStudent}
+          setSelectedStudents={setSelectedStudents}
         />
       )}
     </div>

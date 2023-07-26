@@ -2,93 +2,72 @@ import { Form, Button, Modal } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
 import { useContext, useState } from "react";
 
-const EditStudentModal = ({
-  student,
-  isOpen,
-  onClose,
-  setSelectedStudent,
-  setSelectedStudents,
-}) => {
-  const [name, setName] = useState(student.name);
-  const [birthdate, setBirthdate] = useState(student.birthdate);
-  const [classroomName, setClassroomName] = useState(student.classRoomName);
-  const [allergies, setAllergies] = useState(student.allergies);
-  const [phone, setPhone] = useState(student.phone);
-  const [id, setId] = useState(student.id);
-  const [programs, setPrograms] = useState([]);
-  //this remembers the classroom that the student was previously enrolled into
-  const incomingDataClassroomMemory = student.classroomName;
+const AddStudentModal = ({ isOpen, onClose, setSelectedStudents}) => {
+  const [name, setName] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [classroomName, setClassroomName] = useState("");
+  const [allergies, setAllergies] = useState("");
+  const [phone, setPhone] = useState("");
+  const [id, setId] = useState("")
+  const [programs, setPrograms] = useState([])
 
   const { dispatch } = useContext(ClassroomContext);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const updatedStudent = {
-      id,
-      name,
-      birthdate,
-      classroomName,
-      allergies,
-      phone,
-      programs,
-      incomingDataClassroomMemory,
-    };
+        e.preventDefault();
+        const student = { name, birthdate, phone, classroomName, allergies };
+        // console.log(student)
+        const allClassroomsResponse = await fetch("/api/classes/", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+    
+        const classroomJson = await allClassroomsResponse.json();
+    
+        const classroom = classroomJson.find(
+          (classroom) => classroom.roomName === student.classroomName
+        );
+        const classroomId = classroom._id.toString();
+    
+        if (!classroomId) {
+          console.log("Classroom not found");
+          return;
+        }
+        //this post response returns complete json of the updated classroom {_id:3423, roomName: infants, students:[{}{}]
+        const response = await fetch("/api/classes/" + classroomId + "/students", {
+          method: "POST",
+          body: JSON.stringify(student),
+          headers: { "Content-Type": "application/json" },
+        });
+        const json = await response.json();
+    
+        if (!response.ok) {
+            console.log('error')
+        //   setError(json.error);
+          //   setNullFields(json.nullFields);
+        }
+        if (response.ok) {
+          setSelectedStudents(json.students)
+          setName("");
+          setBirthdate("");
+          setAllergies("");
+          setPhone("");
+          setClassroomName("");
+        //   setError(null);
+          //   setNullFields([]);
+          console.log("new student added");
+          dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: json });
+        }
 
-    const allClassroomsResponse = await fetch("/api/classes/", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const classroomJson = await allClassroomsResponse.json();
-
-    const targetClassroom = classroomJson.find(
-      (classroom) => classroom.roomName === classroomName
-    );
-
-    const classroomId = targetClassroom._id.toString();
-
-    if (!classroomId) {
-      console.log("Classroom not found");
-      return;
-    }
-
-    const response = await fetch(
-      "/api/classes/" +
-        classroomId +
-        "/students/" +
-        updatedStudent.id.toString(),
-      {
-        method: "PATCH",
-        body: JSON.stringify(updatedStudent),
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-
-    const json = await response.json();
-
-    if (!response.ok) {
-      console.log("bad response");
-    }
-
-    const updatedAllClassroomsResponse = await fetch("/api/classes/", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const updatedJson = await updatedAllClassroomsResponse.json();
-
-    if (response.ok) {
-      await dispatch({ type: "SET_CLASSROOMS", payload: updatedJson }); // await dispatch({type:"UPDATE_STUDENT", payload:classroomWithUpdatedStudentInside})
-    }
-
-    setSelectedStudent("");
-    setSelectedStudents(json.students);
+    console.log(json)
+    setSelectedStudents(json.students)
     onClose();
   };
 
   return (
     <Modal show={isOpen} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit Student Details</Modal.Title>
+        <Modal.Title>Add Student Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
@@ -147,7 +126,7 @@ const EditStudentModal = ({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button type="submit" variant="primary" onClick={handleSubmit}>
+        <Button type='submit' variant="primary" onClick={handleSubmit}>
           Save Changes
         </Button>
         <Button variant="secondary" onClick={onClose}>
@@ -158,4 +137,4 @@ const EditStudentModal = ({
   );
 };
 
-export default EditStudentModal;
+export default AddStudentModal

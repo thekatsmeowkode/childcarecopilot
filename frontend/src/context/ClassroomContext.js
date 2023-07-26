@@ -44,7 +44,6 @@ export const classroomReducer = (state, action) => {
     //   };
 
     case "UPDATE_STUDENT":
-      console.log(action.payload)
       const { id, classroomName, ...updatedData } = action.payload;
 
       // Update the student details in the client-side state
@@ -58,9 +57,9 @@ export const classroomReducer = (state, action) => {
             }
           : classroom
       );
-      console.log(updatedClassrooms)
+      console.log(updatedClassrooms);
       return {
-        classrooms: updatedClassrooms
+        classrooms: updatedClassrooms,
       };
 
     case "ADD_STUDENT_TO_CLASSROOM":

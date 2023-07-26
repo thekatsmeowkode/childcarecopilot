@@ -6,7 +6,6 @@ import ClassroomDetails from "../components/ClassroomDetails";
 import ClassForm from "../components/ClassForm";
 import StudentForm from "../components/StudentForm";
 import StudentDetails from "../components/StudentDetails";
-import EditStudentForm from "../components/EditStudentModal";
 import EditStudentModal from "../components/EditStudentModal";
 
 const Home = () => {
@@ -61,7 +60,6 @@ const Home = () => {
     console.log(selectedStudents);
   };
 
-
   return (
     <div className="home">
       <div className="classrooms">
@@ -77,7 +75,11 @@ const Home = () => {
       <div className="students-grid">
         {selectedStudents &&
           selectedStudents.map((student) => (
-            <StudentDetails student={student}></StudentDetails>
+            <StudentDetails
+              key={student.id}
+              setSelectedStudents={setSelectedStudents}
+              student={student}
+            ></StudentDetails>
           ))}
       </div>
       <ClassForm></ClassForm>
