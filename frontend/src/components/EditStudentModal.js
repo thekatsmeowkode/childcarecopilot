@@ -85,6 +85,16 @@ const EditStudentModal = ({
     onClose();
   };
 
+  const handleProgramChange = (e) => {
+    const {value, checked} = e.target
+    if (checked) {
+      setPrograms((prevPrograms) => [...prevPrograms, value])
+    }
+    else {
+      setPrograms((prevPrograms) => prevPrograms.filter((program) => program !== value))
+    }
+  }
+
   return (
     <Modal show={isOpen} onHide={onClose}>
       <Modal.Header closeButton>
@@ -112,19 +122,17 @@ const EditStudentModal = ({
           </Form.Group>
           <Form.Group>
             <Form.Label>Classroom:</Form.Label>
-            <select
+            <Form.Select aria-label="Choose a classroom"
               name="classroomName"
               value={classroomName}
               onChange={(e) => setClassroomName(e.target.value)}
               // className={nullFields.includes(classroomName) ? "error" : ""}
             >
-              {" "}
-              <option value=""></option>
               <option value="infants">Infants</option>
               <option value="crawlers">Crawlers</option>
               <option value="toddlers">Toddlers</option>
               <option value="twos">Twos</option>
-            </select>
+            </Form.Select>
           </Form.Group>
           <Form.Group>
             <Form.Label>Allergies:</Form.Label>

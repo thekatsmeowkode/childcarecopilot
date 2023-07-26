@@ -32,10 +32,7 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
     }
 
     const response = await fetch(
-      "/api/classes/" +
-        classroomId +
-        "/students/" +
-        studentId.toString(),
+      "/api/classes/" + classroomId + "/students/" + studentId.toString(),
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -48,7 +45,7 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
       console.log("bad response in Delete route");
     }
 
-    setSelectedStudents(json.students)
+    setSelectedStudents(json.students);
 
     const updatedAllClassroomsResponse = await fetch("/api/classes/", {
       method: "GET",
