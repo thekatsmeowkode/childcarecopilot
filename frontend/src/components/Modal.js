@@ -11,7 +11,7 @@ const EditStudentModal = ({
 }) => {
   const [name, setName] = useState(student.name);
   const [birthdate, setBirthdate] = useState(student.birthdate);
-  const [classroomName, setClassroomName] = useState(student.classroomName);
+  const [classroomName, setClassroomName] = useState(student.classRoomName);
   const [allergies, setAllergies] = useState(student.allergies);
   const [phone, setPhone] = useState(student.phone);
   const [id, setId] = useState(student.id);
@@ -21,7 +21,7 @@ const EditStudentModal = ({
 
   const { dispatch } = useContext(ClassroomContext);
 
-  const handleSubmit = async (e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
     const updatedStudent = {
       id,
@@ -33,7 +33,6 @@ const EditStudentModal = ({
       programs,
       incomingDataClassroomMemory,
     };
-    console.log(updatedStudent)
 
     const allClassroomsResponse = await fetch("/api/classes/", {
       method: "GET",
@@ -78,7 +77,7 @@ const EditStudentModal = ({
     const updatedJson = await updatedAllClassroomsResponse.json();
 
     if (response.ok) {
-      await dispatch({ type: "SET_CLASSROOMS", payload: updatedJson }); // await dispatch({type:"UPDATE_STUDENT", payload:classroomWithUpdatedStudentInside})
+      await dispatch({ type: "SET_CLASSROOMS", payload: updatedJson });
     }
 
     setSelectedStudent("");
@@ -103,7 +102,7 @@ const EditStudentModal = ({
         <Modal.Title>Edit Student Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleEditSubmit}>
           <Form.Group>
             <Form.Label>Name:</Form.Label>
             <Form.Control
@@ -181,7 +180,7 @@ const EditStudentModal = ({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button type="submit" variant="primary" onClick={handleSubmit}>
+        <Button type="submit" variant="primary">
           Save Changes
         </Button>
         <Button variant="secondary" onClick={onClose}>

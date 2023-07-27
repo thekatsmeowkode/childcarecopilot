@@ -1,4 +1,4 @@
-import { Form, Button, Modal } from "react-bootstrap";
+import { Form, Button, Modal, InputGroup } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
 import { useContext, useState } from "react";
 
@@ -10,13 +10,36 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
   const [phone, setPhone] = useState("");
   const [id, setId] = useState("");
   const [programs, setPrograms] = useState([]);
+  const [validated, setValidated] = useState(false);
 
   const { dispatch } = useContext(ClassroomContext);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const student = { name, birthdate, phone, classroomName, allergies, programs };
-    console.log(student)
+  const handleSubmit = (e) => {
+    const form = e.target;
+    console.log(`validity ${form.checkValidity()}`);
+
+    if (!form.checkValidity()) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setValidated(true);
+
+    if (form.checkValidity() === true) {
+      handleAddStudent(e);
+    }
+  };
+
+  const handleAddStudent = async (e) => {
+    e.preventDefault()
+    const student = {
+      name,
+      birthdate,
+      phone,
+      classroomName,
+      allergies,
+      programs,
+    };
+
     const allClassroomsResponse = await fetch("/api/classes/", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -53,14 +76,13 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
       setAllergies("");
       setPhone("");
       setClassroomName("");
-      setPrograms([])
+      setPrograms([]);
       //   setError(null);
       //   setNullFields([]);
       console.log("new student added");
       dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: json });
     }
 
-    console.log(json);
     setSelectedStudents(json.students);
     onClose();
   };
@@ -85,31 +107,47 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
         <Modal.Title>Add Student Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form noValidate onSubmit={handleSubmit} validated={validated}>
           <Form.Group>
             <Form.Label>Name:</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Name"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            <InputGroup hasValidation>
+              <Form.Control
+                type="text"
+                placeholder="Name"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                // isInvalid={!isFormValid && name.length === 0}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please input a name.
+              </Form.Control.Feedback>
+            </InputGroup>
           </Form.Group>
           <Form.Group>
             <Form.Label>Birthdate</Form.Label>
-            <Form.Control
-              type="date"
-              onChange={(e) => setBirthdate(e.target.value)}
-              value={birthdate}
-            />
+            <InputGroup hasValidation>
+              <Form.Control
+                type="date"
+                onChange={(e) => setBirthdate(e.target.value)}
+                value={birthdate}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                Please input a birthdate.
+              </Form.Control.Feedback>
+            </InputGroup>
           </Form.Group>
           <Form.Group>
             <Form.Label>Classroom:</Form.Label>
+            <InputGroup hasValidation>
             <Form.Select
               name="classroomName"
               value={classroomName}
               onChange={(e) => setClassroomName(e.target.value)}
+              required
+              // isInvalid={!isFormValid && classroomName === ''}
               // className={nullFields.includes(classroomName) ? "error" : ""}
             >
               <option value=""></option>
@@ -118,6 +156,10 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               <option value="toddlers">Toddlers</option>
               <option value="twos">Twos</option>
             </Form.Select>
+            <Form.Control.Feedback type="invalid">
+                Please input a classroom.
+              </Form.Control.Feedback>
+            </InputGroup>
           </Form.Group>
           <Form.Group>
             <Form.Label>Allergies:</Form.Label>
@@ -135,7 +177,6 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              required
               // className={nullFields.includes(phone) ? "error" : ""}
             />
           </Form.Group>
@@ -159,12 +200,12 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               onChange={handleProgramChange}
             ></Form.Check>
           </Form.Group>
+          <Button type="submit" variant="primary">
+            Save Changes
+          </Button>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button type="submit" variant="primary" onClick={handleSubmit}>
-          Save Changes
-        </Button>
         <Button variant="secondary" onClick={onClose}>
           Cancel
         </Button>
