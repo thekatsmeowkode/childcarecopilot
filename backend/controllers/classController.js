@@ -123,11 +123,18 @@ const updateStudent = async (req, res) => {
     const oldClassroom = await Classroom.findOne({
       roomName: incomingDataClassroomMemory,
     });
-
+    // console.log(`classmemory:${incomingDataClassroomMemory}`)
+    //delete old student
     const studentIndex = findIndex(oldClassroom, studentId);
+    // console.log(`studentIdOld:${studentId}`)
+    // console.log(`oldclass:${oldClassroom}`)
 
     oldClassroom.students.splice(studentIndex, 1);
 
+    await oldClassroom.save();
+    // console.log(`oldClassroom after save: ${oldClassroom}`)
+
+    //add new student
     const classroom = await Classroom.findOne({ _id: classId });
 
     if (!classroom) {
@@ -143,11 +150,12 @@ const updateStudent = async (req, res) => {
       programs,
       classroomName,
     };
+    // console.log(`newstudent:${{...newStudent}}`)
 
     classroom.students.push(newStudent);
+    // console.log(`new classroom: ${classroom}`)
 
     await classroom.save();
-    await oldClassroom.save();
 
     return res.json(classroom);
   } catch (error) {
