@@ -107,19 +107,32 @@ input.error {
 }
 
 .students-grid {
-  display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(1fr, 2fr));
-  gap: .25rem;
+  /* display:grid; */
+  /* grid-template-columns: repeat(auto-fill, minmax(1fr, 2fr)); */
+  /* gap: .25rem; */
 }
 
 .student-details {
   background-color:#f0f0f0;
   padding:.5rem;
   border:1px solid #ccc;
-  display:grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
+  /* display:grid; */
+  /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr */
 }
 
 .student-details > p {
   padding:.25rem;
 }
+
+table {
+  /* border:1px solid; */
+  width:100%;
+  border-collapse:collapse;
+  padding:1rem;
+}
+
+th, tr, td {
+  border:1px solid black !important;
+  padding:.5rem;
+}
+

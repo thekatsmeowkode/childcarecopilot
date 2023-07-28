@@ -129,7 +129,6 @@ const EditStudentModal = ({
               name="classroomName"
               value={classroomName}
               onChange={(e) => setClassroomName(e.target.value)}
-              // className={nullFields.includes(classroomName) ? "error" : ""}
             >
               <option value="infants">Infants</option>
               <option value="crawlers">Crawlers</option>
@@ -143,7 +142,6 @@ const EditStudentModal = ({
               type="text"
               value={allergies}
               onChange={(e) => setAllergies(e.target.value)}
-              // className={nullFields.includes(allergies) ? "error" : ""}
             />
           </Form.Group>
           <Form.Group>
@@ -152,7 +150,6 @@ const EditStudentModal = ({
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              // className={nullFields.includes(phone) ? "error" : ""}
             />
           </Form.Group>
           <Form.Group>

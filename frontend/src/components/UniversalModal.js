@@ -1,18 +1,115 @@
 import { Form, Button, Modal, InputGroup } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 
-const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
+const UniversalModal = ({
+  student,
+  isOpen,
+  onClose,
+  selectedStudent,
+  setSelectedStudent,
+  setSelectedStudents,
+  setIsModalOpen,
+  mode,
+}) => {
+
   const [name, setName] = useState("");
   const [birthdate, setBirthdate] = useState("");
   const [classroomName, setClassroomName] = useState("");
   const [allergies, setAllergies] = useState("");
   const [phone, setPhone] = useState("");
   const [id, setId] = useState("");
-  const [programs, setPrograms] = useState([]);
+  const [programs, setPrograms] = useState("");
+
+  useEffect(() => {
+    if (mode === 'edit' && selectedStudent) {
+      console.log("here")
+      setName(student.name)
+      setBirthdate(student.birthdate)
+      setClassroomName(student.classroomName)
+      setAllergies(student.allergies)
+      setPhone(student.phone)
+      setPrograms(student.programs)
+      setIsModalOpen(true)
+    }
+  }, [mode, selectedStudent])
+  
   const [validated, setValidated] = useState(false);
+  //this remembers the classroom that the student was previously enrolled into
+  // let incomingDataClassroomMemory = "";
+  // if (mode === "edit") {
+  //   console.log(student)
+  //   incomingDataClassroomMemory = student.classroomName;
+  // }
 
   const { dispatch } = useContext(ClassroomContext);
+
+  const handleEditStudent = async (e) => {
+    const incomingDataClassroomMemory = student.classroomName;
+    console.log(student.name)
+
+    e.preventDefault();
+    const updatedStudent = {
+      id,
+      name,
+      birthdate,
+      classroomName,
+      allergies,
+      phone,
+      programs,
+      incomingDataClassroomMemory,
+    };
+
+    const allClassroomsResponse = await fetch("/api/classes/", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const classroomJson = await allClassroomsResponse.json();
+
+    const targetClassroom = classroomJson.find(
+      (classroom) => classroom.roomName === classroomName
+    );
+
+    const classroomId = targetClassroom._id.toString();
+
+    if (!classroomId) {
+      console.log("Classroom not found");
+      return;
+    }
+
+    const response = await fetch(
+      "/api/classes/" +
+        classroomId +
+        "/students/" +
+        updatedStudent.id.toString(),
+      {
+        method: "PATCH",
+        body: JSON.stringify(updatedStudent),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    const json = await response.json();
+
+    if (!response.ok) {
+      console.log("bad response");
+    }
+
+    const updatedAllClassroomsResponse = await fetch("/api/classes/", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    const updatedJson = await updatedAllClassroomsResponse.json();
+
+    if (response.ok) {
+      await dispatch({ type: "SET_CLASSROOMS", payload: updatedJson });
+    }
+
+    setSelectedStudent("");
+    setSelectedStudents(json.students);
+    onClose();
+  };
 
   const handleSubmit = (e) => {
     const form = e.target;
@@ -24,7 +121,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
     setValidated(true);
 
     if (form.checkValidity() === true) {
-      handleAddStudent(e);
+      mode === "add" ? handleAddStudent(e) : handleEditStudent(e);
     }
   };
 
@@ -75,7 +172,10 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
       setClassroomName("");
       setPrograms([]);
       console.log("new student added");
-      dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: updatedClassroomJson });
+      dispatch({
+        type: "ADD_STUDENT_TO_CLASSROOM",
+        payload: updatedClassroomJson,
+      });
     }
 
     setSelectedStudents(updatedClassroomJson.students);
@@ -99,7 +199,9 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
   return (
     <Modal show={isOpen} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Student Details</Modal.Title>
+        <Modal.Title>
+          {mode === "add" ? "Add" : "Edit"} Student Details
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form noValidate onSubmit={handleSubmit} validated={validated}>
@@ -113,7 +215,6 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                // isInvalid={!isFormValid && name.length === 0}
               />
               <Form.Control.Feedback type="invalid">
                 Please input a name.
@@ -142,8 +243,6 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
                 value={classroomName}
                 onChange={(e) => setClassroomName(e.target.value)}
                 required
-                // isInvalid={!isFormValid && classroomName === ''}
-                // className={nullFields.includes(classroomName) ? "error" : ""}
               >
                 <option value=""></option>
                 <option value="infants">Infants</option>
@@ -162,7 +261,6 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               type="text"
               value={allergies}
               onChange={(e) => setAllergies(e.target.value)}
-              // className={nullFields.includes(allergies) ? "error" : ""}
             />
           </Form.Group>
           <Form.Group>
@@ -172,7 +270,6 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              // className={nullFields.includes(phone) ? "error" : ""}
             />
           </Form.Group>
           <Form.Group>
@@ -209,4 +306,4 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
   );
 };
 
-export default AddStudentModal;
+export default UniversalModal;

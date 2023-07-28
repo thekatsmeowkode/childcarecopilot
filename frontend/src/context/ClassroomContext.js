@@ -26,26 +26,6 @@ export const classroomReducer = (state, action) => {
     //         : classroom
     //     ),
     //   };
-    // case "UPDATE_STUDENT":
-    //   //input is one student {student}
-    //   const targetClassroom = state.classrooms.find(
-    //     (oneClassroom) => oneClassroom.roomName === action.payload.classroomName
-    //   );
-    //   const newClassState = targetClassroom.students.map((student) =>
-    //     student.id === action.payload.id ? { ...action.payload } : student
-    //   );
-    //   const newStateClassrooms = state.classrooms.map((classroom) =>
-    //     classroom.roomName === targetClassroom.roomName
-    //       ? {
-    //           ...classroom,
-    //           students: [...newClassState],
-    //         }
-    //       : classroom
-    //   );
-    //   return {
-    //     classrooms: newStateClassrooms,
-    //   };
-
     case "UPDATE_STUDENT":
       const { id, classroomName, ...updatedData } = action.payload;
 
@@ -60,7 +40,6 @@ export const classroomReducer = (state, action) => {
             }
           : classroom
       );
-      console.log(updatedClassrooms);
       return {
         classrooms: updatedClassrooms,
       };

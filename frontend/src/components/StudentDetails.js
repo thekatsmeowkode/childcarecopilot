@@ -1,15 +1,29 @@
 import { useContext, useState } from "react";
 import { ClassroomContext } from "../context/ClassroomContext";
 import EditStudentModal from "./EditStudentModal";
+import UniversalModal from "./UniversalModal";
 
-const StudentDetails = ({ student, setSelectedStudents }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const StudentDetails = ({
+  student,
+  setSelectedStudents,
+  mode,
+  isUniversalModalOpen,
+  setIsUniversalModalOpen,
+  setMode,
+  openEditModal
+}) => {
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [studentData, setStudentData] = useState(student)
   const { dispatch } = useContext(ClassroomContext);
 
   const handleEditClick = async (studentId, classroomName) => {
-    setSelectedStudent(student);
-    setIsModalOpen(true);
+    setMode('edit')
+    setIsUniversalModalOpen(true)
+    setSelectedStudent(student)
+    console.log(studentData)
+    console.log(mode)
+    // setIsModalOpen(true);
   };
 
   const handleDeleteClick = async (studentId, classroomName) => {
@@ -93,26 +107,52 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
   //     setSelectedStudent(targetStudent);
   //     return targetStudent;
   //   };
+  const formatProgramName = (program) => {
+    switch (program) {
+      case "earlyMorning":
+        return "Early Morning";
+      case "extendedDay":
+        return "Extended Day";
+      case "lateDay":
+        return "Late Day";
+      default:
+        return;
+    }
+  };
 
   return (
-    <div className="student-details">
-      <p>{student.name}</p>
-      <p>{student.id}</p>
-      <p>{student.classroomName}</p>
-      <p>{student.allergies}</p>
-      <button
-        onClick={() => handleEditClick(student.id, student.classroomName)}
-        className="material-symbols-outlined"
-      >
-        Edit
-      </button>
-      <button
-        onClick={() => handleDeleteClick(student.id, student.classroomName)}
-        className="material-symbols-outlined"
-      >
-        Delete
-      </button>
-      {selectedStudent && (
+    // <div className="student-details"
+    <>
+      <tr>
+        <td>{student.name}</td>
+        <td>{student.birthdate}</td>
+        <td>
+          <ol>
+            {student.programs.map((program) => (
+              <li>{formatProgramName(program)}</li>
+            ))}
+          </ol>
+        </td>
+        <td>{student.allergies}</td>
+        <td>{student.classroomName}</td>
+        <td>
+          <button
+            onClick={openEditModal}
+            className="material-symbols-outlined"
+          >
+            Edit
+          </button>
+        </td>
+        <td>
+          <button
+            onClick={() => handleDeleteClick(student.id, student.classroomName)}
+            className="material-symbols-outlined"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      {/* {selectedStudent && (
         <EditStudentModal
           student={selectedStudent}
           isOpen={isModalOpen}
@@ -120,8 +160,20 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
           setSelectedStudent={setSelectedStudent}
           setSelectedStudents={setSelectedStudents}
         />
+      )} */}
+      {
+      selectedStudent && (
+        <UniversalModal
+          mode={mode}
+          student={studentData}
+          isOpen={isUniversalModalOpen}
+          setIsModalOpen={setIsUniversalModalOpen}
+          onClose={() => setIsUniversalModalOpen(false)}
+          setSelectedStudent={setSelectedStudent}
+          setSelectedStudents={setSelectedStudents}
+        />
       )}
-    </div>
+    </>
   );
 };
 
