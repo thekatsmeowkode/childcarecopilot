@@ -4,7 +4,6 @@ import { useClassroomContext } from "../hooks/useClassroomContext";
 //components
 import ClassroomDetails from "../components/ClassroomDetails";
 import ClassForm from "../components/ClassForm";
-import StudentForm from "../components/StudentForm";
 import StudentDetails from "../components/StudentDetails";
 import AddStudentModal from "../components/AddStudentModal";
 
