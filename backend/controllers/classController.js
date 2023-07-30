@@ -163,48 +163,6 @@ const updateStudent = async (req, res) => {
   }
 };
 
-//   ---------------------
-//   try {
-//   let studentData = {id:studentId}
-//   let dataToBeUpdated = {...req.body}
-//   await Classroom.findOneAndUpdate({"students.id": studentData.id}, {$set: {"students.$": dataToBeUpdated}})
-//   return res.status(200).json(dataToBeUpdated)
-//     }
-//   catch (error) {
-//     console.log(error)
-//     return res.status(404).json({error:"it fucked up"})
-//   }
-//   ------------------------
-// try {
-//   const classroom = await Classroom.findById(classId);
-
-//   if (!classroom) {
-//     return res.status(404).json({ error: "Class id does not exist" });
-//   }
-//   // find student in class's student array
-//   // const studentIndex = findIndex(classroom, studentId);
-//   // console.log(studentIndex)
-//   const studentIndex = classroom.students.findIndex((student) => student.id.toString() === studentId)
-
-//   if (studentIndex === -1) {
-//       return res.status(404).json({error:"Student not found"})
-//   }
-
-//   classroom.students[studentIndex].id = id;
-//   classroom.students[studentIndex].name = name;
-//   classroom.students[studentIndex].birthdate = birthdate;
-//   classroom.students[studentIndex].allergies = allergies;
-//   classroom.students[studentIndex].programs = programs;
-//   classroom.students[studentIndex].phone = phone;
-//   classroom.students[studentIndex].classroomName = classroomName;
-
-//   await classroom.save();
-//   return res.status(200).json(classroom);
-// } catch (error) {
-//   console.error(error);
-//   res.status(500).json({ error: "Internal server error" });
-// }
-
 //POST student to class
 const addStudent = async (req, res) => {
   const { classId } = req.params;
@@ -220,7 +178,7 @@ const addStudent = async (req, res) => {
     const newStudent = {
       id: new ObjectId(),
       name,
-      birthdate,
+      birthdate: new Date(birthdate),
       phone,
       allergies,
       programs,
