@@ -26,14 +26,15 @@ const EditStudentModal = ({
     const updatedStudent = {
       id,
       name,
-      birthdate,
+      birthdate: new Date(birthdate),
       classroomName,
       allergies,
       phone,
       programs,
       incomingDataClassroomMemory,
     };
-    console.log(updatedStudent);
+
+    console.log(`updatedStudent: ${JSON.stringify(updatedStudent)}`)
 
     const allClassroomsResponse = await fetch("/api/classes/", {
       method: "GET",

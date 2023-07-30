@@ -1,6 +1,7 @@
 import { Form, Button, Modal, InputGroup } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
 import { useContext, useState } from "react";
+import { getClassroomId } from "../utils/getClassroomId";
 
 const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
   const [name, setName] = useState("");
@@ -30,7 +31,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
   };
 
   const handleAddStudent = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const student = {
       name,
       birthdate,
@@ -39,32 +40,16 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
       allergies,
       programs,
     };
-    
-    console.log(student)
-    console.log(typeof(student.birthdate))
 
-    const allClassroomsResponse = await fetch("/api/classes/", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const classroomId = await getClassroomId(student);
 
-    const classroomJson = await allClassroomsResponse.json();
-
-    const classroom = classroomJson.find(
-      (classroom) => classroom.roomName === student.classroomName
-    );
-    const classroomId = classroom._id.toString();
-
-    if (!classroomId) {
-      console.log("Classroom not found");
-      return;
-    }
     //this post response returns complete json of the updated classroom {_id:3423, roomName: infants, students:[{}{}]
     const response = await fetch("/api/classes/" + classroomId + "/students", {
       method: "POST",
       body: JSON.stringify(student),
       headers: { "Content-Type": "application/json" },
     });
+
     const json = await response.json();
 
     if (!response.ok) {
@@ -80,7 +65,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
       setClassroomName("");
       setPrograms([]);
       console.log("new student added");
-      console.log(json.students)
+      console.log(`students array after adding student: ${json.students}`);
       dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: json });
     }
 
@@ -143,21 +128,21 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
           <Form.Group>
             <Form.Label>Classroom:</Form.Label>
             <InputGroup hasValidation>
-            <Form.Select
-              name="classroomName"
-              value={classroomName}
-              onChange={(e) => setClassroomName(e.target.value)}
-              required
-              // isInvalid={!isFormValid && classroomName === ''}
-              // className={nullFields.includes(classroomName) ? "error" : ""}
-            >
-              <option value=""></option>
-              <option value="infants">Infants</option>
-              <option value="crawlers">Crawlers</option>
-              <option value="toddlers">Toddlers</option>
-              <option value="twos">Twos</option>
-            </Form.Select>
-            <Form.Control.Feedback type="invalid">
+              <Form.Select
+                name="classroomName"
+                value={classroomName}
+                onChange={(e) => setClassroomName(e.target.value)}
+                required
+                // isInvalid={!isFormValid && classroomName === ''}
+                // className={nullFields.includes(classroomName) ? "error" : ""}
+              >
+                <option value=""></option>
+                <option value="infants">Infants</option>
+                <option value="crawlers">Crawlers</option>
+                <option value="toddlers">Toddlers</option>
+                <option value="twos">Twos</option>
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
                 Please input a classroom.
               </Form.Control.Feedback>
             </InputGroup>
