@@ -1,6 +1,7 @@
 import { Form, Button, Modal } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
 import { useContext, useState } from "react";
+import { getClassroomId } from "../utils/getClassroomId";
 
 const EditStudentModal = ({
   student,
@@ -36,23 +37,7 @@ const EditStudentModal = ({
 
     console.log(`updatedStudent: ${JSON.stringify(updatedStudent)}`)
 
-    const allClassroomsResponse = await fetch("/api/classes/", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const classroomJson = await allClassroomsResponse.json();
-
-    const targetClassroom = classroomJson.find(
-      (classroom) => classroom.roomName === classroomName
-    );
-
-    const classroomId = targetClassroom._id.toString();
-
-    if (!classroomId) {
-      console.log("Classroom not found");
-      return;
-    }
+    const classroomId = await getClassroomId(updatedStudent)
 
     const response = await fetch(
       "/api/classes/" +
@@ -69,7 +54,7 @@ const EditStudentModal = ({
     const json = await response.json();
 
     if (!response.ok) {
-      console.log("bad response");
+      throw Error("Could not complete patch request for update student route")
     }
 
     const updatedAllClassroomsResponse = await fetch("/api/classes/", {
