@@ -7,7 +7,14 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const { dispatch } = useContext(ClassroomContext);
 
-  const handleEditClick = async (studentId, classroomName) => {
+  const handleEditClick = () => {
+    //formats a date object into a string representation to pre-populate edit form
+    function formatDate (date) {  
+      date = new Date(student.birthdate)
+      return date.toISOString().substring(0,10)
+    }
+
+    student.birthdate = formatDate(student.birthdate)
     setSelectedStudent(student);
     setIsModalOpen(true);
   };
@@ -101,7 +108,7 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
       <p>{student.classroomName}</p>
       <p>{student.allergies}</p>
       <button
-        onClick={() => handleEditClick(student.id, student.classroomName)}
+        onClick={() => handleEditClick()}
         className="material-symbols-outlined"
       >
         Edit

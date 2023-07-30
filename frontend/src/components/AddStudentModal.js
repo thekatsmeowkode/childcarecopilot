@@ -39,6 +39,9 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
       allergies,
       programs,
     };
+    
+    console.log(student)
+    console.log(typeof(student.birthdate))
 
     const allClassroomsResponse = await fetch("/api/classes/", {
       method: "GET",
@@ -66,9 +69,8 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
 
     if (!response.ok) {
       console.log("error");
-      //   setError(json.error);
-      //   setNullFields(json.nullFields);
     }
+
     if (response.ok) {
       setSelectedStudents(json.students);
       setName("");
@@ -77,9 +79,8 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
       setPhone("");
       setClassroomName("");
       setPrograms([]);
-      //   setError(null);
-      //   setNullFields([]);
       console.log("new student added");
+      console.log(json.students)
       dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: json });
     }
 

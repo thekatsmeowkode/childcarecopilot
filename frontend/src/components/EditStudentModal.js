@@ -10,7 +10,7 @@ const EditStudentModal = ({
   setSelectedStudents,
 }) => {
   const [name, setName] = useState(student.name);
-  const [birthdate, setBirthdate] = useState(student.birthdate);
+  const [birthdate, setBirthdate] = useState(student.birthdate)
   const [classroomName, setClassroomName] = useState(student.classroomName);
   const [allergies, setAllergies] = useState(student.allergies);
   const [phone, setPhone] = useState(student.phone);
@@ -33,7 +33,7 @@ const EditStudentModal = ({
       programs,
       incomingDataClassroomMemory,
     };
-    console.log(updatedStudent)
+    console.log(updatedStudent);
 
     const allClassroomsResponse = await fetch("/api/classes/", {
       method: "GET",
