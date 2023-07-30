@@ -4,20 +4,25 @@ import { useContext, useState } from "react";
 import { getClassroomId } from "../utils/getClassroomId";
 
 const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
-  const [name, setName] = useState("");
-  const [birthdate, setBirthdate] = useState("");
-  const [classroomName, setClassroomName] = useState("");
-  const [allergies, setAllergies] = useState("");
-  const [phone, setPhone] = useState("");
-  const [id, setId] = useState("");
-  const [programs, setPrograms] = useState([]);
+  const [form, setForm] = useState({
+    name: "",
+    birthdate: "",
+    classroomName: "",
+    allergies: "",
+    phone: "",
+    programs: [],
+  });
   const [validated, setValidated] = useState(false);
-
   const { dispatch } = useContext(ClassroomContext);
+
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+
+    setForm({ ...form, [name]: value });
+  };
 
   const handleSubmit = (e) => {
     const form = e.target;
-    console.log(`validity ${form.checkValidity()}`);
 
     if (!form.checkValidity()) {
       e.preventDefault();
@@ -32,14 +37,8 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
-    const student = {
-      name,
-      birthdate,
-      phone,
-      classroomName,
-      allergies,
-      programs,
-    };
+    const student = { ...form };
+    console.log(student);
 
     const classroomId = await getClassroomId(student);
 
@@ -53,19 +52,20 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
     const json = await response.json();
 
     if (!response.ok) {
-      console.log("error");
+      throw Error("Error while trying to post student to database");
     }
 
     if (response.ok) {
       setSelectedStudents(json.students);
-      setName("");
-      setBirthdate("");
-      setAllergies("");
-      setPhone("");
-      setClassroomName("");
-      setPrograms([]);
-      console.log("new student added");
-      console.log(`students array after adding student: ${json.students}`);
+      setForm({
+        name: "",
+        birthdate: "",
+        classroomName: "",
+        allergies: "",
+        phone: "",
+        programs: [],
+      });
+      console.log(`new student added`);
       dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: json });
     }
 
@@ -77,13 +77,15 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
     const { value, checked } = e.target;
 
     if (checked) {
-      setPrograms((prevPrograms) =>
-        !prevPrograms ? [value] : [...prevPrograms, value]
-      );
+      setForm((prevForm) => ({
+        ...prevForm,
+        programs: [...prevForm.programs, value],
+      }));
     } else {
-      setPrograms((prevPrograms) =>
-        prevPrograms.filter((program) => program !== value)
-      );
+      setForm((prevForm) => ({
+        ...prevForm,
+        programs: prevForm.programs.filter((program) => program !== value),
+      }));
     }
   };
 
@@ -101,10 +103,9 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
                 type="text"
                 placeholder="Name"
                 name="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={form.name}
+                onChange={onChangeInput}
                 required
-                // isInvalid={!isFormValid && name.length === 0}
               />
               <Form.Control.Feedback type="invalid">
                 Please input a name.
@@ -116,8 +117,9 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
             <InputGroup hasValidation>
               <Form.Control
                 type="date"
-                onChange={(e) => setBirthdate(e.target.value)}
-                value={birthdate}
+                name="birthdate"
+                onChange={onChangeInput}
+                value={form.birthdate}
                 required
               />
               <Form.Control.Feedback type="invalid">
@@ -130,11 +132,9 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
             <InputGroup hasValidation>
               <Form.Select
                 name="classroomName"
-                value={classroomName}
-                onChange={(e) => setClassroomName(e.target.value)}
+                value={form.classroomName}
+                onChange={onChangeInput}
                 required
-                // isInvalid={!isFormValid && classroomName === ''}
-                // className={nullFields.includes(classroomName) ? "error" : ""}
               >
                 <option value=""></option>
                 <option value="infants">Infants</option>
@@ -151,19 +151,19 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
             <Form.Label>Allergies:</Form.Label>
             <Form.Control
               type="text"
-              value={allergies}
-              onChange={(e) => setAllergies(e.target.value)}
-              // className={nullFields.includes(allergies) ? "error" : ""}
+              name="allergies"
+              value={form.allergies}
+              onChange={onChangeInput}
             />
           </Form.Group>
           <Form.Group>
             <Form.Label>Phone Number:</Form.Label>
             <Form.Control
               type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              name="phone"
+              value={form.phone}
+              onChange={onChangeInput}
               pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              // className={nullFields.includes(phone) ? "error" : ""}
             />
           </Form.Group>
           <Form.Group>
