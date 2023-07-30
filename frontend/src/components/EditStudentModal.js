@@ -1,7 +1,8 @@
 import { Form, Button, Modal } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { getClassroomId } from "../utils/getClassroomId";
+import useForm from "../hooks/useForm";
 
 const EditStudentModal = ({
   student,
@@ -10,13 +11,15 @@ const EditStudentModal = ({
   setSelectedStudent,
   setSelectedStudents,
 }) => {
-  const [name, setName] = useState(student.name);
-  const [birthdate, setBirthdate] = useState(student.birthdate)
-  const [classroomName, setClassroomName] = useState(student.classroomName);
-  const [allergies, setAllergies] = useState(student.allergies);
-  const [phone, setPhone] = useState(student.phone);
-  const [id, setId] = useState(student.id);
-  const [programs, setPrograms] = useState(student.programs);
+  const { form, setForm, onChangeInput } = useForm({
+    name: student.name,
+    birthdate: student.birthdate,
+    classroomName: student.classroomName,
+    allergies: student.allergies,
+    phone: student.phone,
+    id: student.id,
+    programs: student.programs,
+  });
   //this remembers the classroom that the student was previously enrolled into
   const incomingDataClassroomMemory = student.classroomName;
 
@@ -25,19 +28,13 @@ const EditStudentModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedStudent = {
-      id,
-      name,
-      birthdate: new Date(birthdate),
-      classroomName,
-      allergies,
-      phone,
-      programs,
+      ...form,
       incomingDataClassroomMemory,
     };
 
-    console.log(`updatedStudent: ${JSON.stringify(updatedStudent)}`)
+    console.log(`updatedStudent: ${JSON.stringify(updatedStudent)}`);
 
-    const classroomId = await getClassroomId(updatedStudent)
+    const classroomId = await getClassroomId(updatedStudent);
 
     const response = await fetch(
       "/api/classes/" +
@@ -54,7 +51,7 @@ const EditStudentModal = ({
     const json = await response.json();
 
     if (!response.ok) {
-      throw Error("Could not complete patch request for update student route")
+      throw Error("Could not complete patch request for update student route");
     }
 
     const updatedAllClassroomsResponse = await fetch("/api/classes/", {
@@ -75,11 +72,15 @@ const EditStudentModal = ({
   const handleProgramChange = (e) => {
     const { value, checked } = e.target;
     if (checked) {
-      setPrograms((prevPrograms) => [...prevPrograms, value]);
+      setForm((prevForm) => ({
+        ...prevForm,
+        programs: [...prevForm.programs, value],
+      }));
     } else {
-      setPrograms((prevPrograms) =>
-        prevPrograms.filter((program) => program !== value)
-      );
+      setForm((prevForm) => ({
+        ...prevForm,
+        programs: prevForm.programs.filter((program) => program !== value),
+      }));
     }
   };
 
@@ -96,16 +97,17 @@ const EditStudentModal = ({
               type="text"
               placeholder="Name"
               name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={form.name}
+              onChange={onChangeInput}
             />
           </Form.Group>
           <Form.Group>
             <Form.Label>Birthdate</Form.Label>
             <Form.Control
               type="date"
-              onChange={(e) => setBirthdate(e.target.value)}
-              value={birthdate}
+              name="birthdate"
+              onChange={onChangeInput}
+              value={form.birthdate}
             />
           </Form.Group>
           <Form.Group>
@@ -113,8 +115,8 @@ const EditStudentModal = ({
             <Form.Select
               aria-label="Choose a classroom"
               name="classroomName"
-              value={classroomName}
-              onChange={(e) => setClassroomName(e.target.value)}
+              value={form.classroomName}
+              onChange={onChangeInput}
               // className={nullFields.includes(classroomName) ? "error" : ""}
             >
               <option value="infants">Infants</option>
@@ -127,8 +129,9 @@ const EditStudentModal = ({
             <Form.Label>Allergies:</Form.Label>
             <Form.Control
               type="text"
-              value={allergies}
-              onChange={(e) => setAllergies(e.target.value)}
+              name="allergies"
+              value={form.allergies}
+              onChange={onChangeInput}
               // className={nullFields.includes(allergies) ? "error" : ""}
             />
           </Form.Group>
@@ -136,8 +139,9 @@ const EditStudentModal = ({
             <Form.Label>Phone Number:</Form.Label>
             <Form.Control
               type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              name="phone"
+              value={form.phone}
+              onChange={onChangeInput}
               // className={nullFields.includes(phone) ? "error" : ""}
             />
           </Form.Group>
@@ -147,21 +151,21 @@ const EditStudentModal = ({
               value="earlyMorning"
               onChange={handleProgramChange}
               label="Early morning 7:30-8:30"
-              checked={programs.includes("earlyMorning")}
+              checked={form.programs.includes("earlyMorning")}
             ></Form.Check>
             <Form.Check
               type="checkbox"
               value="extendedDay"
               label="Extended Day 3:30-4:30"
               onChange={handleProgramChange}
-              checked={programs.includes("extendedDay")}
+              checked={form.programs.includes("extendedDay")}
             ></Form.Check>
             <Form.Check
               type="checkbox"
               value="lateDay"
               label="Late Day 4:30-5:30"
               onChange={handleProgramChange}
-              checked={programs.includes("lateDay")}
+              checked={form.programs.includes("lateDay")}
             ></Form.Check>
           </Form.Group>
         </Form>
