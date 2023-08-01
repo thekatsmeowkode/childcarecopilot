@@ -3,25 +3,17 @@ const Schema = mongoose.Schema
 
 const schoolSchema = new Schema(
     {
-        classroomCount: {
-            type: Number,
-            required:true
-        },
         costCoreProgram: {
-            type: Number,
-            required:true
+            type: Number
         },
         costEarlyMorning: {
-            type:Number,
-            required:true
+            type:Number
         },
         costExtendedDay: {
-            type:Number,
-            required:true
+            type:Number
         },
         costLateDay: {
-            type:Number,
-            required:true
+            type:Number
         },
         squareFootageInfants: {
             type:Number,
@@ -35,9 +27,6 @@ const schoolSchema = new Schema(
         squareFootageTwos: {
             type:Number
         },
-        totalSquareFootageSchool: {
-            type:Number
-        },
         squareFootageCrib: {
             type:Number
         },
@@ -47,38 +36,47 @@ const schoolSchema = new Schema(
         numberBathrooms: {
             type:Number
         },
-        oneToThreeYearSnack: {
-            type:Object,
-            required:true
+        oneTo3SnackVegFruit: {
+            type:Number
         },
-        oneToThreeYearSnack: {
-            milk:Number,
-            vegFruit: Number,
-            grain: Number,
-            protein: Number
+        oneTo3SnackMilk: {
+            type:Number
         },
-        oneToThreeYearLunch: {
-            type:Object,
-            required:true
+        oneTo3SnackProtein: {
+            type:Number
         },
-        oneToThreeYearLunch: {
-            milk:Number,
-            veg:Number,
-            fruit:Number,
-            grain:Number,
-            protein:Number
+        oneTo3SnackGrains: {
+            type:Number
         },
+        // oneToThreeYearSnack: {
+        //     type:Object,
+        //     required:true
+        // },
+        // oneToThreeYearSnack: {
+        //     milk:Number,
+        //     vegFruit: Number,
+        //     grain: Number,
+        //     protein: Number
+        // },
+        // oneToThreeYearLunch: {
+        //     type:Object,
+        //     required:true
+        // },
+        // oneToThreeYearLunch: {
+        //     milk:Number,
+        //     veg:Number,
+        //     fruit:Number,
+        //     grain:Number,
+        //     protein:Number
+        // },
         ratioBirthToTwo: {
-            type:Number,
-            required:true
+            type:Number
         },
         ratioTwotoThree: {
-            type:Number,
-            required:true
+            type:Number
         },
         kidsPerEmergencyCrib: {
-            type: Number,
-            required:true
+            type: Number
         },
     }
 )
