@@ -69,7 +69,6 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
       dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: json });
     }
 
-    setSelectedStudents(json.students);
     onClose();
   };
 

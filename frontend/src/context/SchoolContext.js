@@ -1,6 +1,6 @@
 import { createContext, useReducer } from "react";
 
-export const ClassroomContext = createContext();
+export const SchoolContext = createContext();
 
     export const schoolReducer = (state, action) => {
         switch (action.type) {
