@@ -57,23 +57,26 @@ const getClassRevenue = async (req, res) => {
     });
 
     const revenue = {
-      earlyMorning: schoolData.costEarlyMorning * counts.earlyMorning,
-      extendedDay: schoolData.costExtendedDay * counts.extendedDay,
-      lateDay: schoolData.costLateDay * counts.lateDay,
+      title: "Total Revenue",
+      earlyMorning: {
+        message: "Early Morning Program:",
+        value: schoolData.costEarlyMorning * counts.earlyMorning,
+      },
+      extendedDay: {
+        message: "Extended Day Program:",
+        value: schoolData.costExtendedDay * counts.extendedDay,
+      },
+      lateDay: {
+        message: "Late Day Program:",
+        value: schoolData.costLateDay * counts.lateDay,
+      },
+      schoolTotal: { message: "School Monthly Revenue:", value: 0 },
     };
     //this has to happen after the revenue object is created
-    revenue.totalAllProgram = revenue.earlyMorning + revenue.extendedDay + revenue.lateDay
-
-    const messages = {
-      title: "Total Revenue",
-      totalRevenue: "School Monthly Revenue:",
-      earlyMorning: "Early Morning Program:",
-      extendedDay: "Extended Day Program:",
-      lateDay: "Late Day Program:"
-    }
-
-    console.log(counts );
-    console.log(revenue);
+    revenue.schoolTotal.value =
+      revenue.earlyMorning.value +
+      revenue.extendedDay.value +
+      revenue.lateDay.value;
 
     res.status(200).json({ counts, revenue });
   } catch (error) {
@@ -81,4 +84,35 @@ const getClassRevenue = async (req, res) => {
   }
 };
 
-module.exports = { addSchool, getSchool, updateSchool, getClassRevenue };
+const getTotalStudents = async (req, res) => {
+  try {
+    const schoolData = await School.findOne({});
+
+    if (!schoolData) {
+      return res.status(404).json({ error: "School data not found" });
+    }
+
+    const classrooms = await Classroom.find();
+    let totalStudents = 0;
+
+    classrooms.forEach((classroom) => {
+      totalStudents += classroom.students.reduce((acc, student) => {
+        return acc + 1;
+      }, 0);
+    });
+
+    totalObj = {title: "Total Students", totalStudents}
+
+    res.status(200).json(totalObj)
+  } catch (error) {
+    res.status(500).json({ error: "Error calculating total students" });
+  }
+};
+
+module.exports = {
+  addSchool,
+  getSchool,
+  updateSchool,
+  getClassRevenue,
+  getTotalStudents,
+};
