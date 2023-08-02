@@ -73,6 +73,24 @@ const getStaffRequired = (room, schoolData, dividedAges) => {
   return teacherCount;
 };
 
+const getNumStudents = async () => {
+  const schoolData = await School.findOne({});
+
+    if (!schoolData) {
+      return res.status(404).json({ error: "School data not found" });
+    }
+
+    const classrooms = await Classroom.find();
+    let totalStudents = 0;
+
+    classrooms.forEach((classroom) => {
+      totalStudents += classroom.students.reduce((acc, student) => {
+        return acc + 1;
+      }, 0);
+    });
+    return totalStudents
+}
+
 //POST a school
 const addSchool = async (req, res) => {
   const { ...form } = req.body;
@@ -104,6 +122,7 @@ const updateSchool = async (req, res) => {
   console.log(JSON.stringify(req.body));
 };
 
+
 //GET revenue for each class
 const getClassRevenue = async (req, res) => {
   const PROGRAM_NAMES = ["earlyMorning", "extendedDay", "lateDay"];
@@ -129,6 +148,8 @@ const getClassRevenue = async (req, res) => {
       });
     });
 
+    const totalStudents = await getNumStudents()
+
     const revenue = {
       title: "Total Revenue",
       earlyMorning: {
@@ -143,10 +164,11 @@ const getClassRevenue = async (req, res) => {
         message: "Late Day Program:",
         value: schoolData.costLateDay * counts.lateDay,
       },
-      schoolTotal: { message: "School Monthly Revenue:", value: 0 },
+      schoolTotal: { message: "School Monthly Revenue:", value:0 },
     };
     //this has to happen after the revenue object is created
     revenue.schoolTotal.value =
+      (totalStudents * schoolData.costCoreProgram) +
       revenue.earlyMorning.value +
       revenue.extendedDay.value +
       revenue.lateDay.value;
@@ -183,7 +205,7 @@ const getTotalStudents = async (req, res) => {
   }
 };
 
-//GET staff required per room based on ages
+//GET staff required per room based on ages for CORE PROGRAM
 const getStaffRequiredCore = async (req, res) => {
   try {
     const schoolData = await School.findOne({});
@@ -228,6 +250,7 @@ const getStaffRequiredCore = async (req, res) => {
   }
 };
 
+//GET staff required per room based on ages for OPTIONAL PROGRAMS
 const getStaffPerProgram = async (req, res) => {
   const { program } = req.params;
 
