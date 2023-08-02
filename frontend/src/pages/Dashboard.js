@@ -5,6 +5,9 @@ const Dashboard = () => {
   const [revenueDetails, setRevenueDetails] = useState(null);
   const [totalStudents, setTotalStudents] = useState(null);
   const [staffCoreHours, setStaffCoreHours] = useState(null);
+  const [staffEarlyMorning, setStaffEarlyMorning] = useState(null);
+  const [staffExtendedDay, setStaffExtendedDay] = useState(null)
+  const [staffLateDay, setStaffLateDay] = useState(null)
 
   const CLASSROOM_NAMES = {
     infants: "infants",
@@ -44,17 +47,42 @@ const Dashboard = () => {
     return json;
   };
 
+  const getStaffProgram = async (program) => {
+    const programStaff = await fetch(
+      `api/school/staff-required/${program}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    const json = await programStaff.json();
+    return json;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [revenueData, studentData, staffCoreData] = await Promise.all([
+        const [
+          revenueData,
+          studentData,
+          staffCoreData,
+          staffEarlyMorningData,
+          extendedDayStaff,
+          lateDayStaff,
+        ] = await Promise.all([
           getClassRevenue(),
           getTotalStudents(),
           getStaffCoreHours(),
+          getStaffProgram("earlyMorning"),
+          getStaffProgram("extendedDay"),
+          getStaffProgram("lateDay"),
         ]);
         setRevenueDetails(revenueData);
         setTotalStudents(studentData);
         setStaffCoreHours(staffCoreData);
+        setStaffEarlyMorning(staffEarlyMorningData);
+        setStaffExtendedDay(extendedDayStaff);
+        setStaffLateDay(lateDayStaff);
       } catch (error) {
         console.error("Error fetching dashboard data", error);
       }
@@ -76,6 +104,21 @@ const Dashboard = () => {
       )}
       {staffCoreHours ? (
         <DashboardSquare squareDetails={staffCoreHours} />
+      ) : (
+        "Loading..."
+      )}
+      {staffEarlyMorning ? (
+        <DashboardSquare squareDetails={staffEarlyMorning} />
+      ) : (
+        "Loading..."
+      )}
+      {staffExtendedDay ? (
+        <DashboardSquare squareDetails={staffExtendedDay} />
+      ) : (
+        "Loading..."
+      )}
+      {staffLateDay ? (
+        <DashboardSquare squareDetails={staffLateDay} />
       ) : (
         "Loading..."
       )}

@@ -104,7 +104,7 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
   return (
     <div className="student-details">
       <p>{student.name}</p>
-      <p>{student.id}</p>
+      <p>{student.birthdate}</p>
       <p>{student.classroomName}</p>
       <p>{student.allergies}</p>
       <button
