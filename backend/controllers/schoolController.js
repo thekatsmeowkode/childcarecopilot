@@ -3,6 +3,30 @@ const Classroom = require("../models/ClassModel");
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
+const divideAges = async () => {
+  const classrooms = await Classroom.find();
+  let countsUnder2 = { infants: 0, toddlers: 0, crawlers: 0, twos: 0 };
+  let countsOver2 = { infants: 0, toddlers: 0, crawlers: 0, twos: 0 };
+
+  const today = new Date();
+
+  classrooms.forEach((classroom) => {
+    classroom.students.forEach((student) => {
+      const differenceInDays = Math.floor(
+        (today - student.birthdate) / MS_PER_DAY
+      );
+      //730 is the number of days in 2 years
+      if (differenceInDays < 730) {
+        countsUnder2[student.classroomName] += 1;
+      } else {
+        countsOver2[student.classroomName] += 1;
+      }
+    });
+  });
+
+  return { countsUnder2, countsOver2 };
+};
+
 //POST a school
 const addSchool = async (req, res) => {
   const { ...form } = req.body;
@@ -121,30 +145,14 @@ const getStaffRequired = async (req, res) => {
     if (!schoolData) {
       return res.status(404).json({ error: "School data not found" });
     }
-
-    const classrooms = await Classroom.find();
-    let countsUnder2 = { infants: 0, toddlers: 0, crawlers: 0, twos: 0 };
-    let countsOver2 = { infants: 0, toddlers: 0, crawlers: 0, twos: 0 };
-
-    const today = new Date();
-
-    classrooms.forEach((classroom) => {
-      classroom.students.forEach((student) => {
-        const differenceInDays = Math.floor(
-          (today - student.birthdate) / MS_PER_DAY
-        );
-        //730 is the number of days in 2 years
-        if (differenceInDays < 730) {
-          countsUnder2[student.classroomName] += 1;
-        } else {
-          countsOver2[student.classroomName] += 1;
-        }
-      });
-    });
+    
+    const dividedAges = await divideAges();
 
     const getStaffRequired = (room) => {
-      let countUnder2 = countsUnder2[room];
-      let countOver2 = countsOver2[room];
+      let countUnder2 = dividedAges.countsUnder2[room];
+      console.log(countUnder2);
+      let countOver2 = dividedAges.countsOver2[room];
+      console.log(countOver2);
       let teacherCount = 0;
       if (countUnder2 > 0) {
         if (countUnder2 <= schoolData.ratioBirthToTwo) {
