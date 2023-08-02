@@ -82,14 +82,27 @@ const Home = () => {
           ))}
       </div>
       <div className="students-grid">
-        {selectedStudents &&
-          selectedStudents.map((student) => (
-            <StudentDetails
-              key={student.id}
-              setSelectedStudents={setSelectedStudents}
-              student={student}
-            ></StudentDetails>
-          ))}
+        <table>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <th>Birthdate</th>
+              <th>Programs</th>
+              <th>Allergies</th>
+              <th>Classroom</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+            {selectedStudents &&
+              selectedStudents.map((student) => (
+                <StudentDetails
+                  key={student.id}
+                  setSelectedStudents={setSelectedStudents}
+                  student={student}
+                ></StudentDetails>
+              ))}
+          </tbody>
+        </table>
       </div>
       <ClassForm></ClassForm>
       {/* <StudentForm setSelectedStudents={setSelectedStudents}></StudentForm> */}

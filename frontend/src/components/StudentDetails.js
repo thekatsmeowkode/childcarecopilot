@@ -9,12 +9,12 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
 
   const handleEditClick = () => {
     //formats a date object into a string representation to pre-populate edit form
-    function formatDate (date) {  
-      date = new Date(student.birthdate)
-      return date.toISOString().substring(0,10)
+    function formatDate(date) {
+      date = new Date(student.birthdate);
+      return date.toISOString().substring(0, 10);
     }
 
-    student.birthdate = formatDate(student.birthdate)
+    student.birthdate = formatDate(student.birthdate);
     setSelectedStudent(student);
     setIsModalOpen(true);
   };
@@ -66,6 +66,19 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
     }
   };
 
+  const formatProgramName = (program) => {
+    switch (program) {
+      case "earlyMorning":
+        return "Early Morning";
+      case "extendedDay":
+        return "Extended Day";
+      case "lateDay":
+        return "Late Day";
+      default:
+        return;
+    }
+  };
+
   //     const allClassroomsResponse = await fetch("/api/classes/", {
   //       method: "GET",
   //       headers: { "Content-Type": "application/json" },
@@ -102,23 +115,37 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
   //   };
 
   return (
-    <div className="student-details">
-      <p>{student.name}</p>
-      <p>{student.birthdate}</p>
-      <p>{student.classroomName}</p>
-      <p>{student.allergies}</p>
-      <button
-        onClick={() => handleEditClick()}
-        className="material-symbols-outlined"
-      >
-        Edit
-      </button>
-      <button
-        onClick={() => handleDeleteClick(student.id, student.classroomName)}
-        className="material-symbols-outlined"
-      >
-        Delete
-      </button>
+    <>
+      <tr>
+        <td>{student.name}</td>
+        <td>{student.birthdate}</td>
+        <td>
+          <ol>
+            {student.programs.map((program) => (
+              <li>{formatProgramName(program)}</li>
+            ))}
+          </ol>
+        </td>
+        <td>{student.allergies}</td>
+        <td>{student.classroomName}</td>
+        <td>
+          <button
+            onClick={handleEditClick}
+            className="material-symbols-outlined"
+          >
+            Edit
+          </button>
+        </td>
+        <td>
+          <button
+            onClick={() => handleDeleteClick(student.id, student.classroomName)}
+            className="material-symbols-outlined"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+
       {selectedStudent && (
         <EditStudentModal
           student={selectedStudent}
@@ -128,7 +155,7 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
           setSelectedStudents={setSelectedStudents}
         />
       )}
-    </div>
+    </>
   );
 };
 

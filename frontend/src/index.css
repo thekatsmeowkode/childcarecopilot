@@ -123,3 +123,15 @@ input.error {
 .student-details > p {
   padding:.25rem;
 }
+
+table {
+  /* border:1px solid; */
+  width:100%;
+  border-collapse:collapse;
+  padding:1rem;
+}
+
+th, tr, td {
+  border:1px solid black !important;
+  padding:.5rem;
+}
