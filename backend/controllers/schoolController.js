@@ -41,7 +41,6 @@ const divideAges = async (program) => {
       });
     });
   }
-
   return { countsUnder2, countsOver2 };
 };
 
@@ -70,10 +69,11 @@ const getStaffRequired = (room, schoolData, dividedAges) => {
       teacherCount += 1;
     }
   }
+  console.log(teacherCount)
   return teacherCount;
 };
 
-const getStudentsPerProgram = async (classrooms) => {
+const getStudentsPerProgram = async () => {
   const PROGRAM_NAMES = ["earlyMorning", "extendedDay", "lateDay"];
 
   let roomsWithCounts = {
@@ -106,11 +106,6 @@ const getStudentsPerProgram = async (classrooms) => {
 };
 
 const getNumStudents = async () => {
-  const schoolData = await School.findOne({});
-
-  if (!schoolData) {
-    return res.status(404).json({ error: "School data not found" });
-  }
 
   const classrooms = await Classroom.find();
   let totalStudents = 0;
@@ -121,6 +116,31 @@ const getNumStudents = async () => {
     }, 0);
   });
   return totalStudents;
+};
+
+const getNumStudentsByClass = async () => {
+  let countPerRoom = { infants: 0, crawlers: 0, toddlers: 0, twos: 0 };
+
+  try {
+    const classrooms = await Classroom.find();
+
+    let countPerRoom = { infants: 0, crawlers: 0, toddlers: 0, twos: 0 };
+
+    classrooms.forEach((classroom) => {
+      const roomName = classroom.roomName
+      console.log(roomName)
+      countPerRoom[roomName] += classroom.students.reduce(
+        (acc, student) => {
+          return acc + 1;
+        },
+        0
+      );
+    });
+
+    return countPerRoom;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 //POST a school
@@ -247,37 +267,43 @@ const getStaffRequiredCore = async (req, res) => {
 
     const dividedAges = await divideAges();
 
+    const studentCount = await getNumStudentsByClass()
+
     const staffCoreHours = {
       title: "Staff Required Core Hours",
       infants: {
         message: "Infant Room Teachers",
-        value: getStaffRequired("infants", schoolData, dividedAges),
+        numTeachers: getStaffRequired("infants", schoolData, dividedAges),
+        numStudents: studentCount.infants
       },
       crawlers: {
         message: "Crawlers Room Teachers",
-        value: getStaffRequired("crawlers", schoolData, dividedAges),
+        numTeachers: getStaffRequired("crawlers", schoolData, dividedAges),
+        numStudents: studentCount.crawlers
       },
       toddlers: {
         message: "Toddler Room Teachers",
-        value: getStaffRequired("toddlers", schoolData, dividedAges),
+        numTeachers: getStaffRequired("toddlers", schoolData, dividedAges),
+        numStudents: studentCount.toddlers
       },
       twos: {
         message: "Twos Room Teachers",
-        value: getStaffRequired("twos", schoolData, dividedAges),
+        numTeachers: getStaffRequired("twos", schoolData, dividedAges),
+        numStudents: studentCount.twos
       },
 
-      schoolTotal: { message: "School Staff Required ", value: 0 },
+      schoolTotal: { message: "School Staff Required ", numTeachers: 0 },
     };
     //this has to happen after the revenue object is created
-    staffCoreHours.schoolTotal.value =
-      staffCoreHours.infants.value +
-      staffCoreHours.crawlers.value +
-      staffCoreHours.toddlers.value +
-      staffCoreHours.twos.value;
+    staffCoreHours.schoolTotal.numTeachers =
+      staffCoreHours.infants.numTeachers +
+      staffCoreHours.crawlers.numTeachers +
+      staffCoreHours.toddlers.numTeachers +
+      staffCoreHours.twos.numTeachers;
 
     res.status(200).json({ staffCoreHours });
   } catch (error) {
-    res.status(500).json({ error: "Error calculating total revenue" });
+    res.status(500).json({ error: "Error calculating staff required core hours" });
   }
 };
 
@@ -318,33 +344,33 @@ const getStaffPerProgram = async (req, res) => {
       title: "Staff Required " + textOutput,
       infants: {
         message: "Infant Room Teachers",
-        value: getStaffRequired("infants", schoolData, dividedAges),
-        numStudents: studentsPerProgram.infants[program]
+        numTeachers: getStaffRequired("infants", schoolData, dividedAges),
+        numStudents: studentsPerProgram.infants[program],
       },
       crawlers: {
         message: "Crawlers Room Teachers",
-        value: getStaffRequired("crawlers", schoolData, dividedAges),
-        numStudents: studentsPerProgram.crawlers[program]
+        numTeachers: getStaffRequired("crawlers", schoolData, dividedAges),
+        numStudents: studentsPerProgram.crawlers[program],
       },
       toddlers: {
         message: "Toddler Room Teachers",
-        value: getStaffRequired("toddlers", schoolData, dividedAges),
-        numStudents: studentsPerProgram.toddlers[program]
+        numTeachers: getStaffRequired("toddlers", schoolData, dividedAges),
+        numStudents: studentsPerProgram.toddlers[program],
       },
       twos: {
         message: "Twos Room Teachers",
-        value: getStaffRequired("twos", schoolData, dividedAges),
-        numStudents: studentsPerProgram.twos[program]
+        numTeachers: getStaffRequired("twos", schoolData, dividedAges),
+        numStudents: studentsPerProgram.twos[program],
       },
 
-      schoolTotal: { message: textOutput + " Staff Required", value: 0 },
+      schoolTotal: { message: textOutput + " Staff Required", numTeachers: 0 },
     };
     //this has to happen after the revenue object is created
-    staffPerProgram.schoolTotal.value =
-      staffPerProgram.infants.value +
-      staffPerProgram.crawlers.value +
-      staffPerProgram.toddlers.value +
-      staffPerProgram.twos.value;
+    staffPerProgram.schoolTotal.numTeachers =
+      staffPerProgram.infants.numTeachers +
+      staffPerProgram.crawlers.numTeachers +
+      staffPerProgram.toddlers.numTeachers +
+      staffPerProgram.twos.numTeachers;
 
     res.status(200).json({ staffPerProgram });
   } catch (error) {
