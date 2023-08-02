@@ -1,6 +1,4 @@
 const DashboardSquare = ({ squareDetails }) => {
-  //   console.log(squareDetails);
-  console.log(squareDetails.staffPerProgram);
   return (
     <>
       {squareDetails.revenue &&
@@ -28,15 +26,19 @@ const DashboardSquare = ({ squareDetails }) => {
         <>
           <p>{squareDetails.staffCoreHours.title}</p>
           <p>{squareDetails.staffCoreHours.infants.message}</p>
-          <p>{squareDetails.staffCoreHours.infants.value}</p>
+          <p>{squareDetails.staffCoreHours.infants.numTeachers}</p>
+          <p>s:{squareDetails.staffCoreHours.infants.numStudents}</p>
           <p>{squareDetails.staffCoreHours.crawlers.message}</p>
-          <p>{squareDetails.staffCoreHours.crawlers.value}</p>
+          <p>{squareDetails.staffCoreHours.crawlers.numTeachers}</p>
+          <p>s:{squareDetails.staffCoreHours.crawlers.numStudents}</p>
           <p>{squareDetails.staffCoreHours.toddlers.message}</p>
-          <p>{squareDetails.staffCoreHours.toddlers.value}</p>
+          <p>{squareDetails.staffCoreHours.toddlers.numTeachers}</p>
+          <p>s:{squareDetails.staffCoreHours.toddlers.numStudents}</p>
           <p>{squareDetails.staffCoreHours.twos.message}</p>
-          <p>{squareDetails.staffCoreHours.twos.value}</p>
+          <p>{squareDetails.staffCoreHours.twos.numTeachers}</p>
+          <p>s:{squareDetails.staffCoreHours.twos.numStudents}</p>
           <p>{squareDetails.staffCoreHours.schoolTotal.message}</p>
-          <p>{squareDetails.staffCoreHours.schoolTotal.value}</p>
+          <p>{squareDetails.staffCoreHours.schoolTotal.numTeachers}</p>
         </>
       )}
       {squareDetails.staffPerProgram &&
@@ -44,15 +46,19 @@ const DashboardSquare = ({ squareDetails }) => {
           <>
             <p>{squareDetails.staffPerProgram.title}</p>
             <p>{squareDetails.staffPerProgram.infants.message}</p>
-            <p>{squareDetails.staffPerProgram.infants.value}</p>
+            <p>teachers:{squareDetails.staffPerProgram.infants.numTeachers}</p>
+            <p>students:{squareDetails.staffPerProgram.infants.numStudents}</p>
             <p>{squareDetails.staffPerProgram.crawlers.message}</p>
-            <p>{squareDetails.staffPerProgram.crawlers.value}</p>
+            <p>t: {squareDetails.staffPerProgram.crawlers.numTeachers}</p>
+            <p>s: {squareDetails.staffPerProgram.crawlers.numStudents}</p>
             <p>{squareDetails.staffPerProgram.toddlers.message}</p>
-            <p>{squareDetails.staffPerProgram.toddlers.value}</p>
+            <p>t:{squareDetails.staffPerProgram.toddlers.numTeachers}</p>
+            <p>s: {squareDetails.staffPerProgram.toddlers.numStudents}</p>
             <p>{squareDetails.staffPerProgram.twos.message}</p>
-            <p>{squareDetails.staffPerProgram.twos.value}</p>
+            <p>t: {squareDetails.staffPerProgram.twos.numTeachers}</p>
+            <p>s: {squareDetails.staffPerProgram.twos.numStudents}</p>
             <p>{squareDetails.staffPerProgram.schoolTotal.message}</p>
-            <p>{squareDetails.staffPerProgram.schoolTotal.value}</p>
+            <p>t: {squareDetails.staffPerProgram.schoolTotal.numTeachers}</p>
           </>
         )}
       {squareDetails.staffPerProgram &&
@@ -60,15 +66,19 @@ const DashboardSquare = ({ squareDetails }) => {
           <>
             <p>{squareDetails.staffPerProgram.title}</p>
             <p>{squareDetails.staffPerProgram.infants.message}</p>
-            <p>{squareDetails.staffPerProgram.infants.value}</p>
+            <p>teachers:{squareDetails.staffPerProgram.infants.numTeachers}</p>
+            <p>students:{squareDetails.staffPerProgram.infants.numStudents}</p>
             <p>{squareDetails.staffPerProgram.crawlers.message}</p>
-            <p>{squareDetails.staffPerProgram.crawlers.value}</p>
+            <p>t: {squareDetails.staffPerProgram.crawlers.numTeachers}</p>
+            <p>s: {squareDetails.staffPerProgram.crawlers.numStudents}</p>
             <p>{squareDetails.staffPerProgram.toddlers.message}</p>
-            <p>{squareDetails.staffPerProgram.toddlers.value}</p>
+            <p>t:{squareDetails.staffPerProgram.toddlers.numTeachers}</p>
+            <p>s: {squareDetails.staffPerProgram.toddlers.numStudents}</p>
             <p>{squareDetails.staffPerProgram.twos.message}</p>
-            <p>{squareDetails.staffPerProgram.twos.value}</p>
+            <p>t: {squareDetails.staffPerProgram.twos.numTeachers}</p>
+            <p>s: {squareDetails.staffPerProgram.twos.numStudents}</p>
             <p>{squareDetails.staffPerProgram.schoolTotal.message}</p>
-            <p>{squareDetails.staffPerProgram.schoolTotal.value}</p>
+            <p>t: {squareDetails.staffPerProgram.schoolTotal.numTeachers}</p>
           </>
         )}
       {squareDetails.staffPerProgram &&
@@ -76,15 +86,19 @@ const DashboardSquare = ({ squareDetails }) => {
           <>
             <p>{squareDetails.staffPerProgram.title}</p>
             <p>{squareDetails.staffPerProgram.infants.message}</p>
-            <p>{squareDetails.staffPerProgram.infants.value}</p>
+            <p>teachers:{squareDetails.staffPerProgram.infants.numTeachers}</p>
+            <p>students:{squareDetails.staffPerProgram.infants.numStudents}</p>
             <p>{squareDetails.staffPerProgram.crawlers.message}</p>
-            <p>{squareDetails.staffPerProgram.crawlers.value}</p>
+            <p>t: {squareDetails.staffPerProgram.crawlers.numTeachers}</p>
+            <p>s: {squareDetails.staffPerProgram.crawlers.numStudents}</p>
             <p>{squareDetails.staffPerProgram.toddlers.message}</p>
-            <p>{squareDetails.staffPerProgram.toddlers.value}</p>
+            <p>t:{squareDetails.staffPerProgram.toddlers.numTeachers}</p>
+            <p>s: {squareDetails.staffPerProgram.toddlers.numStudents}</p>
             <p>{squareDetails.staffPerProgram.twos.message}</p>
-            <p>{squareDetails.staffPerProgram.twos.value}</p>
+            <p>t: {squareDetails.staffPerProgram.twos.numTeachers}</p>
+            <p>s: {squareDetails.staffPerProgram.twos.numStudents}</p>
             <p>{squareDetails.staffPerProgram.schoolTotal.message}</p>
-            <p>{squareDetails.staffPerProgram.schoolTotal.value}</p>
+            <p>t: {squareDetails.staffPerProgram.schoolTotal.numTeachers}</p>
           </>
         )}
     </>

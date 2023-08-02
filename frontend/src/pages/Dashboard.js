@@ -33,7 +33,6 @@ const Dashboard = () => {
       headers: { "Content-Type": "application/json" },
     });
     const json = await totalStudents.json();
-    console.log(json);
     //json to get is json.classRevenue
     return json;
   };

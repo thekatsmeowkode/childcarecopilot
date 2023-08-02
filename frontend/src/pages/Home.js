@@ -96,7 +96,7 @@ const Home = () => {
             {selectedStudents &&
               selectedStudents.map((student) => (
                 <StudentDetails
-                  key={student.id}
+                  key={student._id}
                   setSelectedStudents={setSelectedStudents}
                   student={student}
                 ></StudentDetails>
