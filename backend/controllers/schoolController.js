@@ -3,28 +3,74 @@ const Classroom = require("../models/ClassModel");
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-const divideAges = async () => {
+const divideAges = async (program) => {
   const classrooms = await Classroom.find();
   let countsUnder2 = { infants: 0, toddlers: 0, crawlers: 0, twos: 0 };
   let countsOver2 = { infants: 0, toddlers: 0, crawlers: 0, twos: 0 };
 
   const today = new Date();
 
-  classrooms.forEach((classroom) => {
-    classroom.students.forEach((student) => {
-      const differenceInDays = Math.floor(
-        (today - student.birthdate) / MS_PER_DAY
-      );
-      //730 is the number of days in 2 years
-      if (differenceInDays < 730) {
-        countsUnder2[student.classroomName] += 1;
-      } else {
-        countsOver2[student.classroomName] += 1;
-      }
+  if (program) {
+    classrooms.forEach((classroom) => {
+      classroom.students.forEach((student) => {
+        if (student.programs.includes(program)) {
+          const differenceInDays = Math.floor(
+            (today - student.birthdate) / MS_PER_DAY
+          );
+          //730 is the number of days in 2 years
+          if (differenceInDays < 730) {
+            countsUnder2[student.classroomName] += 1;
+          } else {
+            countsOver2[student.classroomName] += 1;
+          }
+        }
+      });
     });
-  });
+  } else {
+    classrooms.forEach((classroom) => {
+      classroom.students.forEach((student) => {
+        const differenceInDays = Math.floor(
+          (today - student.birthdate) / MS_PER_DAY
+        );
+        //730 is the number of days in 2 years
+        if (differenceInDays < 730) {
+          countsUnder2[student.classroomName] += 1;
+        } else {
+          countsOver2[student.classroomName] += 1;
+        }
+      });
+    });
+  }
 
   return { countsUnder2, countsOver2 };
+};
+
+const getStaffRequired = (room, schoolData, dividedAges) => {
+  let countUnder2 = dividedAges.countsUnder2[room];
+  let countOver2 = dividedAges.countsOver2[room];
+  if (!countOver2 && !countUnder2) {
+    return 0;
+  }
+
+  let teacherCount = 0;
+  if (countUnder2 > 0) {
+    if (countUnder2 <= schoolData.ratioBirthToTwo) {
+      return 1;
+    }
+    teacherCount += Math.floor(countUnder2 / schoolData.ratioBirthToTwo);
+    if (countUnder2 % schoolData.ratioBirthToTwo) {
+      teacherCount += 1;
+    }
+  } else {
+    if (countOver2 <= schoolData.ratioTwoToThree) {
+      return 1;
+    }
+    teacherCount += Math.floor(countOver2 / schoolData.ratioTwoToThree);
+    if (countOver2 % schoolData.ratioTwoToThree) {
+      teacherCount += 1;
+    }
+  }
+  return teacherCount;
 };
 
 //POST a school
@@ -138,75 +184,111 @@ const getTotalStudents = async (req, res) => {
 };
 
 //GET staff required per room based on ages
-const getStaffRequired = async (req, res) => {
+const getStaffRequiredCore = async (req, res) => {
   try {
     const schoolData = await School.findOne({});
 
     if (!schoolData) {
       return res.status(404).json({ error: "School data not found" });
     }
-    
+
     const dividedAges = await divideAges();
 
-    const getStaffRequired = (room) => {
-      let countUnder2 = dividedAges.countsUnder2[room];
-      console.log(countUnder2);
-      let countOver2 = dividedAges.countsOver2[room];
-      console.log(countOver2);
-      let teacherCount = 0;
-      if (countUnder2 > 0) {
-        if (countUnder2 <= schoolData.ratioBirthToTwo) {
-          return 1;
-        }
-        teacherCount += Math.floor(countUnder2 / schoolData.ratioBirthToTwo);
-        console.log(`count after first operation: ${teacherCount}`);
-        if (countUnder2 % schoolData.ratioBirthToTwo) {
-          teacherCount += 1;
-        }
-      } else {
-        console.log(schoolData);
-        if (countOver2 <= schoolData.ratioTwoToThree) {
-          return 1;
-        }
-        teacherCount += Math.floor(countOver2 / schoolData.ratioTwoToThree);
-        if (countOver2 % schoolData.ratioTwoToThree) {
-          teacherCount += 1;
-        }
-      }
-      return teacherCount;
-    };
-
-    const staffRequired = {
+    const staffCoreHours = {
       title: "Staff Required Core Hours",
       infants: {
         message: "Infant Room Teachers",
-        value: getStaffRequired("infants"),
+        value: getStaffRequired("infants", schoolData, dividedAges),
       },
       crawlers: {
         message: "Crawlers Room Teachers",
-        value: getStaffRequired("crawlers"),
+        value: getStaffRequired("crawlers", schoolData, dividedAges),
       },
       toddlers: {
         message: "Toddler Room Teachers",
-        value: getStaffRequired("toddlers"),
+        value: getStaffRequired("toddlers", schoolData, dividedAges),
       },
       twos: {
         message: "Twos Room Teachers",
-        value: getStaffRequired("twos"),
+        value: getStaffRequired("twos", schoolData, dividedAges),
       },
 
       schoolTotal: { message: "School Staff Required ", value: 0 },
     };
     //this has to happen after the revenue object is created
-    staffRequired.schoolTotal.value =
-      staffRequired.infants.value +
-      staffRequired.crawlers.value +
-      staffRequired.toddlers.value +
-      staffRequired.twos.value;
+    staffCoreHours.schoolTotal.value =
+      staffCoreHours.infants.value +
+      staffCoreHours.crawlers.value +
+      staffCoreHours.toddlers.value +
+      staffCoreHours.twos.value;
 
-    res.status(200).json({ staffRequired });
+    res.status(200).json({ staffCoreHours });
   } catch (error) {
     res.status(500).json({ error: "Error calculating total revenue" });
+  }
+};
+
+const getStaffPerProgram = async (req, res) => {
+  const { program } = req.params;
+
+  let textOutput = "";
+
+  switch (program) {
+    case "earlyMorning": {
+      textOutput = "Early Morning";
+      break
+    }
+    case "extendedDay": {
+      textOutput = "Extended Day";
+      break
+    }
+    case "lateDay": {
+      textOutput = "Late Day";
+      break
+    }
+  }
+
+  try {
+    const schoolData = await School.findOne({});
+
+    if (!schoolData) {
+      return res.status(404).json({ error: "School data not found" });
+    }
+
+    const dividedAges = await divideAges(program);
+
+    const staffPerProgram = {
+      dataLabel: program,
+      title: "Staff Required " + textOutput,
+      infants: {
+        message: "Infant Room Teachers",
+        value: getStaffRequired("infants", schoolData, dividedAges),
+      },
+      crawlers: {
+        message: "Crawlers Room Teachers",
+        value: getStaffRequired("crawlers", schoolData, dividedAges),
+      },
+      toddlers: {
+        message: "Toddler Room Teachers",
+        value: getStaffRequired("toddlers", schoolData, dividedAges),
+      },
+      twos: {
+        message: "Twos Room Teachers",
+        value: getStaffRequired("twos", schoolData, dividedAges),
+      },
+
+      schoolTotal: { message: textOutput + " Staff Required", value: 0 },
+    };
+    //this has to happen after the revenue object is created
+    staffPerProgram.schoolTotal.value =
+      staffPerProgram.infants.value +
+      staffPerProgram.crawlers.value +
+      staffPerProgram.toddlers.value +
+      staffPerProgram.twos.value;
+
+    res.status(200).json({ staffPerProgram });
+  } catch (error) {
+    res.status(500).json({ error: "Error calculating staff per program" });
   }
 };
 
@@ -216,5 +298,6 @@ module.exports = {
   updateSchool,
   getClassRevenue,
   getTotalStudents,
-  getStaffRequired,
+  getStaffRequiredCore,
+  getStaffPerProgram,
 };

@@ -5,7 +5,8 @@ const {
   updateSchool,
   getClassRevenue,
   getTotalStudents,
-  getStaffRequired,
+  getStaffRequiredCore,
+  getStaffPerProgram,
 } = require("../controllers/schoolController");
 
 const router = express.Router();
@@ -20,6 +21,8 @@ router.get("/class-revenue", getClassRevenue);
 
 router.get("/total-students", getTotalStudents);
 
-router.get("/staff-required", getStaffRequired);
+router.get("/staff-required", getStaffRequiredCore);
+
+router.get("/staff-required/:program", getStaffPerProgram)
 
 module.exports = router;
