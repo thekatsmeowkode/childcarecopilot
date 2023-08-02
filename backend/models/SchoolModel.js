@@ -72,7 +72,7 @@ const schoolSchema = new Schema(
         ratioBirthToTwo: {
             type:Number
         },
-        ratioTwotoThree: {
+        ratioTwoToThree: {
             type:Number
         },
         kidsPerEmergencyCrib: {
