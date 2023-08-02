@@ -7,13 +7,55 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const { dispatch } = useContext(ClassroomContext);
 
-  const handleEditClick = () => {
-    //formats a date object into a string representation to pre-populate edit form
-    function formatDate(date) {
-      date = new Date(student.birthdate);
-      return date.toISOString().substring(0, 10);
+  function formatDate(date) {
+    date = new Date(student.birthdate);
+    return date.toISOString().substring(0, 10);
+  }
+
+  function calculateAge(dateOfBirth) {
+    const today = new Date();
+    const birthDateObj = new Date(dateOfBirth);
+
+    let years = today.getFullYear() - birthDateObj.getFullYear();
+    let months = today.getMonth() - birthDateObj.getMonth();
+    let days = today.getDate() - birthDateObj.getDate();
+
+    if (days < 0) {
+      months -= 1;
+      const tempDate = new Date(today.getFullYear(), today.getMonth(), 0);
+      days = tempDate.getDate() + days;
     }
 
+    if (months < 0) {
+      years -= 1;
+      months = 12 + months;
+    }
+
+    return { years, months, days };
+  }
+
+  function formatAge(dateOfBirth) {
+    const { years, months, days } = calculateAge(dateOfBirth);
+
+    let formattedAge = "";
+
+    if (years > 0) {
+      formattedAge += `${years} ${years === 1 ? "year" : "years"}`;
+    }
+
+    if (months > 0) {
+      formattedAge += ` ${months} ${months === 1 ? "month" : "months"}`;
+    }
+
+    if (years === 0 && months === 0 && days > 0) {
+      formattedAge = `${days} ${days === 1 ? "day" : "days"}`;
+    }
+
+    return formattedAge.trim();
+  }
+
+  const handleEditClick = () => {
+    //formats a date object into a string representation to pre-populate edit form
     student.birthdate = formatDate(student.birthdate);
     setSelectedStudent(student);
     setIsModalOpen(true);
@@ -62,7 +104,7 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
     const updatedJson = await updatedAllClassroomsResponse.json();
 
     if (updatedAllClassroomsResponse.ok) {
-      dispatch({ type: "DELETE_STUDENT", payload: updatedJson }); // await dispatch({type:"UPDATE_STUDENT", payload:classroomWithUpdatedStudentInside})
+      dispatch({ type: "DELETE_STUDENT", payload: updatedJson });
     }
   };
 
@@ -79,46 +121,16 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
     }
   };
 
-  //     const allClassroomsResponse = await fetch("/api/classes/", {
-  //       method: "GET",
-  //       headers: { "Content-Type": "application/json" },
-  //     });
-
-  //     const classroomJson = await allClassroomsResponse.json();
-  //     const classroom = classroomJson.find(
-  //       (classroom) => classroom.roomName === classroomName
-  //     );
-  //     const classroomId = classroom._id.toString();
-
-  //     if (!classroomId) {
-  //       console.log("Classroom not found");
-  //       return;
-  //     }
-
-  //     const getOneClassroomResponse = await fetch("/api/classes/" + classroomId, {
-  //       method: "GET",
-  //       headers: { "Content-Type": "application/json" },
-  //     });
-
-  //     const oneClassJson = await getOneClassroomResponse.json();
-
-  //     if (!oneClassJson) {
-  //       console.log("One class not found");
-  //       return;
-  //     }
-
-  //     const targetStudent = oneClassJson.students.find(
-  //       (allStudents) => allStudents.id === studentId
-  //     );
-  //     setSelectedStudent(targetStudent);
-  //     return targetStudent;
-  //   };
-
   return (
     <>
       <tr>
         <td>{student.name}</td>
-        <td>{student.birthdate}</td>
+        <td>
+          <ul>
+            <li>{formatDate(student.birthdate)}</li>
+            <li>{formatAge(student.birthdate)}</li>
+          </ul>
+        </td>
         <td>
           <ol>
             {student.programs.map((program) => (

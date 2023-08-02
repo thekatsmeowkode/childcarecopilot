@@ -107,17 +107,17 @@ input.error {
 }
 
 .students-grid {
-  display:grid;
+  /* display:grid;
   grid-template-columns: repeat(auto-fill, minmax(1fr, 2fr));
-  gap: .25rem;
+  gap: .25rem; */
 }
 
 .student-details {
   background-color:#f0f0f0;
   padding:.5rem;
   border:1px solid #ccc;
-  display:grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
+  /* display:grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr */
 }
 
 .student-details > p {
