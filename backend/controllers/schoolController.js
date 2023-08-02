@@ -73,23 +73,55 @@ const getStaffRequired = (room, schoolData, dividedAges) => {
   return teacherCount;
 };
 
+const getStudentsPerProgram = async (classrooms) => {
+  const PROGRAM_NAMES = ["earlyMorning", "extendedDay", "lateDay"];
+
+  let roomsWithCounts = {
+    infants: { earlyMorning: 0, extendedDay: 0, lateDay: 0 },
+    crawlers: { earlyMorning: 0, extendedDay: 0, lateDay: 0 },
+    toddlers: { earlyMorning: 0, extendedDay: 0, lateDay: 0 },
+    twos: { earlyMorning: 0, extendedDay: 0, lateDay: 0 },
+  };
+
+  try {
+    const rooms = await Classroom.find();
+
+    rooms.forEach((classroom) => {
+      let counts = { earlyMorning: 0, extendedDay: 0, lateDay: 0 };
+      PROGRAM_NAMES.forEach((program) => {
+        counts[program] += classroom.students.reduce((acc, student) => {
+          if (student.programs.includes(program)) {
+            return acc + 1;
+          }
+          return acc;
+        }, 0);
+      });
+      roomsWithCounts[classroom.roomName] = counts;
+    });
+
+    return roomsWithCounts;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getNumStudents = async () => {
   const schoolData = await School.findOne({});
 
-    if (!schoolData) {
-      return res.status(404).json({ error: "School data not found" });
-    }
+  if (!schoolData) {
+    return res.status(404).json({ error: "School data not found" });
+  }
 
-    const classrooms = await Classroom.find();
-    let totalStudents = 0;
+  const classrooms = await Classroom.find();
+  let totalStudents = 0;
 
-    classrooms.forEach((classroom) => {
-      totalStudents += classroom.students.reduce((acc, student) => {
-        return acc + 1;
-      }, 0);
-    });
-    return totalStudents
-}
+  classrooms.forEach((classroom) => {
+    totalStudents += classroom.students.reduce((acc, student) => {
+      return acc + 1;
+    }, 0);
+  });
+  return totalStudents;
+};
 
 //POST a school
 const addSchool = async (req, res) => {
@@ -122,7 +154,6 @@ const updateSchool = async (req, res) => {
   console.log(JSON.stringify(req.body));
 };
 
-
 //GET revenue for each class
 const getClassRevenue = async (req, res) => {
   const PROGRAM_NAMES = ["earlyMorning", "extendedDay", "lateDay"];
@@ -148,7 +179,7 @@ const getClassRevenue = async (req, res) => {
       });
     });
 
-    const totalStudents = await getNumStudents()
+    const totalStudents = await getNumStudents();
 
     const revenue = {
       title: "Total Revenue",
@@ -164,11 +195,11 @@ const getClassRevenue = async (req, res) => {
         message: "Late Day Program:",
         value: schoolData.costLateDay * counts.lateDay,
       },
-      schoolTotal: { message: "School Monthly Revenue:", value:0 },
+      schoolTotal: { message: "School Monthly Revenue:", value: 0 },
     };
     //this has to happen after the revenue object is created
     revenue.schoolTotal.value =
-      (totalStudents * schoolData.costCoreProgram) +
+      totalStudents * schoolData.costCoreProgram +
       revenue.earlyMorning.value +
       revenue.extendedDay.value +
       revenue.lateDay.value;
@@ -259,15 +290,15 @@ const getStaffPerProgram = async (req, res) => {
   switch (program) {
     case "earlyMorning": {
       textOutput = "Early Morning";
-      break
+      break;
     }
     case "extendedDay": {
       textOutput = "Extended Day";
-      break
+      break;
     }
     case "lateDay": {
       textOutput = "Late Day";
-      break
+      break;
     }
   }
 
@@ -280,24 +311,30 @@ const getStaffPerProgram = async (req, res) => {
 
     const dividedAges = await divideAges(program);
 
+    const studentsPerProgram = await getStudentsPerProgram();
+
     const staffPerProgram = {
       dataLabel: program,
       title: "Staff Required " + textOutput,
       infants: {
         message: "Infant Room Teachers",
         value: getStaffRequired("infants", schoolData, dividedAges),
+        numStudents: studentsPerProgram.infants[program]
       },
       crawlers: {
         message: "Crawlers Room Teachers",
         value: getStaffRequired("crawlers", schoolData, dividedAges),
+        numStudents: studentsPerProgram.crawlers[program]
       },
       toddlers: {
         message: "Toddler Room Teachers",
         value: getStaffRequired("toddlers", schoolData, dividedAges),
+        numStudents: studentsPerProgram.toddlers[program]
       },
       twos: {
         message: "Twos Room Teachers",
         value: getStaffRequired("twos", schoolData, dividedAges),
+        numStudents: studentsPerProgram.twos[program]
       },
 
       schoolTotal: { message: textOutput + " Staff Required", value: 0 },
