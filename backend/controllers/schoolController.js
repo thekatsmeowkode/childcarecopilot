@@ -44,6 +44,21 @@ const divideAges = async (program) => {
   return { countsUnder2, countsOver2 };
 };
 
+const calculateMonthsOld = (birthdate) => {
+  const now = new Date();
+  const birthDate = new Date(birthdate);
+
+  let monthsOld = (now.getFullYear() - birthDate.getFullYear()) * 12;
+  monthsOld += now.getMonth() - birthDate.getMonth();
+
+  // Adjust months if the birthdate day is after the current day of the month
+  if (now.getDate() < birthDate.getDate()) {
+    monthsOld--;
+  }
+
+  return monthsOld;
+};
+
 const getStaffRequired = (room, schoolData, dividedAges) => {
   let countUnder2 = dividedAges.countsUnder2[room];
   let countOver2 = dividedAges.countsOver2[room];
@@ -69,7 +84,6 @@ const getStaffRequired = (room, schoolData, dividedAges) => {
       teacherCount += 1;
     }
   }
-  console.log(teacherCount)
   return teacherCount;
 };
 
@@ -106,7 +120,6 @@ const getStudentsPerProgram = async () => {
 };
 
 const getNumStudents = async () => {
-
   const classrooms = await Classroom.find();
   let totalStudents = 0;
 
@@ -127,14 +140,10 @@ const getNumStudentsByClass = async () => {
     let countPerRoom = { infants: 0, crawlers: 0, toddlers: 0, twos: 0 };
 
     classrooms.forEach((classroom) => {
-      const roomName = classroom.roomName
-      console.log(roomName)
-      countPerRoom[roomName] += classroom.students.reduce(
-        (acc, student) => {
-          return acc + 1;
-        },
-        0
-      );
+      const roomName = classroom.roomName;
+      countPerRoom[roomName] += classroom.students.reduce((acc, student) => {
+        return acc + 1;
+      }, 0);
     });
 
     return countPerRoom;
@@ -143,6 +152,7 @@ const getNumStudentsByClass = async () => {
   }
 };
 
+//----------------------------------
 //POST a school
 const addSchool = async (req, res) => {
   const { ...form } = req.body;
@@ -267,29 +277,29 @@ const getStaffRequiredCore = async (req, res) => {
 
     const dividedAges = await divideAges();
 
-    const studentCount = await getNumStudentsByClass()
+    const studentCount = await getNumStudentsByClass();
 
     const staffCoreHours = {
       title: "Staff Required Core Hours",
       infants: {
         message: "Infant Room Teachers",
         numTeachers: getStaffRequired("infants", schoolData, dividedAges),
-        numStudents: studentCount.infants
+        numStudents: studentCount.infants,
       },
       crawlers: {
         message: "Crawlers Room Teachers",
         numTeachers: getStaffRequired("crawlers", schoolData, dividedAges),
-        numStudents: studentCount.crawlers
+        numStudents: studentCount.crawlers,
       },
       toddlers: {
         message: "Toddler Room Teachers",
         numTeachers: getStaffRequired("toddlers", schoolData, dividedAges),
-        numStudents: studentCount.toddlers
+        numStudents: studentCount.toddlers,
       },
       twos: {
         message: "Twos Room Teachers",
         numTeachers: getStaffRequired("twos", schoolData, dividedAges),
-        numStudents: studentCount.twos
+        numStudents: studentCount.twos,
       },
 
       schoolTotal: { message: "School Staff Required ", numTeachers: 0 },
@@ -303,7 +313,9 @@ const getStaffRequiredCore = async (req, res) => {
 
     res.status(200).json({ staffCoreHours });
   } catch (error) {
-    res.status(500).json({ error: "Error calculating staff required core hours" });
+    res
+      .status(500)
+      .json({ error: "Error calculating staff required core hours" });
   }
 };
 
@@ -378,6 +390,29 @@ const getStaffPerProgram = async (req, res) => {
   }
 };
 
+//GET data formatted for boxplot
+const getBoxPlotData = async (req, res) => {
+  try {
+    const classrooms = await Classroom.find();
+
+    agesInMonths = []
+
+    classrooms.map((classroom) => {
+      let roomName = classroom.roomName
+      classroom.students.map((student) => {
+        newDataPoint = {}
+        newDataPoint.name = roomName
+        newDataPoint.value = calculateMonthsOld(student.birthdate);
+        agesInMonths.push(newDataPoint)
+      });
+    });
+
+    await res.status(200).json({agesInMonths});
+  } catch (error) {
+    res.status(404).json({ error: "Error getting data for boxplot" });
+  }
+};
+
 module.exports = {
   addSchool,
   getSchool,
@@ -386,4 +421,5 @@ module.exports = {
   getTotalStudents,
   getStaffRequiredCore,
   getStaffPerProgram,
+  getBoxPlotData,
 };
