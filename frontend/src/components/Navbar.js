@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+import { useState } from 'react'
 import Slider from "./Slider";
 
 const Navbar = () => {
+  const [activePage, setActivePage] = useState(null)
+
   return (
     <header>
       <div className="nav-bar">

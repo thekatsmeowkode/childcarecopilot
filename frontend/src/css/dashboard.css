@@ -3,7 +3,12 @@
 }
 
 .dashboard-grid {
+    width:100%;
     display:grid;
     gap: 1rem;
     grid-template-columns: 1fr 1fr 1fr
+}
+
+.boxplot {
+    grid-column: 1 / span 2
 }

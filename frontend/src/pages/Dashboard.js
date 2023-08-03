@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import BoxPlot from "../components/BoxPlot";
+import BoxPlot from "../components/dashboardSquares/BoxPlot";
 import RevenueSquare from "../components/dashboardSquares/RevenueSquare";
-import CoreHoursSquare from '../components/dashboardSquares/CoreHoursSquare'
-import CapacitySquare from '../components/dashboardSquares/CapacitySquare'
-import ProgramSquare from '../components/dashboardSquares/ProgramSquare'
+import CoreHoursSquare from "../components/dashboardSquares/CoreHoursSquare";
+import CapacitySquare from "../components/dashboardSquares/CapacitySquare";
+import ProgramSquare from "../components/dashboardSquares/ProgramSquare";
+import Spinner from "react-bootstrap/Spinner";
 import "../css/dashboard.css";
 
 const Dashboard = () => {
@@ -110,38 +111,53 @@ const Dashboard = () => {
         {revenueDetails ? (
           <RevenueSquare revenueData={revenueDetails} />
         ) : (
-          "Loading..."
+          <Spinner animation="grow" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
         )}
         {totalStudents ? (
           <CapacitySquare capacityData={totalStudents} />
         ) : (
-          "Loading..."
+          <Spinner animation="grow" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
         )}
         {staffCoreHours ? (
           <CoreHoursSquare coreData={staffCoreHours} />
         ) : (
-          "Loading..."
+          <Spinner animation="grow" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
         )}
         {staffEarlyMorning ? (
           <ProgramSquare programData={staffEarlyMorning} />
         ) : (
-          "Loading..."
+          <Spinner animation="grow" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
         )}
         {staffExtendedDay ? (
           <ProgramSquare programData={staffExtendedDay} />
         ) : (
-          "Loading..."
+          <Spinner animation="grow" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
         )}
         {staffLateDay ? (
           <ProgramSquare programData={staffLateDay} />
         ) : (
-          "Loading..."
+          <Spinner animation="grow" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
         )}
         {boxPlotData ? (
-          <BoxPlot data={boxPlotData} width={700} height={400}></BoxPlot>
-        ) : (
-          "Loading..."
-        )}
+          <BoxPlot
+            className="boxplot"
+            data={boxPlotData}
+            width={700}
+            height={400}
+          ></BoxPlot>
+        ) : null}
       </main>
     </>
   );

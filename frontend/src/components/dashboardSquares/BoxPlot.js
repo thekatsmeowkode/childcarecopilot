@@ -1,10 +1,10 @@
 import React from "react";
 import * as d3 from "d3";
 import { useMemo } from "react";
-import { getSummaryStats } from "../utils/getSummaryStats";
-import { VerticalBox } from "./boxplotComponents/VerticalBox";
-import { AxisLeft } from "./boxplotComponents/AxisLeft";
-import { AxisBottom } from "./boxplotComponents/AxisCategoric";
+import { getSummaryStats } from "../../utils/getSummaryStats";
+import { VerticalBox } from "../boxplotComponents/VerticalBox";
+import { AxisLeft } from "../boxplotComponents/AxisLeft";
+import { AxisBottom } from "../boxplotComponents/AxisCategoric";
 
 const MARGIN = { top: 30, right: 30, bottom: 30, left: 50 };
 const JITTER_WIDTH = 40;
@@ -78,7 +78,7 @@ const BoxPlot = ({ width, height, data }) => {
   });
 
   return (
-    <div>
+    <div className="boxplot">
       <svg width={width} height={height}>
         <g
           width={boundsWidth}
