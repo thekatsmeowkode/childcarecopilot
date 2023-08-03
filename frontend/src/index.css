@@ -14,7 +14,7 @@ body {
 header {
   background: #fff;
 }
-header .container {
+header .nav-bar {
   max-width: 1400px;
   margin: 0 auto;
   padding: 10px 20px;
@@ -134,4 +134,9 @@ table {
 th, tr, td {
   border:1px solid black !important;
   padding:.5rem;
+}
+
+.slider-container {
+  display:flex;
+  gap:10px
 }
