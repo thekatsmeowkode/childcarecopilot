@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import DashboardSquare from "../components/DashboardSquare";
+import BoxPlot from "../components/BoxPlot";
 
 const Dashboard = () => {
   const [revenueDetails, setRevenueDetails] = useState(null);
   const [totalStudents, setTotalStudents] = useState(null);
   const [staffCoreHours, setStaffCoreHours] = useState(null);
   const [staffEarlyMorning, setStaffEarlyMorning] = useState(null);
-  const [staffExtendedDay, setStaffExtendedDay] = useState(null)
-  const [staffLateDay, setStaffLateDay] = useState(null)
+  const [staffExtendedDay, setStaffExtendedDay] = useState(null);
+  const [staffLateDay, setStaffLateDay] = useState(null);
+  const [boxPlotData, setBoxPlotData] = useState(null);
 
   const CLASSROOM_NAMES = {
     infants: "infants",
@@ -47,14 +49,20 @@ const Dashboard = () => {
   };
 
   const getStaffProgram = async (program) => {
-    const programStaff = await fetch(
-      `api/school/staff-required/${program}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const programStaff = await fetch(`api/school/staff-required/${program}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
     const json = await programStaff.json();
+    return json;
+  };
+
+  const getBoxPlotData = async () => {
+    const plotData = await fetch("/api/school/box-plot-data", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    const json = await plotData.json();
     return json;
   };
 
@@ -68,6 +76,7 @@ const Dashboard = () => {
           staffEarlyMorningData,
           extendedDayStaff,
           lateDayStaff,
+          boxPlotDatas,
         ] = await Promise.all([
           getClassRevenue(),
           getTotalStudents(),
@@ -75,6 +84,7 @@ const Dashboard = () => {
           getStaffProgram("earlyMorning"),
           getStaffProgram("extendedDay"),
           getStaffProgram("lateDay"),
+          getBoxPlotData(),
         ]);
         setRevenueDetails(revenueData);
         setTotalStudents(studentData);
@@ -82,6 +92,7 @@ const Dashboard = () => {
         setStaffEarlyMorning(staffEarlyMorningData);
         setStaffExtendedDay(extendedDayStaff);
         setStaffLateDay(lateDayStaff);
+        setBoxPlotData(boxPlotDatas);
       } catch (error) {
         console.error("Error fetching dashboard data", error);
       }
@@ -118,6 +129,11 @@ const Dashboard = () => {
       )}
       {staffLateDay ? (
         <DashboardSquare squareDetails={staffLateDay} />
+      ) : (
+        "Loading..."
+      )}
+      {boxPlotData ? (
+        <BoxPlot data={boxPlotData} width={700} height={400}></BoxPlot>
       ) : (
         "Loading..."
       )}
