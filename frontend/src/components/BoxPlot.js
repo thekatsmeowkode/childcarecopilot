@@ -7,9 +7,9 @@ import {AxisLeft} from './AxisLeft'
 import {AxisBottom} from './AxisCategoric'
 
 const MARGIN = { top: 30, right: 30, bottom: 30, left: 50 };
+const JITTER_WIDTH = 40;
 
 const BoxPlot = ({ width, height, data }) => {
-    console.log(data.agesInMonths)
     const boundsWidth = width - MARGIN.right - MARGIN.left;
     const boundsHeight = height - MARGIN.top - MARGIN.bottom;
 
@@ -41,6 +41,21 @@ const xScale = d3
 
     const { min, q1, median, q3, max } = sumStats;
 
+    const allCircles = groupData.map((value, i) => (
+        <circle
+          key={i}
+          cx={
+            xScale.bandwidth() / 2 -
+            JITTER_WIDTH / 2 +
+            Math.random() * JITTER_WIDTH
+          }
+          cy={yScale(value)}
+          r={2}
+          fill="grey"
+          fillOpacity={0.3}
+        />
+      ));
+
     return (
       <g key={i} transform={`translate(${xScale(group)},0)`}>
         <VerticalBox
@@ -53,6 +68,7 @@ const xScale = d3
           stroke="black"
           fill={"#ead4f5"}
         />
+        {allCircles}
       </g>
     );
   });
