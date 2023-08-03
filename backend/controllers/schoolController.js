@@ -67,15 +67,18 @@ const getStaffRequired = (room, schoolData, dividedAges) => {
   }
 
   let teacherCount = 0;
+  //if any child is under 2 the room ratio is automatically 1:4 (8/3/23)
   if (countUnder2 > 0) {
-    if (countUnder2 <= schoolData.ratioBirthToTwo) {
+    if ((countUnder2 + countOver2) <= schoolData.ratioBirthToTwo) {
       return 1;
     }
-    teacherCount += Math.floor(countUnder2 / schoolData.ratioBirthToTwo);
-    if (countUnder2 % schoolData.ratioBirthToTwo) {
+    teacherCount += Math.floor((countUnder2+countOver2) / schoolData.ratioBirthToTwo);
+    if ((countUnder2 + countOver2) % schoolData.ratioBirthToTwo) {
       teacherCount += 1;
     }
-  } else {
+  } 
+  //if no children are under 2 the room ratio is 1:7 (8/3/23)
+  else {
     if (countOver2 <= schoolData.ratioTwoToThree) {
       return 1;
     }
@@ -384,6 +387,8 @@ const getStaffPerProgram = async (req, res) => {
       staffPerProgram.toddlers.numTeachers +
       staffPerProgram.twos.numTeachers;
 
+    // console.log(program)
+    // console.log(dividedAges)
     res.status(200).json({ staffPerProgram });
   } catch (error) {
     res.status(500).json({ error: "Error calculating staff per program" });
