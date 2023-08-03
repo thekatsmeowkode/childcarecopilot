@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
-import DashboardSquare from "../components/DashboardSquare";
 import BoxPlot from "../components/BoxPlot";
+import RevenueSquare from "../components/dashboardSquares/RevenueSquare";
+import CoreHoursSquare from '../components/dashboardSquares/CoreHoursSquare'
+import CapacitySquare from '../components/dashboardSquares/CapacitySquare'
+import ProgramSquare from '../components/dashboardSquares/ProgramSquare'
+import "../css/dashboard.css";
 
 const Dashboard = () => {
   const [revenueDetails, setRevenueDetails] = useState(null);
@@ -102,41 +106,43 @@ const Dashboard = () => {
 
   return (
     <>
-      {revenueDetails ? (
-        <DashboardSquare squareDetails={revenueDetails} />
-      ) : (
-        "Loading..."
-      )}
-      {totalStudents ? (
-        <DashboardSquare squareDetails={totalStudents} />
-      ) : (
-        "Loading..."
-      )}
-      {staffCoreHours ? (
-        <DashboardSquare squareDetails={staffCoreHours} />
-      ) : (
-        "Loading..."
-      )}
-      {staffEarlyMorning ? (
-        <DashboardSquare squareDetails={staffEarlyMorning} />
-      ) : (
-        "Loading..."
-      )}
-      {staffExtendedDay ? (
-        <DashboardSquare squareDetails={staffExtendedDay} />
-      ) : (
-        "Loading..."
-      )}
-      {staffLateDay ? (
-        <DashboardSquare squareDetails={staffLateDay} />
-      ) : (
-        "Loading..."
-      )}
-      {boxPlotData ? (
-        <BoxPlot data={boxPlotData} width={700} height={400}></BoxPlot>
-      ) : (
-        "Loading..."
-      )}
+      <main class="dashboard-grid">
+        {revenueDetails ? (
+          <RevenueSquare revenueData={revenueDetails} />
+        ) : (
+          "Loading..."
+        )}
+        {totalStudents ? (
+          <CapacitySquare capacityData={totalStudents} />
+        ) : (
+          "Loading..."
+        )}
+        {staffCoreHours ? (
+          <CoreHoursSquare coreData={staffCoreHours} />
+        ) : (
+          "Loading..."
+        )}
+        {staffEarlyMorning ? (
+          <ProgramSquare programData={staffEarlyMorning} />
+        ) : (
+          "Loading..."
+        )}
+        {staffExtendedDay ? (
+          <ProgramSquare programData={staffExtendedDay} />
+        ) : (
+          "Loading..."
+        )}
+        {staffLateDay ? (
+          <ProgramSquare programData={staffLateDay} />
+        ) : (
+          "Loading..."
+        )}
+        {boxPlotData ? (
+          <BoxPlot data={boxPlotData} width={700} height={400}></BoxPlot>
+        ) : (
+          "Loading..."
+        )}
+      </main>
     </>
   );
 };
