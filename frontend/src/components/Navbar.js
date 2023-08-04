@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Slider from "./Slider";
 
 const Navbar = () => {
-  const [activePage, setActivePage] = useState(null)
+  const [checked, setIsChecked] = useState(true)
 
   return (
     <header>
@@ -13,7 +13,7 @@ const Navbar = () => {
         </Link>
         <div className="slider-container">
           <p>Students</p>
-          <Slider></Slider>
+          <Slider checked={checked} setIsChecked={setIsChecked}></Slider>
           <p>Dashboard</p>
         </div>
       </div>

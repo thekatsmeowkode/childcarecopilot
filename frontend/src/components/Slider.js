@@ -1,10 +1,21 @@
 import Form from "react-bootstrap/Form";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Slider = () => {
+const Slider = ({ checked, setIsChecked }) => {
+  useEffect(() => {
+    setIsChecked(checked);
+  }, []);
+
   let navigate = useNavigate();
   const handleChange = (e) => {
-    e.target.checked ? navigate("/dashboard") : navigate("/");
+    if (e.target.checked) {
+      setIsChecked("true");
+      navigate("/dashboard");
+    } else {
+      setIsChecked("false");
+      navigate("/");
+    }
   };
 
   return (
