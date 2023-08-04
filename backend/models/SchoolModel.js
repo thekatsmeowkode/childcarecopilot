@@ -48,27 +48,6 @@ const schoolSchema = new Schema(
         oneTo3SnackGrains: {
             type:Number
         },
-        // oneToThreeYearSnack: {
-        //     type:Object,
-        //     required:true
-        // },
-        // oneToThreeYearSnack: {
-        //     milk:Number,
-        //     vegFruit: Number,
-        //     grain: Number,
-        //     protein: Number
-        // },
-        // oneToThreeYearLunch: {
-        //     type:Object,
-        //     required:true
-        // },
-        // oneToThreeYearLunch: {
-        //     milk:Number,
-        //     veg:Number,
-        //     fruit:Number,
-        //     grain:Number,
-        //     protein:Number
-        // },
         ratioBirthToTwo: {
             type:Number
         },

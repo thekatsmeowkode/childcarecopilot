@@ -21,25 +21,33 @@ const findIndex = (classroom, studentId) => {
 
 //GET all classes
 const getClassrooms = async (req, res) => {
-  const classrooms = await Classroom.find({});
-  res.status(200).json(classrooms);
+  try {
+    const classrooms = await Classroom.find({});
+    res.status(200).json(classrooms);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 //GET class by id
 const getClassroom = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  checkIdValidity(id);
+    checkIdValidity(id);
 
-  const classroom = await Classroom.findById(id);
+    const classroom = await Classroom.findById(id);
 
-  if (!classroom) {
-    return res
-      .status(404)
-      .json({ error: "No classroom found for requested id" });
+    if (!classroom) {
+      return res
+        .status(404)
+        .json({ error: "No classroom found for requested id" });
+    }
+
+    res.status(200).json(classroom);
+  } catch (error) {
+    req.status(500).json({ error: error.message });
   }
-
-  res.status(200).json(classroom);
 };
 
 //POST a new class
@@ -63,44 +71,51 @@ const createClassroom = async (req, res) => {
     const classroom = await Classroom.create({ roomName, students });
     res.status(200).json(classroom);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
-  res.json({ mssg: "POST a new classroom" });
 };
 
 //DELETE a class
 const deleteClassroom = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  checkIdValidity(id);
+    checkIdValidity(id);
 
-  const classroom = await Classroom.findOneAndDelete({ _id: id });
+    const classroom = await Classroom.findOneAndDelete({ _id: id });
 
-  if (!classroom) {
-    return res.status(400).json({ error: "Classroom id does not exist" });
+    if (!classroom) {
+      return res.status(400).json({ error: "Classroom id does not exist" });
+    }
+
+    res.status(200).json(classroom);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-
-  res.status(200).json(classroom);
 };
 
 //UPDATE a class
 const updateClassroom = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  checkIdValidity(id);
+    checkIdValidity(id);
 
-  const classroom = await Classroom.findOneAndUpdate(
-    { _id: id },
-    {
-      ...req.body,
+    const classroom = await Classroom.findOneAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+      }
+    );
+
+    if (!classroom) {
+      return res.status(400).json({ error: "Classroom id does not exist" });
     }
-  );
 
-  if (!classroom) {
-    return res.status(400).json({ error: "Classroom id does not exist" });
+    res.status(200).json(classroom);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-
-  res.status(200).json(classroom);
 };
 
 //UPDATE student from class
@@ -123,16 +138,11 @@ const updateStudent = async (req, res) => {
     const oldClassroom = await Classroom.findOne({
       roomName: incomingDataClassroomMemory,
     });
-    // console.log(`classmemory:${incomingDataClassroomMemory}`)
-    //delete old student
     const studentIndex = findIndex(oldClassroom, studentId);
-    // console.log(`studentIdOld:${studentId}`)
-    // console.log(`oldclass:${oldClassroom}`)
 
     oldClassroom.students.splice(studentIndex, 1);
 
     await oldClassroom.save();
-    // console.log(`oldClassroom after save: ${oldClassroom}`)
 
     //add new student
     const classroom = await Classroom.findOne({ _id: classId });
@@ -150,16 +160,14 @@ const updateStudent = async (req, res) => {
       programs,
       classroomName,
     };
-    // console.log(`newstudent:${{...newStudent}}`)
 
     classroom.students.push(newStudent);
-    // console.log(`new classroom: ${classroom}`)
 
     await classroom.save();
 
     return res.json(classroom);
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -189,7 +197,7 @@ const addStudent = async (req, res) => {
     await classroom.save();
     return res.json(classroom);
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -211,7 +219,7 @@ const deleteStudent = async (req, res) => {
     return res.status(200).json(classroom);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -230,7 +238,7 @@ const getStudent = async (req, res) => {
     return res.status(200).json(classroom[studentIndex]);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: error.message });
   }
 };
 

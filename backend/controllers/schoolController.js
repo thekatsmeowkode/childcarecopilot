@@ -2,6 +2,7 @@ const School = require("../models/SchoolModel");
 const Classroom = require("../models/ClassModel");
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
+//helper functions----------------------------------------------------
 
 const divideAges = async (program) => {
   const classrooms = await Classroom.find();
@@ -69,14 +70,16 @@ const getStaffRequired = (room, schoolData, dividedAges) => {
   let teacherCount = 0;
   //if any child is under 2 the room ratio is automatically 1:4 (8/3/23)
   if (countUnder2 > 0) {
-    if ((countUnder2 + countOver2) <= schoolData.ratioBirthToTwo) {
+    if (countUnder2 + countOver2 <= schoolData.ratioBirthToTwo) {
       return 1;
     }
-    teacherCount += Math.floor((countUnder2+countOver2) / schoolData.ratioBirthToTwo);
+    teacherCount += Math.floor(
+      (countUnder2 + countOver2) / schoolData.ratioBirthToTwo
+    );
     if ((countUnder2 + countOver2) % schoolData.ratioBirthToTwo) {
       teacherCount += 1;
     }
-  } 
+  }
   //if no children are under 2 the room ratio is 1:7 (8/3/23)
   else {
     if (countOver2 <= schoolData.ratioTwoToThree) {
@@ -155,7 +158,7 @@ const getNumStudentsByClass = async () => {
   }
 };
 
-//----------------------------------
+//------------------ROUTES------------------------------------------------
 //POST a school
 const addSchool = async (req, res) => {
   const { ...form } = req.body;
@@ -163,28 +166,34 @@ const addSchool = async (req, res) => {
     const school = await School.create({ ...form });
     res.status(200).json(school);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
-  res.json({ mssg: "POST the school" });
 };
 
 //GET the school
 const getSchool = async (req, res) => {
-  const school = await School.find({});
-  res.status(200).json(school);
+  try {
+    const school = await School.find({});
+    res.status(200).json(school);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 //PATCH the school
 const updateSchool = async (req, res) => {
-  await School.findByIdAndUpdate("64c84bb803361397826fd4fa", req.body),
-    function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Updated User: ", docs);
-      }
-    };
-  console.log(JSON.stringify(req.body));
+  try {
+    await School.findByIdAndUpdate("64c84bb803361397826fd4fa", req.body),
+      function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Updated User: ", docs);
+        }
+      };
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 //GET revenue for each class
@@ -305,7 +314,7 @@ const getStaffRequiredCore = async (req, res) => {
         numStudents: studentCount.twos,
       },
 
-      schoolTotal: { message: "School Staff Required ", numTeachers: 0 },
+      schoolTotal: { message: "Core Hours Staff Required ", numTeachers: 0 },
     };
     //this has to happen after the revenue object is created
     staffCoreHours.schoolTotal.numTeachers =
@@ -387,8 +396,6 @@ const getStaffPerProgram = async (req, res) => {
       staffPerProgram.toddlers.numTeachers +
       staffPerProgram.twos.numTeachers;
 
-    // console.log(program)
-    // console.log(dividedAges)
     res.status(200).json({ staffPerProgram });
   } catch (error) {
     res.status(500).json({ error: "Error calculating staff per program" });
@@ -400,21 +407,21 @@ const getBoxPlotData = async (req, res) => {
   try {
     const classrooms = await Classroom.find();
 
-    agesInMonths = []
+    agesInMonths = [];
 
     classrooms.map((classroom) => {
-      let roomName = classroom.roomName
+      let roomName = classroom.roomName;
       classroom.students.map((student) => {
-        newDataPoint = {}
-        newDataPoint.name = roomName
+        newDataPoint = {};
+        newDataPoint.name = roomName;
         newDataPoint.value = calculateMonthsOld(student.birthdate);
-        agesInMonths.push(newDataPoint)
+        agesInMonths.push(newDataPoint);
       });
     });
 
-    await res.status(200).json({agesInMonths});
+    res.status(200).json({ agesInMonths });
   } catch (error) {
-    res.status(404).json({ error: "Error getting data for boxplot" });
+    res.status(500).json({ error: "Error getting data for boxplot" });
   }
 };
 

@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const classRoutes = require("./routes/classes");
 const schoolRoutes = require("./routes/school")
+const waitlistRoutes = require('./routes/waitlist')
 
 //express app
 const app = express();
@@ -17,7 +18,8 @@ app.use((req, res, next) => {
 
 //routes
 app.use("/api/classes", classRoutes);
-app.use('/api/school', schoolRoutes)
+app.use('/api/school', schoolRoutes);
+app.use('/api/waitlist', waitlistRoutes)
 
 //connect to db
 mongoose
