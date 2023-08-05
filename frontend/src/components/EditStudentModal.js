@@ -11,7 +11,7 @@ const EditStudentModal = ({
   setSelectedStudent,
   setSelectedStudents,
 }) => {
-  const { form, setForm, onChangeInput } = useForm({
+  const { form, setForm, onChangeInput, handleProgramChange } = useForm({
     name: student.name,
     birthdate: student.birthdate,
     classroomName: student.classroomName,
@@ -31,7 +31,7 @@ const EditStudentModal = ({
       ...form,
       incomingDataClassroomMemory,
     };
-    
+
     const classroomId = await getClassroomId(updatedStudent);
 
     const response = await fetch(
@@ -67,21 +67,6 @@ const EditStudentModal = ({
     onClose();
   };
 
-  const handleProgramChange = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setForm((prevForm) => ({
-        ...prevForm,
-        programs: [...prevForm.programs, value],
-      }));
-    } else {
-      setForm((prevForm) => ({
-        ...prevForm,
-        programs: prevForm.programs.filter((program) => program !== value),
-      }));
-    }
-  };
-
   return (
     <Modal show={isOpen} onHide={onClose}>
       <Modal.Header closeButton>
@@ -115,7 +100,6 @@ const EditStudentModal = ({
               name="classroomName"
               value={form.classroomName}
               onChange={onChangeInput}
-              // className={nullFields.includes(classroomName) ? "error" : ""}
             >
               <option value="infants">Infants</option>
               <option value="crawlers">Crawlers</option>
@@ -130,7 +114,6 @@ const EditStudentModal = ({
               name="allergies"
               value={form.allergies}
               onChange={onChangeInput}
-              // className={nullFields.includes(allergies) ? "error" : ""}
             />
           </Form.Group>
           <Form.Group>
@@ -140,7 +123,6 @@ const EditStudentModal = ({
               name="phone"
               value={form.phone}
               onChange={onChangeInput}
-              // className={nullFields.includes(phone) ? "error" : ""}
             />
           </Form.Group>
           <Form.Group>

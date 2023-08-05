@@ -27,7 +27,10 @@ const Waitlist = () => {
           setStudents={setWaitlistStudents}
         />
       )}
-      <WaitlistDetails waitlistStudents={waitlistStudents} />
+      <WaitlistDetails
+        waitlistStudents={waitlistStudents}
+        setWaitlistStudents = {setWaitlistStudents}
+      />
     </>
   );
 };

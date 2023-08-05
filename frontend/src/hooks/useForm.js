@@ -9,10 +9,26 @@ const useForm = (formState) => {
     setForm({ ...form, [name]: newValue });
   };
 
+  const handleProgramChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        programs: [...prevForm.programs, value],
+      }));
+    } else {
+      setForm((prevForm) => ({
+        ...prevForm,
+        programs: prevForm.programs.filter((program) => program !== value),
+      }));
+    }
+  };
+
   return {
     form,
     onChangeInput,
     setForm,
+    handleProgramChange
   };
 };
 
