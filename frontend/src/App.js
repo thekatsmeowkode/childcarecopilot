@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import SchoolInfo from "./pages/SchoolInfo";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
+import Waitlist from "./pages/Waitlist";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/school" element={<SchoolInfo />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/waitlist" element={<Waitlist/>}/>
           </Routes>
         </div>
       </BrowserRouter>

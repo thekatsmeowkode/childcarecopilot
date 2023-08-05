@@ -1,3 +1,6 @@
+import {formatAge, formatDate} from '../utils/formatDates'
+import formatProgramName from '../utils/formatText'
+
 const WaitlistDetails = ({student}) => {
     <>
       <tr>
@@ -19,7 +22,6 @@ const WaitlistDetails = ({student}) => {
         <td>{student.classroomName}</td>
         <td>
           <button
-            onClick={handleEditClick}
             className="material-symbols-outlined"
           >
             Edit
@@ -27,14 +29,13 @@ const WaitlistDetails = ({student}) => {
         </td>
         <td>
           <button
-            onClick={() => handleDeleteClick(student.id, student.classroomName)}
             className="material-symbols-outlined"
           >
             Delete
           </button>
         </td>
       </tr>
-
+{/* 
       {selectedStudent && (
         <EditStudentModal
           student={selectedStudent}
@@ -43,6 +44,6 @@ const WaitlistDetails = ({student}) => {
           setSelectedStudent={setSelectedStudent}
           setSelectedStudents={setSelectedStudents}
         />
-      )}
+      )} */}
     </>
 }

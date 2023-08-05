@@ -31,9 +31,7 @@ const EditStudentModal = ({
       ...form,
       incomingDataClassroomMemory,
     };
-
-    console.log(`updatedStudent: ${JSON.stringify(updatedStudent)}`);
-
+    
     const classroomId = await getClassroomId(updatedStudent);
 
     const response = await fetch(

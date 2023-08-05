@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { ClassroomContext } from "../context/ClassroomContext";
 import EditStudentModal from "./EditStudentModal";
 import { formatAge, formatDate } from "../utils/formatDates";
+import formatProgramName from '../utils/formatText'
 
 const StudentDetails = ({ student, setSelectedStudents }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,19 +60,6 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
 
     if (updatedAllClassroomsResponse.ok) {
       dispatch({ type: "DELETE_STUDENT", payload: updatedJson });
-    }
-  };
-
-  const formatProgramName = (program) => {
-    switch (program) {
-      case "earlyMorning":
-        return "Early Morning";
-      case "extendedDay":
-        return "Extended Day";
-      case "lateDay":
-        return "Late Day";
-      default:
-        return;
     }
   };
 
