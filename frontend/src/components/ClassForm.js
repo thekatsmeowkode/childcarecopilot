@@ -22,6 +22,7 @@ const ClassForm = () => {
       setError(json.error);
       setNullFields(json.nullFields);
     }
+
     if (response.ok) {
       setRoomName("");
       setError(null);
@@ -43,6 +44,7 @@ const ClassForm = () => {
       <label>Classroom Name:</label>
       <select
         value={roomName}
+        className={nullFields.includes("roomName") ? "error" : ""}
         defaultValue={"infants"}
         onChange={(e) => setRoomName(e.target.value)}
       >

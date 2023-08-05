@@ -33,6 +33,7 @@ const Home = () => {
       headers: { "Content-Type": "application/json" },
     });
 
+    //finds the id of the name of the class button clicked using textcontent
     const classroomJson = await allClassroomsResponse.json();
     const classroom = classroomJson.find(
       (classroom) => classroom.roomName === e.target.textContent
@@ -56,7 +57,6 @@ const Home = () => {
       return;
     }
     setSelectedStudents([...oneClassJson.students]);
-    console.log(selectedStudents);
   };
 
   return (
@@ -105,7 +105,6 @@ const Home = () => {
         </table>
       </div>
       <ClassForm></ClassForm>
-      {/* <StudentForm setSelectedStudents={setSelectedStudents}></StudentForm> */}
     </div>
   );
 };
