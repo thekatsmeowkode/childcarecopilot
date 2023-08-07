@@ -11,6 +11,12 @@ const Navbar = () => {
         <Link to="/">
           <h1>Child Care Copilot</h1>
         </Link>
+        <button>
+          <Link to='/school'>School Info</Link>
+        </button>
+        <button>
+          <Link to='/waitlist'>Waitlist</Link>
+        </button>
         <div className="slider-container">
           <p>Students</p>
           <Slider checked={checked} setIsChecked={setIsChecked}></Slider>

@@ -3,10 +3,11 @@ import { useState } from "react";
 import useForm from '../../hooks/useForm'
 
 const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
-  const {form, setForm, onChangeInput} = useForm({
+  const {form, setForm, onChangeInput, handleProgramChange, handleSubmit, validated} = useForm({
     childName: "",
     parentName: "",
     birthdate: "",
+    startDate: "",
     allergies: "",
     phone: "",
     email: "",
@@ -18,23 +19,22 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
     enrolled: false,
     declined: false,
   });
-  const [validated, setValidated] = useState(false);
+  // const [validated, setValidated] = useState(false);
 
+  // const handleSubmit = (e) => {
+  //   const form = e.target;
+  //   console.log(form)
 
-  const handleSubmit = (e) => {
-    const form = e.target;
-    console.log(form)
+  //   if (!form.checkValidity()) {
+  //     e.preventDefault();
+  //     e.stopPropagation();
+  //   }
+  //   setValidated(true);
 
-    if (!form.checkValidity()) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setValidated(true);
-
-    if (form.checkValidity() === true) {
-      handleAddStudent(e);
-    }
-  };
+  //   if (form.checkValidity() === true) {
+  //     handleAddStudent(e);
+  //   }
+  // };
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
@@ -54,8 +54,8 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
       throw Error("Error while trying to post student to database");
     }
 
-    if (response.ok) {
-      setStudents(json.student);
+    if (json) {
+      setStudents(json.students);
       setForm({
         childName: "",
         parentName: "",
@@ -63,6 +63,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
         allergies: "",
         phone: "",
         email: "",
+        startDate: "",
         programs: [],
         sibling: false,
         emailed: false,
@@ -76,29 +77,13 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
     onClose();
   };
 
-  const handleProgramChange = (e) => {
-    const { value, checked } = e.target;
-
-    if (checked) {
-      setForm((prevForm) => ({
-        ...prevForm,
-        programs: [...prevForm.programs, value],
-      }));
-    } else {
-      setForm((prevForm) => ({
-        ...prevForm,
-        programs: prevForm.programs.filter((program) => program !== value),
-      }));
-    }
-  };
-
   return (
     <Modal show={isOpen} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Add Student Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form noValidate onSubmit={handleSubmit} validated={validated}>
+        <Form noValidate onSubmit={(e) => handleSubmit(e, handleAddStudent)} validated={validated}>
           <Form.Group>
             <Form.Label>Child's Name:</Form.Label>
             <InputGroup hasValidation>
@@ -139,6 +124,21 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
                 name="birthdate"
                 onChange={onChangeInput}
                 value={form.birthdate}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                Please input a birthdate.
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Requested Start Date</Form.Label>
+            <InputGroup hasValidation>
+              <Form.Control
+                type="date"
+                name="startDate"
+                onChange={onChangeInput}
+                value={form.startDate}
                 required
               />
               <Form.Control.Feedback type="invalid">

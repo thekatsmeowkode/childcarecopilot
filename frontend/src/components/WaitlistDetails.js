@@ -20,12 +20,13 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
           student={selectedStudent}
           setWaitlistStudents={setWaitlistStudents}
           isOpen={isEditModalOpen}
-          onClose={()=> setIsEditModalOpen(false)}
+          onClose={() => setIsEditModalOpen(false)}
         />
       )}
       <Table hover variant="dark">
         <thead>
           <tr>
+            <th>Requested Start Date</th>
             <th>Child's Name</th>
             <th>Birthdate</th>
             <th>Allergies</th>
@@ -45,6 +46,7 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
           {waitlistStudents.map((student) => (
             <Fragment key={student._id}>
               <tr onClick={() => handleRowClick(student)}>
+                <td>{formatDate(student.startDate)}</td>
                 <td>{student.childName}</td>
                 <td>{formatDate(student.birthdate)}</td>
                 <td>{student.allergies}</td>
@@ -177,15 +179,6 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
           ))}
         </tbody>
       </Table>
-
-      {/* {selectedStudent && (
-        <EditStudentWaitlist
-          student={selectedStudent}
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          setWaitlistStudents={setWaitlistStudents}
-        />
-      )} */}
     </>
   );
 };

@@ -8,6 +8,7 @@ const EditStudentWaitlist = ({student, setWaitlistStudents, isOpen, onClose}) =>
         childName: student.childName,
         parentName: student.parentName,
         birthdate: new Date(student.birthdate),
+        startDate: new Date(student.startDate),
         allergies: student.allergies,
         phone: student.phone,
         email: student.email,
@@ -133,6 +134,21 @@ const EditStudentWaitlist = ({student, setWaitlistStudents, isOpen, onClose}) =>
                   />
                   <Form.Control.Feedback type="invalid">
                     Please input a birthdate.
+                  </Form.Control.Feedback>
+                </InputGroup>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Requested Start Date</Form.Label>
+                <InputGroup hasValidation>
+                  <Form.Control
+                    type="date"
+                    name="startDate"
+                    onChange={onChangeInput}
+                    value={formatDate(form.startDate)}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Please input a start date.
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
