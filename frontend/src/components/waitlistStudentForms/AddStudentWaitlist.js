@@ -1,6 +1,7 @@
 import { Form, Button, Modal, InputGroup } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import CheckboxField from "./CheckboxField";
+import ProgramField from "./ProgramField";
 
 const CHECKBOX_FIELDS = [
   "sibling",
@@ -9,6 +10,12 @@ const CHECKBOX_FIELDS = [
   "registered",
   "enrolled",
   "declined",
+];
+
+const PROGRAM_FIELDS = [
+  { value: "earlyMorning", label: "Early Morning (7:30-8:30)" },
+  { value: "extendedDay", label: "Extended Day (3:30-4:30)" },
+  { value: "lateDay", label: "Late Day (4:30-5:30)" },
 ];
 
 const initialFormValues = {
@@ -165,24 +172,14 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Check
-              type="checkbox"
-              value="earlyMorning"
-              onChange={handleProgramChange}
-              label="Early morning 7:30-8:30"
-            ></Form.Check>
-            <Form.Check
-              type="checkbox"
-              value="extendedDay"
-              label="Extended Day 3:30-4:30"
-              onChange={handleProgramChange}
-            ></Form.Check>
-            <Form.Check
-              type="checkbox"
-              value="lateDay"
-              label="Late Day 4:30-5:30"
-              onChange={handleProgramChange}
-            ></Form.Check>
+          {PROGRAM_FIELDS.map((program) => (
+              <ProgramField
+                value={program.value}
+                label={program.label}
+                handleProgramChange={handleProgramChange}
+                form={form}
+              />
+            ))}
           </Form.Group>
           {CHECKBOX_FIELDS.map((field) => (
             <CheckboxField
