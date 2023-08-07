@@ -27,7 +27,7 @@ const useForm = (formState) => {
 
   const handleSubmit = (e, callback) => {
     const form = e.target;
-    console.log(form)
+    console.log(form);
 
     if (!form.checkValidity()) {
       e.preventDefault();
@@ -46,7 +46,7 @@ const useForm = (formState) => {
     setForm,
     handleProgramChange,
     handleSubmit,
-    validated
+    validated,
   };
 };
 

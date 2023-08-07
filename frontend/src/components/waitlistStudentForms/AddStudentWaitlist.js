@@ -1,45 +1,36 @@
 import { Form, Button, Modal, InputGroup } from "react-bootstrap";
-import { useState } from "react";
-import useForm from '../../hooks/useForm'
+import useForm from "../../hooks/useForm";
+
+const initialFormValues = {
+  childName: "",
+  parentName: "",
+  birthdate: "",
+  startDate: "",
+  allergies: "",
+  phone: "",
+  email: "",
+  programs: [],
+  sibling: false,
+  emailed: false,
+  toured: false,
+  registered: false,
+  enrolled: false,
+  declined: false,
+}
 
 const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
-  const {form, setForm, onChangeInput, handleProgramChange, handleSubmit, validated} = useForm({
-    childName: "",
-    parentName: "",
-    birthdate: "",
-    startDate: "",
-    allergies: "",
-    phone: "",
-    email: "",
-    programs: [],
-    sibling: false,
-    emailed: false,
-    toured: false,
-    registered: false,
-    enrolled: false,
-    declined: false,
-  });
-  // const [validated, setValidated] = useState(false);
-
-  // const handleSubmit = (e) => {
-  //   const form = e.target;
-  //   console.log(form)
-
-  //   if (!form.checkValidity()) {
-  //     e.preventDefault();
-  //     e.stopPropagation();
-  //   }
-  //   setValidated(true);
-
-  //   if (form.checkValidity() === true) {
-  //     handleAddStudent(e);
-  //   }
-  // };
+  const {
+    form,
+    setForm,
+    onChangeInput,
+    handleProgramChange,
+    handleSubmit,
+    validated,
+  } = useForm(initialFormValues);
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
     const student = { ...form };
-    console.log(student)
 
     //this post response returns complete json of the updated classroom {_id:3423, roomName: infants, students:[{}{}]
     const response = await fetch("/api/waitlist/student", {
@@ -56,22 +47,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
 
     if (json) {
       setStudents(json.students);
-      setForm({
-        childName: "",
-        parentName: "",
-        birthdate: "",
-        allergies: "",
-        phone: "",
-        email: "",
-        startDate: "",
-        programs: [],
-        sibling: false,
-        emailed: false,
-        toured: false,
-        registered: false,
-        enrolled: false,
-        declined: false,
-      });
+      setForm(initialFormValues);
       console.log(`new student added`);
     }
     onClose();
@@ -83,7 +59,11 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
         <Modal.Title>Add Student Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form noValidate onSubmit={(e) => handleSubmit(e, handleAddStudent)} validated={validated}>
+        <Form
+          noValidate
+          onSubmit={(e) => handleSubmit(e, handleAddStudent)}
+          validated={validated}
+        >
           <Form.Group>
             <Form.Label>Child's Name:</Form.Label>
             <InputGroup hasValidation>
