@@ -198,6 +198,7 @@ const EditStudentWaitlist = ({
           <Form.Group>
             {PROGRAM_FIELDS.map((program) => (
               <ProgramField
+                key={program.label}
                 value={program.value}
                 label={program.label}
                 handleProgramChange={handleProgramChange}
@@ -207,6 +208,7 @@ const EditStudentWaitlist = ({
           </Form.Group>
           {CHECKBOX_FIELDS.map((field) => (
             <CheckboxField
+              key={field}
               form={form}
               fieldName={field}
               onChangeInput={onChangeInput}

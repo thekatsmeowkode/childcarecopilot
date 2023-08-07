@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import WaitlistDetails from "../components/WaitlistDetails";
 import AddStudentWaitlist from "../components/waitlistStudentForms/AddStudentWaitlist";
+import DateSelector from "../components/waitlistSquares/DateSelector";
 
 const Waitlist = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [waitlistStudents, setWaitlistStudents] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
 
-  useEffect( () => {
+  useEffect(() => {
     const fetchWaitlist = async () => {
       const waitlist = await fetch("/api/waitlist");
       const waitlistJson = await waitlist.json();
@@ -29,7 +31,11 @@ const Waitlist = () => {
       )}
       <WaitlistDetails
         waitlistStudents={waitlistStudents}
-        setWaitlistStudents = {setWaitlistStudents}
+        setWaitlistStudents={setWaitlistStudents}
+      />
+      <DateSelector
+        setSelectedDate={setSelectedDate}
+        selectedDate={selectedDate}
       />
     </>
   );

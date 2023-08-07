@@ -27,7 +27,6 @@ const useForm = (formState) => {
 
   const handleSubmit = (e, callback) => {
     const form = e.target;
-    console.log(form);
 
     if (!form.checkValidity()) {
       e.preventDefault();
