@@ -6,7 +6,7 @@ const Waitlist = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [waitlistStudents, setWaitlistStudents] = useState([]);
 
-  useEffect(() => {
+  useEffect( () => {
     const fetchWaitlist = async () => {
       const waitlist = await fetch("/api/waitlist");
       const waitlistJson = await waitlist.json();

@@ -1,6 +1,16 @@
 import { Modal, Form, Button, InputGroup } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { formatDate } from "../../utils/formatDates";
+import CheckboxField from "./CheckboxField";
+
+const CHECKBOX_FIELDS = [
+  "sibling",
+  "emailed",
+  "toured",
+  "registered",
+  "enrolled",
+  "declined",
+];
 
 const EditStudentWaitlist = ({
   student,
@@ -179,86 +189,35 @@ const EditStudentWaitlist = ({
             />
           </Form.Group>
           <Form.Group>
-                <Form.Check
-                  type="checkbox"
-                  value="earlyMorning"
-                  onChange={handleProgramChange}
-                  label="Early morning 7:30-8:30"
-                  checked={form.programs.includes("earlyMorning")}
-                ></Form.Check>
-                <Form.Check
-                  type="checkbox"
-                  value="extendedDay"
-                  label="Extended Day 3:30-4:30"
-                  onChange={handleProgramChange}
-                  checked={form.programs.includes("extendedDay")}
-                ></Form.Check>
-                <Form.Check
-                  type="checkbox"
-                  value="lateDay"
-                  label="Late Day 4:30-5:30"
-                  onChange={handleProgramChange}
-                  checked={form.programs.includes("lateDay")}
-                ></Form.Check>
-              </Form.Group>
-          <Form.Group>
             <Form.Check
               type="checkbox"
-              name="sibling"
-              checked={form.sibling}
-              onChange={onChangeInput}
-              label="Sibling"
+              value="earlyMorning"
+              onChange={handleProgramChange}
+              label="Early morning 7:30-8:30"
+              checked={form.programs.includes("earlyMorning")}
             ></Form.Check>
-          </Form.Group>
-          <Form.Group>
             <Form.Check
               type="checkbox"
-              checked={form.emailed}
-              value={form.emailed}
-              name="emailed"
-              onChange={onChangeInput}
-              label="Emailed"
+              value="extendedDay"
+              label="Extended Day 3:30-4:30"
+              onChange={handleProgramChange}
+              checked={form.programs.includes("extendedDay")}
             ></Form.Check>
-          </Form.Group>
-          <Form.Group>
             <Form.Check
               type="checkbox"
-              checked={form.toured}
-              value={form.toured}
-              name="toured"
-              onChange={onChangeInput}
-              label="Toured"
+              value="lateDay"
+              label="Late Day 4:30-5:30"
+              onChange={handleProgramChange}
+              checked={form.programs.includes("lateDay")}
             ></Form.Check>
           </Form.Group>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              checked={form.registered}
-              value={form.registered}
-              name="registered"
-              onChange={onChangeInput}
-              label="Registered"
-            ></Form.Check>
-          </Form.Group>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              checked={form.enrolled}
-              name="enrolled"
-              onChange={onChangeInput}
-              label="Enrolled"
-            ></Form.Check>
-          </Form.Group>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              checked={form.declined}
-              name="declined"
-              onChange={onChangeInput}
-              label="Declined"
-            ></Form.Check>
-          </Form.Group>
-
+          {CHECKBOX_FIELDS.map((field) => (
+            <CheckboxField
+              form={form}
+              fieldName={field}
+              onChangeInput={onChangeInput}
+            />
+          ))}
           <Button type="submit" variant="primary">
             Save Changes
           </Button>

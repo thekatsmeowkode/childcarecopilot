@@ -1,5 +1,15 @@
 import { Form, Button, Modal, InputGroup } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
+import CheckboxField from "./CheckboxField";
+
+const CHECKBOX_FIELDS = [
+  "sibling",
+  "emailed",
+  "toured",
+  "registered",
+  "enrolled",
+  "declined",
+];
 
 const initialFormValues = {
   childName: "",
@@ -16,7 +26,7 @@ const initialFormValues = {
   registered: false,
   enrolled: false,
   declined: false,
-}
+};
 
 const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
   const {
@@ -174,61 +184,14 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               onChange={handleProgramChange}
             ></Form.Check>
           </Form.Group>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              name="sibling"
-              checked={form.sibling}
-              onChange={onChangeInput}
-              label="Sibling"
-            ></Form.Check>
-          </Form.Group>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              value={form.emailed}
-              name="emailed"
-              onChange={onChangeInput}
-              label="Emailed"
-            ></Form.Check>
-          </Form.Group>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              value={form.toured}
-              name="toured"
-              onChange={onChangeInput}
-              label="Toured"
-            ></Form.Check>
-          </Form.Group>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              value={form.registered}
-              name="registered"
-              onChange={onChangeInput}
-              label="Registered"
-            ></Form.Check>
-          </Form.Group>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              checked={form.enrolled}
-              name="enrolled"
-              onChange={onChangeInput}
-              label="Enrolled"
-            ></Form.Check>
-          </Form.Group>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              checked={form.declined}
-              name="declined"
-              onChange={onChangeInput}
-              label="Declined"
-            ></Form.Check>
-          </Form.Group>
-
+          {CHECKBOX_FIELDS.map((field) => (
+            <CheckboxField
+              onChangeInput={onChangeInput}
+              form={form}
+              fieldName={field}
+            />
+          ))}
+          
           <Button type="submit" variant="primary">
             Save Changes
           </Button>

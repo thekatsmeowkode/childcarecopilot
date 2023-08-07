@@ -4,6 +4,15 @@ import formatProgramName from "../utils/formatText";
 import { Table } from "react-bootstrap";
 import EditStudentWaitlist from "./waitlistStudentForms/EditStudentWaitlist";
 
+const CHECKBOX_FIELDS = [
+  "sibling",
+  "emailed",
+  "toured",
+  "registered",
+  "enrolled",
+  "declined",
+];
+
 const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -60,120 +69,27 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
                     ))}
                   </ul>
                 </td>
-                <td>
-                  {student.sibling ? (
-                    <span
-                      role="img"
-                      aria-label="check mark"
-                      className="react-emojis"
-                    >
-                      ✔️
-                    </span>
-                  ) : (
-                    <span
-                      role="img"
-                      aria-label="cross mark"
-                      className="react-emojis"
-                    >
-                      ❌
-                    </span>
-                  )}
-                </td>
-                <td>
-                  {student.emailed ? (
-                    <span
-                      role="img"
-                      aria-label="check mark"
-                      className="react-emojis"
-                    >
-                      ✔️
-                    </span>
-                  ) : (
-                    <span
-                      role="img"
-                      aria-label="cross mark"
-                      className="react-emojis"
-                    >
-                      ❌
-                    </span>
-                  )}
-                </td>
-                <td>
-                  {student.toured ? (
-                    <span
-                      role="img"
-                      aria-label="check mark"
-                      className="react-emojis"
-                    >
-                      ✔️
-                    </span>
-                  ) : (
-                    <span
-                      role="img"
-                      aria-label="cross mark"
-                      className="react-emojis"
-                    >
-                      ❌
-                    </span>
-                  )}
-                </td>
-                <td>
-                  {student.registered ? (
-                    <span
-                      role="img"
-                      aria-label="check mark"
-                      className="react-emojis"
-                    >
-                      ✔️
-                    </span>
-                  ) : (
-                    <span
-                      role="img"
-                      aria-label="cross mark"
-                      className="react-emojis"
-                    >
-                      ❌
-                    </span>
-                  )}
-                </td>
-                <td>
-                  {student.enrolled ? (
-                    <span
-                      role="img"
-                      aria-label="check mark"
-                      className="react-emojis"
-                    >
-                      ✔️
-                    </span>
-                  ) : (
-                    <span
-                      role="img"
-                      aria-label="cross mark"
-                      className="react-emojis"
-                    >
-                      ❌
-                    </span>
-                  )}
-                </td>
-                <td>
-                  {student.declined ? (
-                    <span
-                      role="img"
-                      aria-label="check mark"
-                      className="react-emojis"
-                    >
-                      ✔️
-                    </span>
-                  ) : (
-                    <span
-                      role="img"
-                      aria-label="cross mark"
-                      className="react-emojis"
-                    >
-                      ❌
-                    </span>
-                  )}
-                </td>
+                {CHECKBOX_FIELDS.map((field) => (
+                  <td key={field}>
+                    {student[field] ? (
+                      <span
+                        role="img"
+                        aria-label="check mark"
+                        className="react-emojis"
+                      >
+                        ✔️
+                      </span>
+                    ) : (
+                      <span
+                        role="img"
+                        aria-label="cross mark"
+                        className="react-emojis"
+                      >
+                        ❌
+                      </span>
+                    )}
+                  </td>
+                ))}
               </tr>
             </Fragment>
           ))}
