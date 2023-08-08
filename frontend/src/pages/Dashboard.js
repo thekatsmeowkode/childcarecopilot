@@ -30,7 +30,6 @@ const Dashboard = () => {
     });
 
     const json = await classRevenue.json();
-    //json to get is json.classRevenue
     return json;
   };
 
@@ -40,7 +39,6 @@ const Dashboard = () => {
       headers: { "Content-Type": "application/json" },
     });
     const json = await totalStudents.json();
-    //json to get is json.classRevenue
     return json;
   };
 
