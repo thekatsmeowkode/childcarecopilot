@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import WaitlistDetails from "../components/WaitlistDetails";
 import AddStudentWaitlist from "../components/waitlistStudentForms/AddStudentWaitlist";
 import DateSelector from "../components/waitlistSquares/DateSelector";
+import StatusSquares from "../components/waitlistSquares/StatusSquares";
 import { formatDate } from "../utils/formatDates";
 
 const TODAYS_DATE = new Date();
@@ -18,7 +19,7 @@ const Waitlist = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [waitlistStudents, setWaitlistStudents] = useState([]);
   const [selectedDate, setSelectedDate] = useState(formatDate(TODAYS_DATE));
-  const [squaresData, setSquaresData] = useState(null)
+  const [squaresData, setSquaresData] = useState(null);
 
   const getCategoryData = async () => {
     const categoryDataPromises = CATEGORIES.map(async (category) => {
@@ -29,13 +30,13 @@ const Waitlist = () => {
       return catData.json();
     });
 
-    const categoryData = await Promise.all(categoryDataPromises)
-    return categoryData
+    const categoryData = await Promise.all(categoryDataPromises);
+    return categoryData;
   };
 
   const fetchWaitlist = async () => {
     const waitlist = await fetch("/api/waitlist");
-    return waitlist.json()
+    return waitlist.json();
   };
 
   useEffect(() => {
@@ -46,16 +47,20 @@ const Waitlist = () => {
           getCategoryData(),
         ]);
         setWaitlistStudents(waitlistData.students);
-        setSquaresData(categoryData)
+        setSquaresData(categoryData);
       } catch (error) {
         console.error("Error fetching waitlist data", error);
       }
     };
     fetchData();
-  }, []);
+  }, [waitlistStudents, squaresData]);
 
   return (
     <>
+      <section className="waitlist-status-bar">
+        {squaresData &&
+          squaresData.map((square) => <StatusSquares data={square} />)}
+      </section>
       <button onClick={() => setIsAddOpen(true)}>Add Student</button>
       {isAddOpen && (
         <AddStudentWaitlist

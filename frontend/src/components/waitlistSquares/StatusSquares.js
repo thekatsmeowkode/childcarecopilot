@@ -1,9 +1,14 @@
-const StatusSquares = () => {
-    <>
-    <div>
-        
-    </div>
-    </>
-}
+const StatusSquares = ({ data }) => {
+  const { category, count } = data;
 
-export default StatusSquares
+  return (
+    <>
+      <div className='status-square'>
+        <h6>{category}</h6>
+        <p>{count}</p>
+      </div>
+    </>
+  );
+};
+
+export default StatusSquares;
