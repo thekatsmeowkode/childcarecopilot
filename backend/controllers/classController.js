@@ -19,6 +19,7 @@ const findIndex = (classroom, studentId) => {
   }
 };
 
+//////////////////CLASSROOM routes///////////////////////
 //GET all classes
 const getClassrooms = async (req, res) => {
   try {
@@ -46,7 +47,7 @@ const getClassroom = async (req, res) => {
 
     res.status(200).json(classroom);
   } catch (error) {
-    req.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -118,6 +119,7 @@ const updateClassroom = async (req, res) => {
   }
 };
 
+///////////////////STUDENT Routes///////////////////////////////
 //UPDATE student from class
 const updateStudent = async (req, res) => {
   const { classId, studentId } = req.params;
@@ -251,5 +253,5 @@ module.exports = {
   updateStudent,
   addStudent,
   deleteStudent,
-  getStudent,
+  getStudent
 };

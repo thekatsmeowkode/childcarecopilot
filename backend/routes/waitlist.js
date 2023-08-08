@@ -6,6 +6,7 @@ const {
   editStudent,
   getOneStudentId,
   getNumWLStudentsByCategory,
+  getStudentsOlderThanTargetDate
 } = require("../controllers/waitlistController");
 
 const router = express.Router();
@@ -21,5 +22,9 @@ router.patch("/:studentId", editStudent);
 router.get("/:studentName", getOneStudentId);
 
 router.get("/dashboard/:category", getNumWLStudentsByCategory);
+
+// GET students older than target date in school
+router.get('/:selectedDate/:inputMonthsOld', getStudentsOlderThanTargetDate)
+
 
 module.exports = router;

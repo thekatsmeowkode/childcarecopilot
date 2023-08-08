@@ -1,4 +1,5 @@
 const Waitlist = require("../models/WaitlistModel");
+const Classroom = require("../models/ClassModel");
 
 CURRENT_WAITLIST_ID = "64cd36161a8b00969deefeb4";
 
@@ -130,7 +131,6 @@ const getOneStudentId = async (req, res) => {
 
 const getNumWLStudentsByCategory = async (req, res) => {
   const { category } = req.params;
-  console.log(category)
 
   try {
     const waitlist = await Waitlist.findById({ _id: CURRENT_WAITLIST_ID });
@@ -139,13 +139,49 @@ const getNumWLStudentsByCategory = async (req, res) => {
       return res.status(404).json({ error: "Waitlist not found" });
     }
 
-    let counter = 0;
+    let count = 0;
 
     waitlist.students.map((student) =>
-      student[category] ? (counter += 1) : counter
+      student[category] ? (count += 1) : count
     );
 
-    res.status(200).json({ category, counter });
+    res.status(200).json({ category, count });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+//GET students over 3 by target date from each class
+const getStudentsOlderThanTargetDate = async (req, res) => {
+  const { inputMonthsOld, selectedDate } = req.params;
+  const targetDate = new Date(selectedDate);
+
+  try {
+    const classrooms = await Classroom.find({});
+
+    if (!classrooms) {
+      return res.status(404).json({ error: "No classrooms found" });
+    }
+
+    const isChildOlder = (classrooms, futureDate, inputMonthsOld) => {
+      results = [];
+
+      classrooms.map((classroom) => {
+        classroom.students.map((student) => {
+          const ageInMonths =
+            (futureDate.getFullYear() - student.birthdate.getFullYear()) * 12 +
+            (futureDate.getMonth() - student.birthdate.getMonth());
+          if (ageInMonths > inputMonthsOld) {
+            results.push(student);
+          }
+        });
+      });
+      return results;
+    };
+
+    const targetChildren = isChildOlder(classrooms, targetDate, inputMonthsOld);
+
+    res.status(200).json({ targetChildren });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -158,4 +194,5 @@ module.exports = {
   editStudent,
   getOneStudentId,
   getNumWLStudentsByCategory,
+  getStudentsOlderThanTargetDate
 };
