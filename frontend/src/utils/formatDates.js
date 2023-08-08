@@ -18,9 +18,9 @@ function formatAge(dateOfBirth) {
     return formattedAge.trim();
   }
 
-  function formatDate(birthdate) {
-    const date = new Date(birthdate);
-    return date.toISOString().substring(0, 10);
+  function formatDate(date) {
+    const dateObj = new Date(date);
+    return dateObj.toISOString().substring(0, 10);
   }
 
   function calculateAge(dateOfBirth) {

@@ -1,9 +1,12 @@
-import { Form, InputGroup } from "react-bootstrap";
+import { Form, InputGroup, Button } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
+import {formatDate} from '../../utils/formatDates'
+
+const TODAYS_DATE = new Date()
 
 const DateSelector = ({ setSelectedDate, selectedDate }) => {
-  const { handleSubmit, validated, onChangeInput } = useForm({
-    selectedDate: "",
+  const { handleSubmit, validated, onChangeInput, form } = useForm({
+    selectedDate
   });
 
   const setDate = (date) => {
@@ -17,13 +20,14 @@ const DateSelector = ({ setSelectedDate, selectedDate }) => {
       validated={validated}
     >
       <Form.Group>
-        <Form.Label>Select a date to view enrollment possibilities</Form.Label>
+        <Form.Label>Select a future date to view enrollment possibilities</Form.Label>
         <InputGroup hasValidation>
           <Form.Control
             type="date"
             name="selectedDate"
+            min={formatDate(TODAYS_DATE)}
             onChange={onChangeInput}
-            value={selectedDate ? selectedDate : ""}
+            value={form.selectedDate}
             required
           />
           <Form.Control.Feedback type="invalid">
@@ -31,6 +35,7 @@ const DateSelector = ({ setSelectedDate, selectedDate }) => {
           </Form.Control.Feedback>
         </InputGroup>
       </Form.Group>
+      <Button type='submit'>See possibilities</Button>
     </Form>
   );
 };

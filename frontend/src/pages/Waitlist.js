@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import WaitlistDetails from "../components/WaitlistDetails";
 import AddStudentWaitlist from "../components/waitlistStudentForms/AddStudentWaitlist";
 import DateSelector from "../components/waitlistSquares/DateSelector";
+import { formatDate } from "../utils/formatDates";
+
+const TODAYS_DATE = new Date()
 
 const Waitlist = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [waitlistStudents, setWaitlistStudents] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(formatDate(TODAYS_DATE));
 
   useEffect(() => {
     const fetchWaitlist = async () => {
