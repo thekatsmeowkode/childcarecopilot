@@ -13,6 +13,7 @@ const waitlistSchema = new Schema(
         childName: String,
         parentName: String,
         birthdate: Date,
+        startDate: Date,
         allergies: String,
         phone: String,
         email: String,
