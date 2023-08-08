@@ -1,7 +1,6 @@
 import { Form, InputGroup, Button } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { formatDate } from "../../utils/formatDates";
-import { useState } from "react";
 
 const TODAYS_DATE = new Date();
 
@@ -22,6 +21,7 @@ const DateSelector = ({ ageTargetStudents, setAgeTargetStudents }) => {
       }
     );
     const studentJson = await studentResponse.json();
+    console.log(studentJson)
     setAgeTargetStudents(studentJson.targetChildren);
   };
 

@@ -3,6 +3,7 @@ import WaitlistDetails from "../components/WaitlistDetails";
 import AddStudentWaitlist from "../components/waitlistStudentForms/AddStudentWaitlist";
 import DateSelector from "../components/waitlistSquares/DateSelector";
 import StatusSquares from "../components/waitlistSquares/StatusSquares";
+import StudentOlderTable from "../components/waitlistSquares/StudentOlderTable";
 
 const CATEGORIES = [
   "sibling",
@@ -16,8 +17,8 @@ const CATEGORIES = [
 const Waitlist = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [waitlistStudents, setWaitlistStudents] = useState([]);
-  const [squaresData, setSquaresData] = useState(null);
-  const [ageTargetStudents, setAgeTargetStudents] = useState(null)
+  const [statusData, setStatusData] = useState(null);
+  const [ageTargetStudents, setAgeTargetStudents] = useState(null);
 
   const getCategoryData = async () => {
     const categoryDataPromises = CATEGORIES.map(async (category) => {
@@ -45,7 +46,7 @@ const Waitlist = () => {
           getCategoryData(),
         ]);
         setWaitlistStudents(waitlistData.students);
-        setSquaresData(categoryData);
+        setStatusData(categoryData);
       } catch (error) {
         console.error("Error fetching waitlist data", error);
       }
@@ -56,8 +57,10 @@ const Waitlist = () => {
   return (
     <>
       <section className="waitlist-status-bar">
-        {squaresData &&
-          squaresData.map((square) => <StatusSquares data={square} />)}
+        {statusData &&
+          statusData.map((status) => (
+            <StatusSquares key={Math.random()} data={status} />
+          ))}
       </section>
       <button onClick={() => setIsAddOpen(true)}>Add Student</button>
       {isAddOpen && (
@@ -75,6 +78,7 @@ const Waitlist = () => {
         ageTargetStudents={ageTargetStudents}
         setAgeTargetStudents={setAgeTargetStudents}
       />
+      {ageTargetStudents && <StudentOlderTable students={ageTargetStudents} />}
     </>
   );
 };

@@ -5,6 +5,7 @@ import SchoolInfo from "./pages/SchoolInfo";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Waitlist from "./pages/Waitlist";
+import {Table} from 'react-bootstrap'
 
 function App() {
 
