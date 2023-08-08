@@ -35,6 +35,7 @@ const useForm = (formState) => {
     setValidated(true);
 
     if (form.checkValidity() === true) {
+      e.preventDefault()
       callback(e);
     }
   };

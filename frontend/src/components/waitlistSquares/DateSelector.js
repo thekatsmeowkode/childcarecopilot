@@ -1,26 +1,38 @@
 import { Form, InputGroup, Button } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
-import {formatDate} from '../../utils/formatDates'
+import { formatDate } from "../../utils/formatDates";
+import { useState } from "react";
 
-const TODAYS_DATE = new Date()
+const TODAYS_DATE = new Date();
 
-const DateSelector = ({ setSelectedDate, selectedDate }) => {
+const DateSelector = ({ ageTargetStudents, setAgeTargetStudents }) => {
   const { handleSubmit, validated, onChangeInput, form } = useForm({
-    selectedDate
+    selectedDate: formatDate(TODAYS_DATE),
+    inputMonthsOld: 0,
   });
 
-  const setDate = (date) => {
-    setSelectedDate(date);
+  const getChildrenOverDate = async () => {
+    let { selectedDate, inputMonthsOld } = form;
+    selectedDate = formatDate(selectedDate);
+    const studentResponse = await fetch(
+      `api/waitlist/${selectedDate}/${inputMonthsOld}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    const studentJson = await studentResponse.json();
+    setAgeTargetStudents(studentJson.targetChildren);
   };
 
   return (
     <Form
       noValidate
-      onSubmit={(e) => handleSubmit(e, setDate)}
+      onSubmit={(e) => handleSubmit(e, getChildrenOverDate)}
       validated={validated}
     >
       <Form.Group>
-        <Form.Label>Select a future date to view enrollment possibilities</Form.Label>
+        <Form.Label>Select a future date</Form.Label>
         <InputGroup hasValidation>
           <Form.Control
             type="date"
@@ -35,7 +47,24 @@ const DateSelector = ({ setSelectedDate, selectedDate }) => {
           </Form.Control.Feedback>
         </InputGroup>
       </Form.Group>
-      <Button type='submit'>See possibilities</Button>
+      <Form.Group>
+        <Form.Label>Select a target age in months </Form.Label>
+        <InputGroup hasValidation>
+          <Form.Control
+            type="number"
+            name="inputMonthsOld"
+            max={48}
+            onChange={onChangeInput}
+            value={form.inputMonthsOld}
+            required
+          />
+          <InputGroup.Text>months</InputGroup.Text>
+          <Form.Control.Feedback type="invalid">
+            Please select a number of months
+          </Form.Control.Feedback>
+        </InputGroup>
+      </Form.Group>
+      <Button type="submit">See possibilities</Button>
     </Form>
   );
 };

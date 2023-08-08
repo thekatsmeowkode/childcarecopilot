@@ -3,9 +3,7 @@ import WaitlistDetails from "../components/WaitlistDetails";
 import AddStudentWaitlist from "../components/waitlistStudentForms/AddStudentWaitlist";
 import DateSelector from "../components/waitlistSquares/DateSelector";
 import StatusSquares from "../components/waitlistSquares/StatusSquares";
-import { formatDate } from "../utils/formatDates";
 
-const TODAYS_DATE = new Date();
 const CATEGORIES = [
   "sibling",
   "emailed",
@@ -18,8 +16,8 @@ const CATEGORIES = [
 const Waitlist = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [waitlistStudents, setWaitlistStudents] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(formatDate(TODAYS_DATE));
   const [squaresData, setSquaresData] = useState(null);
+  const [ageTargetStudents, setAgeTargetStudents] = useState(null)
 
   const getCategoryData = async () => {
     const categoryDataPromises = CATEGORIES.map(async (category) => {
@@ -53,7 +51,7 @@ const Waitlist = () => {
       }
     };
     fetchData();
-  }, [waitlistStudents, squaresData]);
+  }, []);
 
   return (
     <>
@@ -74,8 +72,8 @@ const Waitlist = () => {
         setWaitlistStudents={setWaitlistStudents}
       />
       <DateSelector
-        setSelectedDate={setSelectedDate}
-        selectedDate={selectedDate}
+        ageTargetStudents={ageTargetStudents}
+        setAgeTargetStudents={setAgeTargetStudents}
       />
     </>
   );
