@@ -87,7 +87,6 @@ const BoxPlot = ({ width, height, data }) => {
         >
           {allShapes}
           <AxisLeft yScale={yScale} pixelsPerTick={30} />
-          {/* X axis uses an additional translation to appear at the bottom */}
           <g transform={`translate(0, ${boundsHeight})`}>
             <AxisBottom xScale={xScale} />
           </g>
