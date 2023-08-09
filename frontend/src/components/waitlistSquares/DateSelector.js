@@ -4,7 +4,7 @@ import { formatDate } from "../../utils/formatDates";
 
 const TODAYS_DATE = new Date();
 
-const DateSelector = ({ ageTargetStudents, setAgeTargetStudents }) => {
+const DateSelector = ({ setSelectedDate, setAgeTargetStudents, setTriggerHistogram }) => {
   const { handleSubmit, validated, onChangeInput, form } = useForm({
     selectedDate: formatDate(TODAYS_DATE),
     inputMonthsOld: 0,
@@ -21,8 +21,9 @@ const DateSelector = ({ ageTargetStudents, setAgeTargetStudents }) => {
       }
     );
     const studentJson = await studentResponse.json();
-    console.log(studentJson)
     setAgeTargetStudents(studentJson.targetChildren);
+    setSelectedDate(selectedDate)
+    setTriggerHistogram(true)
   };
 
   return (

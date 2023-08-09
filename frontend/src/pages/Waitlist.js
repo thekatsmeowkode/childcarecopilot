@@ -4,6 +4,7 @@ import AddStudentWaitlist from "../components/waitlistStudentForms/AddStudentWai
 import DateSelector from "../components/waitlistSquares/DateSelector";
 import StatusSquares from "../components/waitlistSquares/StatusSquares";
 import StudentOlderTable from "../components/waitlistSquares/StudentOlderTable";
+import AgesHistogram from "../components/waitlistSquares/AgesHistogram";
 
 const CATEGORIES = [
   "sibling",
@@ -19,6 +20,8 @@ const Waitlist = () => {
   const [waitlistStudents, setWaitlistStudents] = useState([]);
   const [statusData, setStatusData] = useState(null);
   const [ageTargetStudents, setAgeTargetStudents] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [triggerHistogram, setTriggerHistogram] = useState(false)
 
   const getCategoryData = async () => {
     const categoryDataPromises = CATEGORIES.map(async (category) => {
@@ -75,10 +78,17 @@ const Waitlist = () => {
         setWaitlistStudents={setWaitlistStudents}
       />
       <DateSelector
-        ageTargetStudents={ageTargetStudents}
         setAgeTargetStudents={setAgeTargetStudents}
+        setSelectedDate={setSelectedDate}
+        setTriggerHistogram={setTriggerHistogram}
       />
-      {ageTargetStudents && <StudentOlderTable students={ageTargetStudents} />}
+      {ageTargetStudents && (
+        <StudentOlderTable
+          selectedDate={selectedDate}
+          students={ageTargetStudents}
+        />
+      )}
+      {triggerHistogram && <AgesHistogram selectedDate={selectedDate} />}
     </>
   );
 };
