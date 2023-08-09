@@ -197,26 +197,25 @@ const getStudentsOlderThanTargetDate = async (req, res) => {
 const getHistogramData = async (req, res) => {
   let { selectedDate } = req.params;
   selectedDate = new Date(selectedDate);
-  console.log(selectedDate);
 
   const getMonthsOld = (selectedDate, birthdate) => {
-    return (
-      (selectedDate.getFullYear() - birthdate.getFullYear()) * 12 +
-      (selectedDate.getMonth() - birthdate.getMonth())
-    );
+    const selectedYear = selectedDate.getFullYear();
+    const selectedMonth = selectedDate.getMonth();
+    const birthYear = birthdate.getFullYear();
+    const birthMonth = birthdate.getMonth();
+    return (selectedYear - birthYear) * 12 + (selectedMonth - birthMonth);
   };
 
   try {
     const classrooms = await Classroom.find();
 
-    agesInMonthsEnrolled = [];
-    agesInMonthsWaitlist = [];
+    const agesInMonthsEnrolled = [];
+    const agesInMonthsWaitlist = [];
 
     classrooms.forEach((classroom) => {
       classroom.students.forEach((student) => {
-        agesInMonthsEnrolled.push(
-          getMonthsOld(selectedDate, student.birthdate)
-        );
+        const ageInMonths = getMonthsOld(selectedDate, student.birthdate);
+        agesInMonthsEnrolled.push(ageInMonths);
       });
     });
 
@@ -227,10 +226,14 @@ const getHistogramData = async (req, res) => {
     }
 
     waitlist.students.forEach((student) => {
-      agesInMonthsWaitlist.push(getMonthsOld(selectedDate, student.birthdate));
+      const ageInMonths = getMonthsOld(selectedDate, student.birthdate);
+      agesInMonthsWaitlist.push(ageInMonths);
     });
 
-    res.status(200).json({ agesInMonthsEnrolled, agesInMonthsWaitlist });
+    res.status(200).json([
+      { group: "enrolled", values: agesInMonthsEnrolled },
+      { group: "waitlist", values: agesInMonthsWaitlist },
+    ]);
   } catch (error) {
     res.status(500).json({ error: "Error getting data for boxplot" });
   }
