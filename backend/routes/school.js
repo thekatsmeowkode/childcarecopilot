@@ -7,7 +7,7 @@ const {
   getTotalStudents,
   getStaffRequiredCore,
   getStaffPerProgram,
-  getBoxPlotData,
+  getBoxPlotData
 } = require("../controllers/schoolController");
 
 const router = express.Router();

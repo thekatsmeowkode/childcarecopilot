@@ -433,5 +433,5 @@ module.exports = {
   getTotalStudents,
   getStaffRequiredCore,
   getStaffPerProgram,
-  getBoxPlotData,
+  getBoxPlotData
 };

@@ -6,7 +6,8 @@ const {
   editStudent,
   getOneStudentId,
   getNumWLStudentsByCategory,
-  getStudentsOlderThanTargetDate
+  getStudentsOlderThanTargetDate,
+  getHistogramData
 } = require("../controllers/waitlistController");
 
 const router = express.Router();
@@ -26,5 +27,6 @@ router.get("/dashboard/:category", getNumWLStudentsByCategory);
 // GET students older than target date in school
 router.get('/:selectedDate/:inputMonthsOld', getStudentsOlderThanTargetDate)
 
+router.get('/histogram/data/:selectedDate', getHistogramData)
 
 module.exports = router;

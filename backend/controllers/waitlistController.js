@@ -151,7 +151,7 @@ const getNumWLStudentsByCategory = async (req, res) => {
   }
 };
 
-//GET students over 3 by target date from each class
+//GET students older than target date from each class
 const getStudentsOlderThanTargetDate = async (req, res) => {
   const { inputMonthsOld, selectedDate } = req.params;
   const targetDate = new Date(selectedDate);
@@ -168,11 +168,17 @@ const getStudentsOlderThanTargetDate = async (req, res) => {
 
       classrooms.map((classroom) => {
         classroom.students.map((student) => {
-          const ageInMonths =
+          const futureAgeInMonths =
             (futureDate.getFullYear() - student.birthdate.getFullYear()) * 12 +
             (futureDate.getMonth() - student.birthdate.getMonth());
-          if (ageInMonths > inputMonthsOld) {
-            results.push(student);
+          if (futureAgeInMonths > inputMonthsOld) {
+            const studentWithAge = {
+              birthdate: student.birthdate,
+              classroomName: student.classroomName,
+              name: student.name,
+              futureAgeInMonths,
+            };
+            results.push(studentWithAge);
           }
         });
       });
@@ -187,6 +193,49 @@ const getStudentsOlderThanTargetDate = async (req, res) => {
   }
 };
 
+//GET data formatted for histogram
+const getHistogramData = async (req, res) => {
+  let { selectedDate } = req.params;
+  selectedDate = new Date(selectedDate);
+  console.log(selectedDate);
+
+  const getMonthsOld = (selectedDate, birthdate) => {
+    return (
+      (selectedDate.getFullYear() - birthdate.getFullYear()) * 12 +
+      (selectedDate.getMonth() - birthdate.getMonth())
+    );
+  };
+
+  try {
+    const classrooms = await Classroom.find();
+
+    agesInMonthsEnrolled = [];
+    agesInMonthsWaitlist = [];
+
+    classrooms.forEach((classroom) => {
+      classroom.students.forEach((student) => {
+        agesInMonthsEnrolled.push(
+          getMonthsOld(selectedDate, student.birthdate)
+        );
+      });
+    });
+
+    const waitlist = await Waitlist.findById({ _id: CURRENT_WAITLIST_ID });
+
+    if (!waitlist) {
+      return res.status(404).json({ error: "Waitlist not found" });
+    }
+
+    waitlist.students.forEach((student) => {
+      agesInMonthsWaitlist.push(getMonthsOld(selectedDate, student.birthdate));
+    });
+
+    res.status(200).json({ agesInMonthsEnrolled, agesInMonthsWaitlist });
+  } catch (error) {
+    res.status(500).json({ error: "Error getting data for boxplot" });
+  }
+};
+
 module.exports = {
   addStudentWL,
   createWaitlist,
@@ -194,5 +243,6 @@ module.exports = {
   editStudent,
   getOneStudentId,
   getNumWLStudentsByCategory,
-  getStudentsOlderThanTargetDate
+  getStudentsOlderThanTargetDate,
+  getHistogramData,
 };
