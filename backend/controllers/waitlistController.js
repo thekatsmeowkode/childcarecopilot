@@ -168,9 +168,12 @@ const getStudentsOlderThanTargetDate = async (req, res) => {
 
       classrooms.map((classroom) => {
         classroom.students.map((student) => {
-          const futureAgeInMonths =
+          let futureAgeInMonths =
             (futureDate.getFullYear() - student.birthdate.getFullYear()) * 12 +
             (futureDate.getMonth() - student.birthdate.getMonth());
+          if (futureDate.getDate() < student.birthdate.getDate()) {
+            futureAgeInMonths -= 1;
+          }
           if (futureAgeInMonths > inputMonthsOld) {
             const studentWithAge = {
               birthdate: student.birthdate,
