@@ -67,7 +67,43 @@ export const Histogram = ({ width, height, data }) => {
       .ticks(yScale.domain()[1])
       .tickFormat(d3.format("d"));
     svgElement.append("g").call(yAxisGenerator);
-  }, [xScale, yScale, boundsHeight]);
+
+    svgElement
+    .append("g")
+    .attr("transform", `translate(0, ${boundsHeight})`)
+    .call(xAxisGenerator)
+    .append("text") // X Axis label
+    .attr("x", boundsWidth / 2)
+    .attr("y", 35) // Adjust the vertical position of the label
+    .attr("fill", "black")
+    .attr("text-anchor", "middle")
+    .text("Age in Months");
+
+  svgElement
+    .append("g")
+    .call(yAxisGenerator)
+    .append("text") // Y Axis label
+    .attr("transform", "rotate(-90)")
+    .attr("y", -50) // Adjust the vertical position of the label
+    .attr("x", -boundsHeight / 2)
+    .attr("fill", "black")
+    .attr("text-anchor", "middle")
+    .text("Number of Students");
+
+  svgElement
+    .append("g")
+    .selectAll("text")
+    .data(groupBuckets)
+    .enter()
+    .append("text") // Key labels
+    .attr("x", boundsWidth + 10)
+    .attr("y", (d, i) => i * 20) // Adjust the vertical position of the labels
+    .attr("fill", (d) => colorScale(d.name))
+    .text((d) => d.name);
+
+  }, [xScale, yScale, boundsHeight, boundsWidth]);
+
+  
 
   const allRects = groupBuckets.map((group, i) =>
     group.buckets.map((bucket, j) => {

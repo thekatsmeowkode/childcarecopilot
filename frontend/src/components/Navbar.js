@@ -17,6 +17,9 @@ const Navbar = () => {
         <button>
           <Link to='/waitlist'>Waitlist</Link>
         </button>
+        <button>
+          <Link to='/time-traveler'>See the future</Link>
+        </button>
         <div className="slider-container">
           <p>Students</p>
           <Slider checked={checked} setIsChecked={setIsChecked}></Slider>

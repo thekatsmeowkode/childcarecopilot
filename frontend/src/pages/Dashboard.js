@@ -4,7 +4,9 @@ import RevenueSquare from "../components/dashboardSquares/RevenueSquare";
 import CoreHoursSquare from "../components/dashboardSquares/CoreHoursSquare";
 import CapacitySquare from "../components/dashboardSquares/CapacitySquare";
 import ProgramSquare from "../components/dashboardSquares/ProgramSquare";
+import Histogram from "../components/dashboardSquares/Histogram";
 import Spinner from "react-bootstrap/Spinner";
+import { formatDate } from "../utils/formatDates";
 import "../css/dashboard.css";
 
 const Dashboard = () => {
@@ -16,13 +18,7 @@ const Dashboard = () => {
   const [staffLateDay, setStaffLateDay] = useState(null);
   const [boxPlotData, setBoxPlotData] = useState(null);
   const [roomCapacities, setRoomCapacities] = useState(null);
-
-  const CLASSROOM_NAMES = {
-    infants: "infants",
-    toddlers: "toddlers",
-    crawlers: "crawlers",
-    twos: "twos",
-  };
+  const [histogramData, setHistogramData] = useState(null);
 
   const getClassRevenue = async () => {
     const classRevenue = await fetch("api/school/class-revenue", {
@@ -80,6 +76,19 @@ const Dashboard = () => {
     return json;
   };
 
+  const getHistogramData = async () => {
+    const histogramDate = formatDate(new Date())
+
+    const histogramResponse = await fetch(
+      `/api/waitlist/histogram/data/${histogramDate}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return histogramResponse.json();
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -92,6 +101,7 @@ const Dashboard = () => {
           lateDayStaff,
           boxPlotDatas,
           roomCapacityData,
+          histogramData,
         ] = await Promise.all([
           getClassRevenue(),
           getTotalStudents(),
@@ -101,6 +111,7 @@ const Dashboard = () => {
           getStaffProgram("lateDay"),
           getBoxPlotData(),
           getRoomCapacities(),
+          getHistogramData(),
         ]);
         setRevenueDetails(revenueData);
         setTotalStudents(studentData);
@@ -110,6 +121,7 @@ const Dashboard = () => {
         setStaffLateDay(lateDayStaff);
         setBoxPlotData(boxPlotDatas);
         setRoomCapacities(roomCapacityData);
+        setHistogramData(histogramData);
       } catch (error) {
         console.error("Error fetching dashboard data", error);
       }
@@ -173,6 +185,13 @@ const Dashboard = () => {
             height={400}
           ></BoxPlot>
         ) : null}
+        {histogramData ? (
+          <Histogram width={600} height={400} data={histogramData} />
+        ) : (
+          <Spinner animation="grow" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        )}
       </main>
     </>
   );
