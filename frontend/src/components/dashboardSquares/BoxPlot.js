@@ -5,6 +5,7 @@ import { getSummaryStats } from "../../utils/getSummaryStats";
 import { VerticalBox } from "../boxplotComponents/VerticalBox";
 import { AxisLeft } from "../boxplotComponents/AxisLeft";
 import { AxisBottom } from "../boxplotComponents/AxisCategoric";
+import AxisLeftLabel from "../boxplotComponents/AxisLeftLabel";
 
 const MARGIN = { top: 30, right: 30, bottom: 30, left: 50 };
 const JITTER_WIDTH = 40;
@@ -86,6 +87,12 @@ const BoxPlot = ({ width, height, data }) => {
           transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
         >
           {allShapes}
+          <AxisLeftLabel
+            text="Age in months"
+            x={-35} // Adjust the position based on your layout
+            y={boundsHeight / 2}
+            rotation={-90}
+          />
           <AxisLeft yScale={yScale} pixelsPerTick={30} />
           <g transform={`translate(0, ${boundsHeight})`}>
             <AxisBottom xScale={xScale} />

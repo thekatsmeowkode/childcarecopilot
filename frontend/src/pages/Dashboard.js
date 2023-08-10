@@ -77,7 +77,7 @@ const Dashboard = () => {
   };
 
   const getHistogramData = async () => {
-    const histogramDate = formatDate(new Date())
+    const histogramDate = formatDate(new Date());
 
     const histogramResponse = await fetch(
       `/api/waitlist/histogram/data/${histogramDate}`,

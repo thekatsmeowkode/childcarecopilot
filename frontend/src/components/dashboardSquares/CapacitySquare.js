@@ -11,15 +11,28 @@ const CapacitySquare = ({ currentStudentsByClass, roomCapacities }) => {
   }
 
   return (
-      <div>
-        <span><p>Infant Room {infants} enrolled / {infantsCap} possible</p>
-        {returnStatusBar(infants, infantsCap)}</span>
-
+    <div>
+      <span>
+        Infant Room {infants} enrolled / {infantsCap} possible
+        {returnStatusBar(infants, infantsCap)}
+      </span>
+      <span>
+        Crawler Room {crawlers} enrolled / {crawlersCap} possible
         {returnStatusBar(crawlers, crawlersCap)}
+      </span>
+      <span>
+        Toddlers Room {toddlers} enrolled / {toddlersCap} possible
         {returnStatusBar(toddlers, toddlersCap)}
+      </span>
+      <span>
+        Twos Room {twos} enrolled / {twosCap} possible
         {returnStatusBar(twos, twosCap)}
+      </span>
+      <span>
+        Total Students {total} enrolled / {totalCap} possible
         {returnStatusBar(total, totalCap)}
-      </div>
+      </span>
+    </div>
   );
 };
 

@@ -5,7 +5,7 @@ const MARGIN = { top: 30, right: 30, bottom: 40, left: 50 };
 const BUCKET_NUMBER = 12;
 const BUCKET_PADDING = 4;
 
-const COLORS = ["#e0ac2b", "#e85252", "#6689c6", "#9a6fb0", "#a53253"];
+const COLORS = ["#ead4f5", "#0dcaf0"];
 
 export const Histogram = ({ width, height, data }) => {
   const axesRef = useRef(null);
@@ -84,7 +84,7 @@ export const Histogram = ({ width, height, data }) => {
     .call(yAxisGenerator)
     .append("text") // Y Axis label
     .attr("transform", "rotate(-90)")
-    .attr("y", -50) // Adjust the vertical position of the label
+    .attr("y", -20) // Adjust the vertical position of the label
     .attr("x", -boundsHeight / 2)
     .attr("fill", "black")
     .attr("text-anchor", "middle")
@@ -96,7 +96,7 @@ export const Histogram = ({ width, height, data }) => {
     .data(groupBuckets)
     .enter()
     .append("text") // Key labels
-    .attr("x", boundsWidth + 10)
+    .attr("x", boundsWidth -500)
     .attr("y", (d, i) => i * 20) // Adjust the vertical position of the labels
     .attr("fill", (d) => colorScale(d.name))
     .text((d) => d.name);
