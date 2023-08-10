@@ -1,14 +1,7 @@
-const futureDate = new Date();
-const birthdate = new Date("2020-12-24");
+const squareFootageInfantRoom = 500
 
-const monthsOld =
-  (futureDate.getFullYear() - birthdate.getFullYear()) * 12 +
-  (futureDate.getMonth() - birthdate.getMonth());
+const squareFootageRequiredCrib = 40
 
-function monthsToYearsAndMonths(months) {
-  const years = Math.floor(months / 12);
-  const remainingMonths = months % 12;
-  return `${years} years ${remainingMonths} months`;
-}
+const capacityInfantRoom = Math.floor(squareFootageInfantRoom / squareFootageRequiredCrib)
 
-console.log(monthsToYearsAndMonths(monthsOld));
+console.log(capacityInfantRoom)

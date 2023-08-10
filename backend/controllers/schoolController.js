@@ -255,12 +255,6 @@ const getClassRevenue = async (req, res) => {
 //GET total students
 const getTotalStudents = async (req, res) => {
   try {
-    const schoolData = await School.findOne({});
-
-    if (!schoolData) {
-      return res.status(404).json({ error: "School data not found" });
-    }
-
     const classrooms = await Classroom.find();
     let totalStudents = 0;
 
@@ -425,6 +419,54 @@ const getBoxPlotData = async (req, res) => {
   }
 };
 
+const getSchoolCapacity = async (req, res) => {
+  try {
+    const schoolData = await School.findOne({});
+
+    if (!schoolData) {
+      return res.status(404).json({ error: "School data not found" });
+    }
+
+    const roomCapacities = {
+      infants: 0,
+      toddlers: 0,
+      crawlers: 0,
+      twos: 0,
+      total: 0,
+    };
+
+    const {
+      squareFootageInfants,
+      squareFootageCrawlers,
+      squareFootageToddlers,
+      squareFootageTwos,
+      squareFootageCrib,
+      squareFootageNoCrib,
+    } = schoolData;
+
+    //The infant room is the only room constrained by crib square footage
+    roomCapacities.infants = Math.floor(
+      squareFootageInfants / squareFootageCrib
+    );
+    roomCapacities.toddlers = Math.floor(
+      squareFootageToddlers / squareFootageNoCrib
+    );
+    roomCapacities.crawlers = Math.floor(
+      squareFootageCrawlers / squareFootageNoCrib
+    );
+    roomCapacities.twos = Math.floor(squareFootageTwos / squareFootageNoCrib);
+    roomCapacities.total =
+      roomCapacities.infants +
+      roomCapacities.crawlers +
+      roomCapacities.toddlers +
+      roomCapacities.twos;
+
+    res.status(200).json({ roomCapacities });
+  } catch (error) {
+    res.status(500).json({ error: "Error getting data for school capacity" });
+  }
+};
+
 module.exports = {
   addSchool,
   getSchool,
@@ -433,5 +475,6 @@ module.exports = {
   getTotalStudents,
   getStaffRequiredCore,
   getStaffPerProgram,
-  getBoxPlotData
+  getBoxPlotData,
+  getSchoolCapacity,
 };
