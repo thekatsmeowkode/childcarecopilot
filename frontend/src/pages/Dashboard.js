@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [staffExtendedDay, setStaffExtendedDay] = useState(null);
   const [staffLateDay, setStaffLateDay] = useState(null);
   const [boxPlotData, setBoxPlotData] = useState(null);
+  const [roomCapacities, setRoomCapacities] = useState(null);
 
   const CLASSROOM_NAMES = {
     infants: "infants",
@@ -69,6 +70,16 @@ const Dashboard = () => {
     return json;
   };
 
+  const getRoomCapacities = async () => {
+    const coreStaff = await fetch("api/school/school-capacity", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    const json = await coreStaff.json();
+    console.log(json);
+    return json;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,6 +91,7 @@ const Dashboard = () => {
           extendedDayStaff,
           lateDayStaff,
           boxPlotDatas,
+          roomCapacityData,
         ] = await Promise.all([
           getClassRevenue(),
           getTotalStudents(),
@@ -88,6 +100,7 @@ const Dashboard = () => {
           getStaffProgram("extendedDay"),
           getStaffProgram("lateDay"),
           getBoxPlotData(),
+          getRoomCapacities(),
         ]);
         setRevenueDetails(revenueData);
         setTotalStudents(studentData);
@@ -96,6 +109,7 @@ const Dashboard = () => {
         setStaffExtendedDay(extendedDayStaff);
         setStaffLateDay(lateDayStaff);
         setBoxPlotData(boxPlotDatas);
+        setRoomCapacities(roomCapacityData);
       } catch (error) {
         console.error("Error fetching dashboard data", error);
       }
@@ -105,7 +119,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <main class="dashboard-grid">
+      <main className="dashboard-grid">
         {revenueDetails ? (
           <RevenueSquare revenueData={revenueDetails} />
         ) : (
@@ -114,7 +128,10 @@ const Dashboard = () => {
           </Spinner>
         )}
         {totalStudents ? (
-          <CapacitySquare capacityData={totalStudents} />
+          <CapacitySquare
+            roomCapacities={roomCapacities.roomCapacities}
+            currentStudentsByClass={roomCapacities.numStudentsPerClass}
+          />
         ) : (
           <Spinner animation="grow" role="status">
             <span className="visually-hidden">Loading...</span>

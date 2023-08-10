@@ -1,16 +1,23 @@
-import { Table } from "react-bootstrap";
-const CapacitySquare = ({ capacityData }) => {
+import { Table, ProgressBar } from "react-bootstrap";
+const CapacitySquare = ({ currentStudentsByClass, roomCapacities }) => {
+  const { infantsCap, crawlersCap, toddlersCap, twosCap, totalCap } =
+    roomCapacities;
+
+  const { infants, crawlers, toddlers, twos, total } = currentStudentsByClass;
+
+  function returnStatusBar(current, cap) {
+    let now = Math.floor((current / cap) * 100);
+    return <ProgressBar variant="info" now={now} label={`${now}%`} />;
+  }
+
   return (
-    <>
-      <Table>
-        <thead>
-          <th>{capacityData.title}</th>
-        </thead>
-        <tr>
-          <td>{capacityData.totalStudents}</td>
-        </tr>
-      </Table>
-    </>
+      <div>
+        {returnStatusBar(infants, infantsCap)}
+        {returnStatusBar(crawlers, crawlersCap)}
+        {returnStatusBar(toddlers, toddlersCap)}
+        {returnStatusBar(twos, twosCap)}
+        {returnStatusBar(total, totalCap)}
+      </div>
   );
 };
 
