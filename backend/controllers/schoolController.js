@@ -138,12 +138,10 @@ const getNumStudents = async () => {
 };
 
 const getNumStudentsByClass = async () => {
-  let countPerRoom = { infants: 0, crawlers: 0, toddlers: 0, twos: 0 };
-
   try {
     const classrooms = await Classroom.find();
 
-    let countPerRoom = { infants: 0, crawlers: 0, toddlers: 0, twos: 0 };
+    const countPerRoom = { infants: 0, crawlers: 0, toddlers: 0, twos: 0, total:0 };
 
     classrooms.forEach((classroom) => {
       const roomName = classroom.roomName;
@@ -151,6 +149,8 @@ const getNumStudentsByClass = async () => {
         return acc + 1;
       }, 0);
     });
+
+    countPerRoom.total = await getNumStudents()
 
     return countPerRoom;
   } catch (error) {
@@ -428,12 +428,14 @@ const getSchoolCapacity = async (req, res) => {
     }
 
     const roomCapacities = {
-      infants: 0,
-      toddlers: 0,
-      crawlers: 0,
-      twos: 0,
-      total: 0,
+      infantsCap: 0,
+      toddlersCap: 0,
+      crawlersCap: 0,
+      twosCap: 0,
+      totalCap: 0,
     };
+
+    const numStudentsPerClass = await getNumStudentsByClass();
 
     const {
       squareFootageInfants,
@@ -445,23 +447,28 @@ const getSchoolCapacity = async (req, res) => {
     } = schoolData;
 
     //The infant room is the only room constrained by crib square footage
-    roomCapacities.infants = Math.floor(
+    roomCapacities.infantsCap = Math.floor(
       squareFootageInfants / squareFootageCrib
     );
-    roomCapacities.toddlers = Math.floor(
+
+    roomCapacities.toddlersCap = Math.floor(
       squareFootageToddlers / squareFootageNoCrib
     );
-    roomCapacities.crawlers = Math.floor(
+
+    roomCapacities.crawlersCap = Math.floor(
       squareFootageCrawlers / squareFootageNoCrib
     );
-    roomCapacities.twos = Math.floor(squareFootageTwos / squareFootageNoCrib);
-    roomCapacities.total =
-      roomCapacities.infants +
-      roomCapacities.crawlers +
-      roomCapacities.toddlers +
-      roomCapacities.twos;
 
-    res.status(200).json({ roomCapacities });
+    roomCapacities.twosCap = Math.floor(
+      squareFootageTwos / squareFootageNoCrib
+    );
+    roomCapacities.totalCap =
+      roomCapacities.infantsCap +
+      roomCapacities.crawlersCap +
+      roomCapacities.toddlersCap +
+      roomCapacities.twosCap;
+
+    res.status(200).json({ roomCapacities, numStudentsPerClass });
   } catch (error) {
     res.status(500).json({ error: "Error getting data for school capacity" });
   }
