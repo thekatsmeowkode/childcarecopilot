@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Waitlist from "./pages/Waitlist";
 import TimeTraveler from "./pages/TimeTraveler"
-import {Table} from 'react-bootstrap'
+import DeveloperTools from "./pages/DeveloperTools";
 
 function App() {
 
@@ -21,6 +21,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/waitlist" element={<Waitlist/>}/>
             <Route path="/time-traveler" element={<TimeTraveler/>}/>
+            <Route path="/easter-egg" element={<DeveloperTools/>}/>
           </Routes>
         </div>
       </BrowserRouter>

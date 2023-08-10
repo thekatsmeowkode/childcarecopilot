@@ -3,7 +3,6 @@ import { useClassroomContext } from "../hooks/useClassroomContext";
 
 //components
 import ClassroomDetails from "../components/ClassroomDetails";
-import ClassForm from "../components/ClassForm";
 import StudentDetails from "../components/StudentDetails";
 import AddStudentModal from "../components/AddStudentModal";
 
@@ -104,7 +103,6 @@ const Home = () => {
           </tbody>
         </table>
       </div>
-      <ClassForm></ClassForm>
     </div>
   );
 };

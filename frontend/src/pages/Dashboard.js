@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [boxPlotData, setBoxPlotData] = useState(null);
   const [roomCapacities, setRoomCapacities] = useState(null);
   const [histogramData, setHistogramData] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null)
 
   const getClassRevenue = async () => {
     const classRevenue = await fetch("api/school/class-revenue", {
