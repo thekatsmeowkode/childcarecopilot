@@ -23,6 +23,11 @@ function formatDate(date) {
   return dateObj.toISOString().substring(0, 10);
 }
 
+function formatDateMonthDay(date) {
+  const dateObj = new Date(date);
+  return dateObj.toISOString().substring(6, 10);
+}
+
 function calculateAge(dateOfBirth) {
   const today = new Date();
   const birthDateObj = new Date(dateOfBirth);
@@ -56,4 +61,5 @@ module.exports = {
   formatDate,
   calculateAge,
   monthsToYearsAndMonths,
+  formatDateMonthDay
 };
