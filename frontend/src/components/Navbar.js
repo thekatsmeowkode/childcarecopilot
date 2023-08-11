@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from 'react'
 import Slider from "./Slider";
+import BirthdayPopover from "./BirthdayPopover";
 
 const Navbar = () => {
   const [checked, setIsChecked] = useState(true)
@@ -25,6 +26,7 @@ const Navbar = () => {
           <Slider checked={checked} setIsChecked={setIsChecked}></Slider>
           <p>Dashboard</p>
         </div>
+        <BirthdayPopover/>
       </div>
     </header>
   );

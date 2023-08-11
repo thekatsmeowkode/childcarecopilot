@@ -1,19 +1,8 @@
-import { useClassroomContext } from "../hooks/useClassroomContext";
+import {useState} from 'react'
 
 const ClassroomDetails = ({ classroom, handleButtonClick }) => {
-  const { dispatch } = useClassroomContext();
 
-  const handleDeleteClick = async () => {
-    const response = await fetch("/api/classes/" + classroom._id, {
-      method: "DELETE",
-    });
-    //document that was just deleted
-    const json = await response.json();
-
-    if (response.ok) {
-      dispatch({ type: "DELETE_CLASSROOM", payload: json });
-    }
-  };
+  const [viewToggled, setViewToggled] = useState(true)
 
   return (
     <div className="classroom-details">
@@ -27,11 +16,11 @@ const ClassroomDetails = ({ classroom, handleButtonClick }) => {
         </button>
       </h4>
       {classroom.students.map((student) => (
-        <p>{student && student.name}</p>
+        viewToggled ? (<p>{student && student.name}</p>) : null
       ))}
-      <span onClick={handleDeleteClick} className="material-symbols-outlined">
-        delete
-      </span>{" "}
+      <span onClick={() => setViewToggled(!viewToggled)} className="material-symbols-outlined">
+        {viewToggled ? "visibility_off" : "visibility"}
+      </span>
     </div>
   );
 };

@@ -38,7 +38,6 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
   const handleAddStudent = async (e) => {
     e.preventDefault();
     const student = { ...form };
-    console.log(student);
 
     const classroomId = await getClassroomId(student);
 

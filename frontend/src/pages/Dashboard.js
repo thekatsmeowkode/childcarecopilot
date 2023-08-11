@@ -19,7 +19,7 @@ const Dashboard = () => {
   const [boxPlotData, setBoxPlotData] = useState(null);
   const [roomCapacities, setRoomCapacities] = useState(null);
   const [histogramData, setHistogramData] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
   const getClassRevenue = async () => {
     const classRevenue = await fetch("api/school/class-revenue", {
@@ -77,8 +77,8 @@ const Dashboard = () => {
     return json;
   };
 
-  const getHistogramData = async () => {
-    const histogramDate = formatDate(new Date());
+  const getHistogramData = async (date) => {
+    const histogramDate = date ? date : formatDate(new Date());
 
     const histogramResponse = await fetch(
       `/api/waitlist/histogram/data/${histogramDate}`,
@@ -88,6 +88,13 @@ const Dashboard = () => {
       }
     );
     return histogramResponse.json();
+  };
+
+  const onDateChange = async (e) => {
+    const { value } = e.target;
+    setSelectedDate(value);
+    const newHistogramData = await getHistogramData(formatDate(value));
+    setHistogramData(newHistogramData)
   };
 
   useEffect(() => {
@@ -186,13 +193,24 @@ const Dashboard = () => {
             height={400}
           ></BoxPlot>
         ) : null}
-        {histogramData ? (
-          <Histogram width={600} height={400} data={histogramData} />
-        ) : (
-          <Spinner animation="grow" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        )}
+        <div>
+          {histogramData ? (
+            <input
+              type="date"
+              min={formatDate(new Date())}
+              value={selectedDate}
+              onChange={onDateChange}
+            />
+          ) : null}
+
+          {histogramData ? (
+            <Histogram width={600} height={400} data={histogramData} />
+          ) : (
+            <Spinner animation="grow" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          )}
+        </div>
       </main>
     </>
   );
