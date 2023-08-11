@@ -9,7 +9,8 @@ const {
   updateStudent,
   addStudent,
   deleteStudent,
-  getStudent
+  getStudent,
+  getUpcomingBirthdays
 } = require("../controllers/classController");
 
 const router = express.Router();
@@ -24,7 +25,7 @@ router.get("/:id", getClassroom);
 router.post("/", createClassroom);
 
 // DELETE a class
-router.delete("/:id", deleteClassroom);
+router.delete("/admin/:roomName", deleteClassroom);
 
 // UPDATE PATCH a class
 router.patch("/:id", updateClassroom);
@@ -40,5 +41,8 @@ router.delete('/:classId/students/:studentId', deleteStudent)
 
 //GET one student
 router.get('/:classId/students/:studentId', getStudent)
+
+//Get upcoming birthdays
+router.get('/navbar/birthdays', getUpcomingBirthdays)
 
 module.exports = router;

@@ -78,8 +78,16 @@ const createClassroom = async (req, res) => {
 
 //DELETE a class
 const deleteClassroom = async (req, res) => {
+  const { roomName } = req.params;
+
   try {
-    const { id } = req.params;
+    const classrooms = await Classroom.find({});
+
+    const [targetClass] = classrooms.filter(
+      (classroom) => classroom.roomName === roomName
+    );
+
+    const id = targetClass._id;
 
     checkIdValidity(id);
 
@@ -156,7 +164,7 @@ const updateStudent = async (req, res) => {
     const newStudent = {
       id: new ObjectId(),
       name,
-      birthdate,
+      birthdate: new Date(birthdate),
       phone,
       allergies,
       programs,
@@ -244,6 +252,50 @@ const getStudent = async (req, res) => {
   }
 };
 
+const getUpcomingBirthdays = async (req, res) => {
+  try {
+    const classrooms = await Classroom.find({});
+
+    if (!classrooms) {
+      return res.status(404).json({ error: "Classes not found" });
+    }
+
+    const upcomingBirthdays = [];
+    const currentDate = new Date();
+    const upcomingWeekEnd = new Date(currentDate);
+    upcomingWeekEnd.setDate(currentDate.getDate() + 7);
+
+    function isBirthdayWithinNextWeek(birthdate) {
+      const birthMonth = birthdate.getMonth();
+      const birthDay = birthdate.getDate();
+      const currentMonth = currentDate.getMonth();
+      //the -1 related to a time zone issue
+      const currentDay = currentDate.getDate() - 1;
+
+      return (
+        (birthMonth === currentMonth &&
+          birthDay >= currentDay &&
+          birthDay <= upcomingWeekEnd.getDate()) 
+      );
+    }
+
+    classrooms.forEach((classroom) => {
+      classroom.students.forEach((student) => {
+        const birthdate = new Date(student.birthdate);
+        // Check if the birthdate is within the upcoming week
+        const isWithinNextWeek = isBirthdayWithinNextWeek(birthdate);
+        if (isWithinNextWeek) {
+          upcomingBirthdays.push(student);
+        }
+      });
+    });
+
+    res.status(200).json({ upcomingBirthdays });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createClassroom,
   getClassrooms,
@@ -253,5 +305,6 @@ module.exports = {
   updateStudent,
   addStudent,
   deleteStudent,
-  getStudent
+  getStudent,
+  getUpcomingBirthdays,
 };
