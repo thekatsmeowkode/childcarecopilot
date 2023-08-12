@@ -2,6 +2,9 @@ import { Form, Button, Modal } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
 import { useContext } from "react";
 import { getClassroomId } from "../utils/getClassroomId";
+import { PROGRAM_FIELDS } from "../constants";
+import { fetchData } from "../api/useApi";
+import ProgramField from "./waitlistStudentForms/ProgramField";
 import useForm from "../hooks/useForm";
 
 const EditStudentModal = ({
@@ -11,21 +14,16 @@ const EditStudentModal = ({
   setSelectedStudent,
   setSelectedStudents,
 }) => {
-  const { form, setForm, onChangeInput, handleProgramChange } = useForm({
-    name: student.name,
-    birthdate: student.birthdate,
-    classroomName: student.classroomName,
-    allergies: student.allergies,
-    phone: student.phone,
-    id: student.id,
-    programs: student.programs,
-  });
+  const { form, setForm, onChangeInput, handleProgramChange, handleSubmit } =
+    useForm({
+      ...student,
+    });
   //this remembers the classroom that the student was previously enrolled into
   const incomingDataClassroomMemory = student.classroomName;
 
   const { dispatch } = useContext(ClassroomContext);
 
-  const handleSubmit = async (e) => {
+  const handleEditStudent = async (e) => {
     e.preventDefault();
     const updatedStudent = {
       ...form,
@@ -34,36 +32,25 @@ const EditStudentModal = ({
 
     const classroomId = await getClassroomId(updatedStudent);
 
-    const response = await fetch(
+    const response = await fetchData(
       "/api/classes/" +
         classroomId +
         "/students/" +
         updatedStudent.id.toString(),
-      {
-        method: "PATCH",
-        body: JSON.stringify(updatedStudent),
-        headers: { "Content-Type": "application/json" },
-      }
+      "PATCH",
+      updatedStudent
     );
 
-    const json = await response.json();
+    const updatedAllClassroomsResponse = await fetchData(
+      "/api/classes/",
+      "GET"
+    );
+    console.log(updatedAllClassroomsResponse);
 
-    if (!response.ok) {
-      throw Error("Could not complete patch request for update student route");
-    }
-
-    const updatedAllClassroomsResponse = await fetch("/api/classes/", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const updatedJson = await updatedAllClassroomsResponse.json();
-
-    if (response.ok) {
-      await dispatch({ type: "SET_CLASSROOMS", payload: updatedJson }); // await dispatch({type:"UPDATE_STUDENT", payload:classroomWithUpdatedStudentInside})
-    }
+    dispatch({ type: "UPDATE_STUDENT", payload: response }); // await dispatch({type:"UPDATE_STUDENT", payload:classroomWithUpdatedStudentInside})
 
     setSelectedStudent("");
-    setSelectedStudents(json.students);
+    setSelectedStudents(response.students)
     onClose();
   };
 
@@ -73,7 +60,7 @@ const EditStudentModal = ({
         <Modal.Title>Edit Student Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={(e) => handleSubmit(e, handleEditStudent)}>
           <Form.Group>
             <Form.Label>Name:</Form.Label>
             <Form.Control
@@ -126,34 +113,22 @@ const EditStudentModal = ({
             />
           </Form.Group>
           <Form.Group>
-            <Form.Check
-              type="checkbox"
-              value="earlyMorning"
-              onChange={handleProgramChange}
-              label="Early morning 7:30-8:30"
-              checked={form.programs.includes("earlyMorning")}
-            ></Form.Check>
-            <Form.Check
-              type="checkbox"
-              value="extendedDay"
-              label="Extended Day 3:30-4:30"
-              onChange={handleProgramChange}
-              checked={form.programs.includes("extendedDay")}
-            ></Form.Check>
-            <Form.Check
-              type="checkbox"
-              value="lateDay"
-              label="Late Day 4:30-5:30"
-              onChange={handleProgramChange}
-              checked={form.programs.includes("lateDay")}
-            ></Form.Check>
+            {PROGRAM_FIELDS.map((program) => (
+              <ProgramField
+                key={program.label}
+                value={program.value}
+                label={program.label}
+                handleProgramChange={handleProgramChange}
+                form={form}
+              />
+            ))}
           </Form.Group>
+          <Button type="submit" variant="primary">
+            Save Changes
+          </Button>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button type="submit" variant="primary" onClick={handleSubmit}>
-          Save Changes
-        </Button>
         <Button variant="secondary" onClick={onClose}>
           Cancel
         </Button>

@@ -39,7 +39,6 @@ export const classroomReducer = (state, action) => {
             }
           : classroom
       );
-      console.log(updatedClassrooms);
       return {
         classrooms: updatedClassrooms,
       };

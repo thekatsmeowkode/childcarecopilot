@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { ClassroomContext } from "../context/ClassroomContext";
 import EditStudentModal from "./EditStudentModal";
 import { formatAge, formatDate } from "../utils/formatDates";
-import formatProgramName from '../utils/formatText'
+import formatProgramName from "../utils/formatText";
 
 const StudentDetails = ({ student, setSelectedStudents }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
