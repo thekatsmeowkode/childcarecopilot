@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import useForm from "../hooks/useForm";
+import { fetchData } from "../api/useApi";
 
 const SchoolInfo = () => {
-  const [validated, setValidated] = useState(false);
-  const { form, setForm, onChangeInput } = useForm({
+  const { form, setForm, onChangeInput, handleSubmit, validated } = useForm({
     costCoreProgram: 0,
     costEarlyMorning: 0,
     costExtendedDay: 0,
@@ -25,82 +25,45 @@ const SchoolInfo = () => {
     kidsPerEmergencyCrib: 0,
   });
 
-    useEffect(() => {
-      fetchSchool()
-    }, [])
+  useEffect(() => {
+    fetchSchool();
+  }, []);
 
-    const fetchSchool = async () => {
-      try {
-        const schoolResponse = await fetch("/api/school/", {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          });
-          const schoolData = await schoolResponse.json()
-          //there will only be one school in the database, so 0 index hardcoded here
-          setForm(schoolData[0])
-      }
-      catch (error) {
-          console.error('Error fetching data:', error)
-      }
-    }
-
-  const handleSubmit = (e) => {
-    const form = e.target;
-    if (!form.checkValidity()) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setValidated(true);
-
-    if (form.checkValidity() === true) {
-        updateSchool(e)
-    }
+  const fetchSchool = async () => {
+    const schoolResponse = await fetchData("/api/school/", "GET");
+    setForm(schoolResponse[0]);
   };
 
-//   const handleAddSchool = async (e) => {
-//     e.preventDefault();
-//     const school = { ...form };
-//     const response = await fetch("/api/school/", {
-//       method: "POST",
-//       body: JSON.stringify(school),
-//       headers: { "Content-Type": "application/json" },
-//     });
+  //   const handleAddSchool = async (e) => {
+  //     e.preventDefault();
+  //     const school = { ...form };
+  //     const response = await fetch("/api/school/", {
+  //       method: "POST",
+  //       body: JSON.stringify(school),
+  //       headers: { "Content-Type": "application/json" },
+  //     });
 
-//     const json = await response.json();
+  //     const json = await response.json();
 
-//     if (!response) {
-//       throw Error("Error while adding the school to the database");
-//     }
+  //     if (!response) {
+  //       throw Error("Error while adding the school to the database");
+  //     }
 
-//     if (response.ok) {
-//       console.log("school added");
-//       console.log(json);
-//     }
-//   };
+  //     if (response.ok) {
+  //       console.log("school added");
+  //       console.log(json);
+  //     }
+  //   };
 
   const updateSchool = async (e) => {
-    e.preventDefault()
-    const school = {...form}
-    const response = await fetch('/api/school/', {
-        method: "PATCH",
-        body: JSON.stringify(school),
-        headers: { "Content-Type": "application/json" }
-    })
-
-    const json = await response.json();
-
-    if (!response) {
-      throw Error("Error while updating the school in the database");
-    }
-
-    if (response.ok) {
-      console.log("school updated");
-      console.log(json);
-    }
-  }
+    e.preventDefault();
+    const school = { ...form };
+    const response = await fetchData("/api/school/", "PATCH", school)
+    setForm({...response})
+  };
 
   return (
-    <Form noValidate onSubmit={handleSubmit} validated={validated}>
+    <Form noValidate onSubmit={(e) => handleSubmit(e, updateSchool)} validated={validated}>
       <Form.Group>
         <Form.Label>Cost of Core Hours (8:30-3:30)</Form.Label>
         <Form.Control

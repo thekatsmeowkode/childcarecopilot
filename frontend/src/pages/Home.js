@@ -16,12 +16,8 @@ const Home = () => {
   useEffect(() => {
     const fetchClass = async () => {
       //in production this needs to be changed to correct endpoint
-      const response = await fetch("/api/classes");
-      const json = await response.json();
-
-      if (response.ok) {
-        dispatch({ type: "SET_CLASSROOMS", payload: json });
-      }
+      const response = await fetchData("/api/classes", "GET");
+      dispatch({ type: "SET_CLASSROOMS", payload: response });
     };
 
     fetchClass();
