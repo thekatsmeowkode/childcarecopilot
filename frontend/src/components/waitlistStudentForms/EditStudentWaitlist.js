@@ -3,7 +3,7 @@ import useForm from "../../hooks/useForm";
 import { formatDate } from "../../utils/formatDates";
 import CheckboxField from "./CheckboxField";
 import ProgramField from "./ProgramField";
-import { fetchData } from "../../api/waitlistApi";
+import { fetchData } from "../../api/useApi";
 import {
   CHECKBOX_FIELDS,
   PROGRAM_FIELDS,
@@ -33,7 +33,7 @@ const EditStudentWaitlist = ({
     e.preventDefault();
     const student = { ...form };
 
-    const response = await fetchData("/", "PATCH", student);
+    const response = await fetchData("api/waitlist/", "PATCH", student);
 
     setWaitlistStudents(response.students);
     setForm(WAITLIST_EMPTY_FIELDS);

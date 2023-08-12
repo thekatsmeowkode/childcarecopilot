@@ -7,7 +7,7 @@ import {
   CHECKBOX_FIELDS,
   WAITLIST_EMPTY_FIELDS,
 } from "../../constants";
-import { fetchData } from "../../api/waitlistApi";
+import { fetchData } from "../../api/useApi";
 
 const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
   const {
@@ -23,7 +23,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
     e.preventDefault();
     const student = { ...form };
 
-    const response = await fetchData("/student", "POST", student);
+    const response = await fetchData("/api/waitlist/student", "POST", student);
 
     setStudents(response.students);
     setForm(WAITLIST_EMPTY_FIELDS);

@@ -1,40 +1,23 @@
 import { Form, Button, Modal, InputGroup } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { getClassroomId } from "../utils/getClassroomId";
-import {ProgramField} from './waitlistStudentForms/ProgramField'
+import ProgramField from "./waitlistStudentForms/ProgramField";
+import { STUDENT_EMPTY_FIELDS, PROGRAM_FIELDS } from "../constants";
+import useForm from "../hooks/useForm";
+import { fetchData } from "../api/useApi";
 
 const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
-  const [form, setForm] = useState({
-    name: "",
-    birthdate: "",
-    classroomName: "",
-    allergies: "",
-    phone: "",
-    programs: [],
-  });
-  const [validated, setValidated] = useState(false);
+  const {
+    form,
+    setForm,
+    onChangeInput,
+    handleProgramChange,
+    handleSubmit,
+    validated,
+  } = useForm(STUDENT_EMPTY_FIELDS);
+
   const { dispatch } = useContext(ClassroomContext);
-
-  const onChangeInput = (e) => {
-    const { name, value } = e.target;
-
-    setForm({ ...form, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    const form = e.target;
-
-    if (!form.checkValidity()) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setValidated(true);
-
-    if (form.checkValidity() === true) {
-      handleAddStudent(e);
-    }
-  };
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
@@ -43,49 +26,18 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
     const classroomId = await getClassroomId(student);
 
     //this post response returns complete json of the updated classroom {_id:3423, roomName: infants, students:[{}{}]
-    const response = await fetch("/api/classes/" + classroomId + "/students", {
-      method: "POST",
-      body: JSON.stringify(student),
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetchData(
+      "/api/classes/" + classroomId + "/students",
+      "POST",
+      student
+    );
 
-    const json = await response.json();
-
-    if (!response.ok) {
-      throw Error("Error while trying to post student to database");
-    }
-
-    if (response.ok) {
-      setSelectedStudents(json.students);
-      setForm({
-        name: "",
-        birthdate: "",
-        classroomName: "",
-        allergies: "",
-        phone: "",
-        programs: [],
-      });
-      console.log(`new student added`);
-      dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: json });
-    }
+    setSelectedStudents(response.students);
+    setForm(STUDENT_EMPTY_FIELDS);
+    console.log(`new student added`);
+    dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: response });
 
     onClose();
-  };
-
-  const handleProgramChange = (e) => {
-    const { value, checked } = e.target;
-
-    if (checked) {
-      setForm((prevForm) => ({
-        ...prevForm,
-        programs: [...prevForm.programs, value],
-      }));
-    } else {
-      setForm((prevForm) => ({
-        ...prevForm,
-        programs: prevForm.programs.filter((program) => program !== value),
-      }));
-    }
   };
 
   return (
@@ -94,7 +46,11 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
         <Modal.Title>Add Student Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form noValidate onSubmit={handleSubmit} validated={validated}>
+        <Form
+          noValidate
+          onSubmit={(e) => handleSubmit(e, handleAddStudent)}
+          validated={validated}
+        >
           <Form.Group>
             <Form.Label>Name:</Form.Label>
             <InputGroup hasValidation>
@@ -166,24 +122,15 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Check
-              type="checkbox"
-              value="earlyMorning"
-              onChange={handleProgramChange}
-              label="Early morning 7:30-8:30"
-            ></Form.Check>
-            <Form.Check
-              type="checkbox"
-              value="extendedDay"
-              label="Extended Day 3:30-4:30"
-              onChange={handleProgramChange}
-            ></Form.Check>
-            <Form.Check
-              type="checkbox"
-              value="lateDay"
-              label="Late Day 4:30-5:30"
-              onChange={handleProgramChange}
-            ></Form.Check>
+            {PROGRAM_FIELDS.map((program) => (
+              <ProgramField
+                key={program.label}
+                value={program.value}
+                label={program.label}
+                handleProgramChange={handleProgramChange}
+                form={form}
+              />
+            ))}
           </Form.Group>
           <Button type="submit" variant="primary">
             Save Changes

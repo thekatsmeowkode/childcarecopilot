@@ -40,3 +40,12 @@ export const WAITLIST_EMPTY_FIELDS = {
     enrolled: false,
     declined: false,
   };
+
+  export const STUDENT_EMPTY_FIELDS = {
+    name: "",
+    birthdate: "",
+    classroomName: "",
+    allergies: "",
+    phone: "",
+    programs: [],
+  }
