@@ -13,24 +13,50 @@ const CapacitySquare = ({ currentStudentsByClass, roomCapacities }) => {
   return (
     <div>
       <span>
-        Infant Room {infants} enrolled / {infantsCap} possible
-        {returnStatusBar(infants, infantsCap)}
+        <div className="status-bar-title">Infants</div>
+        <div className="status-bar-container">
+          <div>{infants}</div>
+          <div className="status-bar">
+            {returnStatusBar(infants, infantsCap)}
+          </div>
+          <div>{infantsCap}</div>
+        </div>
       </span>
       <span>
-        Crawler Room {crawlers} enrolled / {crawlersCap} possible
-        {returnStatusBar(crawlers, crawlersCap)}
+        <div className="status-bar-title">Crawlers</div>
+        <div className="status-bar-container">
+          <div>{crawlers}</div>
+          <div className="status-bar">
+            {returnStatusBar(crawlers, crawlersCap)}
+          </div>
+          <div>{crawlersCap}</div>
+        </div>
       </span>
       <span>
-        Toddlers Room {toddlers} enrolled / {toddlersCap} possible
-        {returnStatusBar(toddlers, toddlersCap)}
+        <div className="status-bar-title">Toddlers</div>
+        <div className="status-bar-container">
+          <div>{toddlers}</div>
+          <div className="status-bar">
+            {returnStatusBar(toddlers, toddlersCap)}
+          </div>
+          <div>{toddlersCap}</div>
+        </div>
       </span>
       <span>
-        Twos Room {twos} enrolled / {twosCap} possible
-        {returnStatusBar(twos, twosCap)}
+        <div className="status-bar-title">Twos</div>
+        <div className="status-bar-container">
+          <div>{twosCap}</div>
+          <div className="status-bar">{returnStatusBar(twos, twosCap)}</div>
+          <div>{twosCap}</div>
+        </div>
       </span>
       <span>
-        Total Students {total} enrolled / {totalCap} possible
-        {returnStatusBar(total, totalCap)}
+        <div className="status-bar-title">Total Students</div>
+        <div className="status-bar-container">
+          <div>{total}</div>
+          <div className="status-bar">{returnStatusBar(total, totalCap)}</div>
+          <div>{totalCap}</div>
+        </div>
       </span>
     </div>
   );

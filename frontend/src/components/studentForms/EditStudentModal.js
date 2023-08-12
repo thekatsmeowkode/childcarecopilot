@@ -1,10 +1,10 @@
 import { Form, Button, Modal } from "react-bootstrap";
-import { ClassroomContext } from "../context/ClassroomContext";
+import { ClassroomContext } from "../../context/ClassroomContext";
 import { useContext } from "react";
-import { PROGRAM_FIELDS } from "../constants";
-import { fetchData } from "../api/useApi";
-import ProgramField from "./waitlistStudentForms/ProgramField";
-import useForm from "../hooks/useForm";
+import { PROGRAM_FIELDS } from "../../constants";
+import { fetchData } from "../../hooks/useApi";
+import ProgramField from "./ProgramField";
+import useForm from "../../hooks/useForm";
 
 const EditStudentModal = ({
   student,
@@ -28,7 +28,7 @@ const EditStudentModal = ({
       ...form,
       incomingDataClassroomMemory,
     };
-    
+
     const response = await fetchData(
       "/api/classes/" +
         updatedStudent.classroomName +
@@ -41,7 +41,7 @@ const EditStudentModal = ({
     dispatch({ type: "UPDATE_STUDENT", payload: response }); // await dispatch({type:"UPDATE_STUDENT", payload:classroomWithUpdatedStudentInside})
 
     setSelectedStudent("");
-    setSelectedStudents(response.students)
+    setSelectedStudents(response.students);
     onClose();
   };
 

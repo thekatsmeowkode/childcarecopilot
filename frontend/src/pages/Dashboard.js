@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import BoxPlot from "../components/dashboardSquares/BoxPlot";
 import RevenueSquare from "../components/dashboardSquares/RevenueSquare";
 import CoreHoursSquare from "../components/dashboardSquares/CoreHoursSquare";
@@ -8,9 +8,9 @@ import Histogram from "../components/dashboardSquares/Histogram";
 import LoadingSpinner from "../components/dashboardSquares/LoadingSpinner";
 import { formatDate } from "../utils/formatDates";
 import "../css/dashboard.css";
-import { fetchData } from "../api/useApi";
+import { fetchData } from "../hooks/useApi";
 
-const Dashboard = () => {
+const Dashboard = React.memo(() => {
   const [revenueDetails, setRevenueDetails] = useState(null);
   const [staffCoreHours, setStaffCoreHours] = useState(null);
   const [staffEarlyMorning, setStaffEarlyMorning] = useState(null);
@@ -162,6 +162,6 @@ const Dashboard = () => {
       </main>
     </>
   );
-};
+});
 
 export default Dashboard;

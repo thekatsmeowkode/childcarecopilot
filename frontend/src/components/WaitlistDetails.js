@@ -2,7 +2,7 @@ import { formatAge, formatDate } from "../utils/formatDates";
 import { Fragment, useState } from "react";
 import formatProgramName from "../utils/formatText";
 import { Table } from "react-bootstrap";
-import EditStudentWaitlist from "./waitlistStudentForms/EditStudentWaitlist";
+import EditStudentWaitlist from "./studentForms/EditStudentWaitlist";
 
 const CHECKBOX_FIELDS = [
   "sibling",

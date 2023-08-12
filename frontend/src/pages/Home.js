@@ -4,8 +4,8 @@ import { useClassroomContext } from "../hooks/useClassroomContext";
 //components
 import ClassroomDetails from "../components/ClassroomDetails";
 import StudentDetails from "../components/StudentDetails";
-import AddStudentModal from "../components/AddStudentModal";
-import { fetchData } from "../api/useApi";
+import AddStudentModal from "../components/studentForms/AddStudentModal";
+import { fetchData } from "../hooks/useApi";
 
 const Home = () => {
   const { classrooms, dispatch } = useClassroomContext();

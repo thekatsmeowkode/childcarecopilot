@@ -1,24 +1,14 @@
 import { OverlayTrigger, Popover } from "react-bootstrap";
 import { useState, Fragment } from "react";
 import { formatDateMonthDay } from "../../utils/formatDates";
+import { fetchData } from "../../hooks/useApi";
 
 const BirthdayPopover = () => {
   const [birthdayData, setBirthdayData] = useState(null);
 
   const handleMouseEnter = async () => {
-    const response = await fetch("/api/classes/navbar/birthdays", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const birthdayJson = await response.json();
-    if (!response.ok) {
-      throw Error("Error while trying to get birthdays");
-    }
-
-    if (response.ok) {
-      const { upcomingBirthdays } = birthdayJson;
-      setBirthdayData(upcomingBirthdays);
-    }
+    const response = await fetchData("/api/classes/navbar/birthdays", "GET");
+    setBirthdayData(response.upcomingBirthdays);
   };
 
   const handleMouseLeave = () => {

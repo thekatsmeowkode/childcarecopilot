@@ -1,6 +1,7 @@
 import { Form, InputGroup, Button } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { formatDate } from "../../utils/formatDates";
+import { fetchData } from "../../hooks/useApi";
 
 const TODAYS_DATE = new Date();
 
@@ -13,18 +14,14 @@ const DateSelector = ({ setSelectedDate, setAgeTargetStudents }) => {
   const getChildrenOverDate = async () => {
     let { selectedDate, inputMonthsOld } = form;
     selectedDate = formatDate(selectedDate);
-    const studentResponse = await fetch(
+    const studentResponse = await fetchData(
       `api/waitlist/${selectedDate}/${inputMonthsOld}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      }
+      "GET"
     );
-    const studentJson = await studentResponse.json();
-    setAgeTargetStudents(studentJson.targetChildren);
+    setAgeTargetStudents(studentResponse.targetChildren);
     setSelectedDate(selectedDate);
   };
-  
+
   return (
     <Form
       noValidate

@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import WaitlistDetails from "../components/WaitlistDetails";
-import AddStudentWaitlist from "../components/waitlistStudentForms/AddStudentWaitlist";
+import AddStudentWaitlist from "../components/studentForms/AddStudentWaitlist";
 import StatusSquares from "../components/waitlistSquares/StatusSquares";
-import { fetchData } from "../api/useApi";
+import { fetchData } from "../hooks/useApi";
 import { CHECKBOX_FIELDS } from "../constants";
 
-const Waitlist = () => {
+const Waitlist = React.memo(() => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [waitlistStudents, setWaitlistStudents] = useState([]);
   const [statusData, setStatusData] = useState(null);
@@ -65,6 +65,6 @@ const Waitlist = () => {
       />
     </>
   );
-};
+});
 
 export default Waitlist;

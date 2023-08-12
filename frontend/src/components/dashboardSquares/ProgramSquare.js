@@ -16,7 +16,7 @@ const ProgramSquare = ({ programData }) => {
         </thead>
         <tbody>
           {CLASS_NAMES.map((classroom) => (
-            <tr>
+            <tr key={Math.random()}>
               <td>{staffPerProgram[classroom]["message"]}</td>
               <td>{staffPerProgram[classroom]["numTeachers"]}</td>
               <td>{staffPerProgram[classroom]["numStudents"]}</td>

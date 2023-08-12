@@ -1,24 +1,29 @@
-import {useEffect, useState} from 'react'
-import {fetchData} from './api'
+// const BASE_URL = "/api/waitlist";
 
-export const useApi = (endpoint, method, data = null) => {
-    const [responseData, setResponseData] = useState(null)
-    const [isLoading, setIsLoading] = useState(null)
-    const [error, setError] = useState(null)
+const createHeaders = () => ({
+  "Content-Type": "application/json",
+});
 
-    useEffect(() => {
-        const fetchApiData = async () => {
-            try {
-                const response = await fetchData(endpoint, method, data)
-                setResponseData(response)
-            } catch (error) {
-                setError(error)
-            } finally {
-                setIsLoading(false)
-            }
-        }
-        fetchApiData()
-    }, [endpoint, method, data])
+export const fetchData = async (endpoint, method, data = null) => {
+  try {
+    const options = {
+      method,
+      headers: createHeaders(),
+    };
 
-    return {responseData, isLoading, error}
-}
+    if (data) {
+      options.body = JSON.stringify(data);
+    }
+
+    const response = await fetch(endpoint, options);
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};

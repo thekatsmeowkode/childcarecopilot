@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
 import { ClassroomContext } from "../context/ClassroomContext";
-import EditStudentModal from "./EditStudentModal";
+import EditStudentModal from "./studentForms/EditStudentModal";
 import { formatAge, formatDate } from "../utils/formatDates";
 import formatProgramName from "../utils/formatText";
-import { fetchData } from "../api/useApi";
+import { fetchData } from "../hooks/useApi";
 
 const StudentDetails = ({ student, setSelectedStudents }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,18 +18,19 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
   };
 
   const handleDeleteClick = async (student) => {
-
-    const {classroomName} = student
+    const { classroomName } = student;
 
     const response = await fetchData(
-      "/api/classes/" + classroomName + "/students/" + 
-      student._id.toString(),
+      "/api/classes/" + classroomName + "/students/" + student._id.toString(),
       "DELETE"
     );
 
     setSelectedStudents(response.students);
 
-    const updatedAllClassroomsResponse = await fetchData("/api/classes/", "GET");
+    const updatedAllClassroomsResponse = await fetchData(
+      "/api/classes/",
+      "GET"
+    );
 
     dispatch({ type: "DELETE_STUDENT", payload: updatedAllClassroomsResponse });
   };
@@ -47,7 +48,7 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
         <td>
           <ol>
             {student.programs.map((program) => (
-              <li>{formatProgramName(program)}</li>
+              <li key={program}>{formatProgramName(program)}</li>
             ))}
           </ol>
         </td>

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import useForm from "../hooks/useForm";
-import { fetchData } from "../api/useApi";
+import { fetchData } from "../hooks/useApi";
 
 const SchoolInfo = () => {
   const { form, setForm, onChangeInput, handleSubmit, validated } = useForm({
@@ -58,12 +58,16 @@ const SchoolInfo = () => {
   const updateSchool = async (e) => {
     e.preventDefault();
     const school = { ...form };
-    const response = await fetchData("/api/school/", "PATCH", school)
-    setForm({...response})
+    const response = await fetchData("/api/school/", "PATCH", school);
+    setForm({ ...response });
   };
 
   return (
-    <Form noValidate onSubmit={(e) => handleSubmit(e, updateSchool)} validated={validated}>
+    <Form
+      noValidate
+      onSubmit={(e) => handleSubmit(e, updateSchool)}
+      validated={validated}
+    >
       <Form.Group>
         <Form.Label>Cost of Core Hours (8:30-3:30)</Form.Label>
         <Form.Control

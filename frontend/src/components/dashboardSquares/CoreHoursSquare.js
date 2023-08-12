@@ -16,7 +16,7 @@ const CoreHoursSquare = ({ coreData }) => {
         </thead>
         <tbody>
           {CLASS_NAMES.map((classroom) => (
-            <tr>
+            <tr key={Math.random()}>
               <td>{staffCoreHours[classroom]["message"]}</td>
               <td>{staffCoreHours[classroom]["numTeachers"]}</td>
               <td>{staffCoreHours[classroom]["numStudents"]}</td>

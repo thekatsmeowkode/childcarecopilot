@@ -1,5 +1,6 @@
 import { Table } from "react-bootstrap";
 import { PROGRAM_NAMES } from "../../constants";
+import { formatAmountInDollars } from "../../utils/formatText";
 
 const RevenueSquare = ({ revenueData }) => {
   const { revenue } = revenueData;
@@ -15,12 +16,12 @@ const RevenueSquare = ({ revenueData }) => {
         <tbody>
           <tr>
             <td>{revenue.schoolTotal.message}</td>
-            <td>{revenue.schoolTotal.value}</td>
+            <td>{formatAmountInDollars(revenue.schoolTotal.value)}</td>
           </tr>
           {PROGRAM_NAMES.map((program) => (
-            <tr>
+            <tr key={program}>
               <td>{revenue[program]["message"]}</td>
-              <td>{revenue[program]["value"]}</td>
+              <td>{formatAmountInDollars(revenue[program]["value"])}</td>
             </tr>
           ))}
         </tbody>
