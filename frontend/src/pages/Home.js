@@ -5,11 +5,12 @@ import { useClassroomContext } from "../hooks/useClassroomContext";
 import ClassroomDetails from "../components/ClassroomDetails";
 import StudentDetails from "../components/StudentDetails";
 import AddStudentModal from "../components/AddStudentModal";
+import { fetchData } from "../api/useApi";
 
 const Home = () => {
   const { classrooms, dispatch } = useClassroomContext();
   const [selectedStudents, setSelectedStudents] = useState([]);
-  const [selectedClassName, setSelectedClassName] = useState("")
+  const [selectedClassName, setSelectedClassName] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   useEffect(() => {
@@ -28,36 +29,15 @@ const Home = () => {
 
   //displays selected class
   const handleButtonClick = async (e) => {
-    const allClassroomsResponse = await fetch("/api/classes/", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const classroomName = e.target.textContent;
 
-    //finds the id of the name of the class button clicked using textcontent
-    const classroomJson = await allClassroomsResponse.json();
-    const classroom = classroomJson.find(
-      (classroom) => classroom.roomName === e.target.textContent
+    const oneClassroomResponse = await fetchData(
+      "/api/classes/" + classroomName,
+      "GET"
     );
-    const classroomId = classroom._id.toString();
 
-    if (!classroomId) {
-      console.log("Classroom not found");
-      return;
-    }
-
-    const getOneClassroomResponse = await fetch("/api/classes/" + classroomId, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const oneClassJson = await getOneClassroomResponse.json();
-
-    if (!oneClassJson) {
-      console.log("One class not found");
-      return;
-    }
-    setSelectedClassName(e.target.textContent)
-    setSelectedStudents([...oneClassJson.students]);
+    setSelectedClassName(classroomName);
+    setSelectedStudents([...oneClassroomResponse.students]);
   };
 
   return (

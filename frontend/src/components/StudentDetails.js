@@ -3,7 +3,6 @@ import { ClassroomContext } from "../context/ClassroomContext";
 import EditStudentModal from "./EditStudentModal";
 import { formatAge, formatDate } from "../utils/formatDates";
 import formatProgramName from "../utils/formatText";
-import { getClassroomId } from "../utils/getClassroomId";
 import { fetchData } from "../api/useApi";
 
 const StudentDetails = ({ student, setSelectedStudents }) => {

@@ -1,7 +1,6 @@
 import { Form, Button, Modal } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
 import { useContext } from "react";
-import { getClassroomId } from "../utils/getClassroomId";
 import { PROGRAM_FIELDS } from "../constants";
 import { fetchData } from "../api/useApi";
 import ProgramField from "./waitlistStudentForms/ProgramField";
@@ -29,23 +28,15 @@ const EditStudentModal = ({
       ...form,
       incomingDataClassroomMemory,
     };
-
-    const classroomId = await getClassroomId(updatedStudent);
-
+    
     const response = await fetchData(
       "/api/classes/" +
-        classroomId +
+        updatedStudent.classroomName +
         "/students/" +
-        updatedStudent.id.toString(),
+        updatedStudent._id.toString(),
       "PATCH",
       updatedStudent
     );
-
-    const updatedAllClassroomsResponse = await fetchData(
-      "/api/classes/",
-      "GET"
-    );
-    console.log(updatedAllClassroomsResponse);
 
     dispatch({ type: "UPDATE_STUDENT", payload: response }); // await dispatch({type:"UPDATE_STUDENT", payload:classroomWithUpdatedStudentInside})
 

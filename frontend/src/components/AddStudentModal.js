@@ -1,7 +1,6 @@
 import { Form, Button, Modal, InputGroup } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
 import { useContext } from "react";
-import { getClassroomId } from "../utils/getClassroomId";
 import ProgramField from "./waitlistStudentForms/ProgramField";
 import { STUDENT_EMPTY_FIELDS, PROGRAM_FIELDS } from "../constants";
 import useForm from "../hooks/useForm";
@@ -23,11 +22,9 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
     e.preventDefault();
     const student = { ...form };
 
-    const classroomId = await getClassroomId(student);
-
     //this post response returns complete json of the updated classroom {_id:3423, roomName: infants, students:[{}{}]
     const response = await fetchData(
-      "/api/classes/" + classroomId + "/students",
+      "/api/classes/students",
       "POST",
       student
     );
