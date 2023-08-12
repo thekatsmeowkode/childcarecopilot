@@ -11,5 +11,4 @@ const formatProgramName = (program) => {
     }
   };
 
-
 export default formatProgramName

@@ -1,6 +1,6 @@
 import { OverlayTrigger, Popover } from "react-bootstrap";
 import { useState, Fragment } from "react";
-import { formatDateMonthDay } from "../utils/formatDates";
+import { formatDateMonthDay } from "../../utils/formatDates";
 
 const BirthdayPopover = () => {
   const [birthdayData, setBirthdayData] = useState(null);
@@ -42,7 +42,9 @@ const BirthdayPopover = () => {
                         ? "birthday"
                         : ""
                     }
-                  >{`${student.name} ${formatDateMonthDay(student.birthdate)}`}</p>
+                  >{`${student.name} ${formatDateMonthDay(
+                    student.birthdate
+                  )}`}</p>
                 </Fragment>
               ))}
           </Popover.Body>

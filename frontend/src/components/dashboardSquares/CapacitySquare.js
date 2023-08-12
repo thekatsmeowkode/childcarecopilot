@@ -1,4 +1,4 @@
-import { Table, ProgressBar } from "react-bootstrap";
+import { ProgressBar } from "react-bootstrap";
 const CapacitySquare = ({ currentStudentsByClass, roomCapacities }) => {
   const { infantsCap, crawlersCap, toddlersCap, twosCap, totalCap } =
     roomCapacities;

@@ -1,4 +1,4 @@
-import {Form} from 'react-bootstrap'
+import { Form } from "react-bootstrap";
 
 const ProgramField = ({ handleProgramChange, form, value, label }) => {
   return (

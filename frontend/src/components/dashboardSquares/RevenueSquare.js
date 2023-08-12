@@ -1,34 +1,28 @@
 import { Table } from "react-bootstrap";
+import { PROGRAM_NAMES } from "../../constants";
 
 const RevenueSquare = ({ revenueData }) => {
-  const {
-    revenue: { title, earlyMorning, extendedDay, lateDay, schoolTotal },
-  } = revenueData;
+  const { revenue } = revenueData;
+
   return (
     <>
       <Table>
         <thead>
           <tr>
-            <th colSpan={2}>{title}</th>
+            <th colSpan={2}>{revenue.title}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{schoolTotal.message}</td>
-            <td>{schoolTotal.value}</td>
+            <td>{revenue.schoolTotal.message}</td>
+            <td>{revenue.schoolTotal.value}</td>
           </tr>
-          <tr>
-            <td>{earlyMorning.message}</td>
-            <td>{earlyMorning.value}</td>
-          </tr>
-          <tr>
-            <td>{extendedDay.message}</td>
-            <td>{extendedDay.value}</td>
-          </tr>
-          <tr>
-            <td>{lateDay.message}</td>
-            <td>{lateDay.value}</td>
-          </tr>
+          {PROGRAM_NAMES.map((program) => (
+            <tr>
+              <td>{revenue[program]["message"]}</td>
+              <td>{revenue[program]["value"]}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </>

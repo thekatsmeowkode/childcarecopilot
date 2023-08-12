@@ -9,6 +9,7 @@ import AddStudentModal from "../components/AddStudentModal";
 const Home = () => {
   const { classrooms, dispatch } = useClassroomContext();
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [selectedClassName, setSelectedClassName] = useState("")
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const Home = () => {
       console.log("One class not found");
       return;
     }
+    setSelectedClassName(e.target.textContent)
     setSelectedStudents([...oneClassJson.students]);
   };
 
@@ -81,6 +83,7 @@ const Home = () => {
           ))}
       </div>
       <div className="students-grid">
+        <h3>{selectedClassName}</h3>
         <table>
           <tbody>
             <tr>

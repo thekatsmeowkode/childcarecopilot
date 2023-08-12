@@ -3,21 +3,12 @@ import useForm from "../../hooks/useForm";
 import { formatDate } from "../../utils/formatDates";
 import CheckboxField from "./CheckboxField";
 import ProgramField from "./ProgramField";
-
-const CHECKBOX_FIELDS = [
-  "sibling",
-  "emailed",
-  "toured",
-  "registered",
-  "enrolled",
-  "declined",
-];
-
-const PROGRAM_FIELDS = [
-  { value: "earlyMorning", label: "Early Morning (7:30-8:30)" },
-  { value: "extendedDay", label: "Extended Day (3:30-4:30)" },
-  { value: "lateDay", label: "Late Day (4:30-5:30)" },
-];
+import { fetchData } from "../../api/waitlistApi";
+import {
+  CHECKBOX_FIELDS,
+  PROGRAM_FIELDS,
+  WAITLIST_EMPTY_FIELDS,
+} from "../../constants";
 
 const EditStudentWaitlist = ({
   student,
@@ -33,64 +24,20 @@ const EditStudentWaitlist = ({
     handleSubmit,
     validated,
   } = useForm({
-    childName: student.childName,
-    parentName: student.parentName,
+    ...student,
     birthdate: new Date(student.birthdate),
     startDate: new Date(student.startDate),
-    allergies: student.allergies,
-    phone: student.phone,
-    email: student.email,
-    programs: student.programs,
-    sibling: student.sibling,
-    emailed: student.emailed,
-    toured: student.toured,
-    registered: student.registered,
-    enrolled: student.enrolled,
-    declined: student.declined,
   });
 
   const handleEditStudent = async (e) => {
     e.preventDefault();
     const student = { ...form };
 
-    const studentResponse = await fetch("api/waitlist/" + student.childName, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetchData("/", "PATCH", student);
 
-    const studentId = await studentResponse.json();
-
-    const response = await fetch("/api/waitlist/" + studentId, {
-      method: "PATCH",
-      body: JSON.stringify(student),
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const json = await response.json();
-
-    if (!response.ok) {
-      throw Error("Error while trying to post student to database");
-    }
-
-    if (response.ok) {
-      setWaitlistStudents(json.students);
-      setForm({
-        childName: "",
-        parentName: "",
-        birthdate: "",
-        allergies: "",
-        phone: "",
-        email: "",
-        programs: [],
-        sibling: false,
-        emailed: false,
-        toured: false,
-        registered: false,
-        enrolled: false,
-        declined: false,
-      });
-      console.log(`student updated`);
-    }
+    setWaitlistStudents(response.students);
+    setForm(WAITLIST_EMPTY_FIELDS);
+    console.log(`student updated`);
     onClose();
   };
 

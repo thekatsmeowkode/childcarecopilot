@@ -5,7 +5,9 @@
 :root {
   --primary: #055ec3;
   --error: #e7195a;
+  font-size: 16px
 }
+
 body {
   background: #f1f1f1;
   margin: 0;
@@ -15,6 +17,7 @@ body {
 header {
   background: #fff;
 }
+
 header .nav-bar {
   max-width: 100%;
   margin: 0 auto;
@@ -38,7 +41,7 @@ header a {
 /* homepage */
 .home {
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 5fr;
   gap: 1rem;
 }
 
@@ -78,6 +81,7 @@ label,
 input {
   display: block;
 }
+
 input {
   padding: 10px;
   margin-top: 10px;
@@ -87,6 +91,7 @@ input {
   border-radius: 4px;
   box-sizing: border-box;
 }
+
 form button {
   background: var(--primary);
   border: 0;
@@ -96,6 +101,7 @@ form button {
   border-radius: 4px;
   cursor: pointer;
 }
+
 div.error {
   padding: 10px;
   background: #ffefef;
@@ -185,4 +191,17 @@ td {
   to {
     background-position: 200% center;
   }
+}
+
+.logo {
+  max-height: 150px;
+}
+
+h1 {
+  font-size: 200px;
+  font-family: "Lobster Two", cursive;
+}
+
+h3 {
+  font-family: "Lobster Two", cursive
 }

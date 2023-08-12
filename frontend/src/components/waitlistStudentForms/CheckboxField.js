@@ -1,10 +1,9 @@
-import useForm from "../../hooks/useForm";
 import { Form } from "react-bootstrap";
 
 const CheckboxField = ({ form, fieldName, onChangeInput }) => {
   const lowerCase = fieldName.toLowerCase();
   const fieldLabel = fieldName.charAt(0).toUpperCase() + lowerCase.slice(1);
-  
+
   return (
     <Form.Group>
       <Form.Check

@@ -2,6 +2,7 @@ import { Form, Button, Modal, InputGroup } from "react-bootstrap";
 import { ClassroomContext } from "../context/ClassroomContext";
 import { useContext, useState } from "react";
 import { getClassroomId } from "../utils/getClassroomId";
+import {ProgramField} from './waitlistStudentForms/ProgramField'
 
 const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
   const [form, setForm] = useState({

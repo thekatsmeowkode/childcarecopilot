@@ -2,38 +2,12 @@ import { Form, Button, Modal, InputGroup } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import CheckboxField from "./CheckboxField";
 import ProgramField from "./ProgramField";
-
-const CHECKBOX_FIELDS = [
-  "sibling",
-  "emailed",
-  "toured",
-  "registered",
-  "enrolled",
-  "declined",
-];
-
-const PROGRAM_FIELDS = [
-  { value: "earlyMorning", label: "Early Morning (7:30-8:30)" },
-  { value: "extendedDay", label: "Extended Day (3:30-4:30)" },
-  { value: "lateDay", label: "Late Day (4:30-5:30)" },
-];
-
-const initialFormValues = {
-  childName: "",
-  parentName: "",
-  birthdate: "",
-  startDate: "",
-  allergies: "",
-  phone: "",
-  email: "",
-  programs: [],
-  sibling: false,
-  emailed: false,
-  toured: false,
-  registered: false,
-  enrolled: false,
-  declined: false,
-};
+import {
+  PROGRAM_FIELDS,
+  CHECKBOX_FIELDS,
+  WAITLIST_EMPTY_FIELDS,
+} from "../../constants";
+import { fetchData } from "../../api/waitlistApi";
 
 const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
   const {
@@ -43,30 +17,17 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
     handleProgramChange,
     handleSubmit,
     validated,
-  } = useForm(initialFormValues);
+  } = useForm(WAITLIST_EMPTY_FIELDS);
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
     const student = { ...form };
 
-    //this post response returns complete json of the updated classroom {_id:3423, roomName: infants, students:[{}{}]
-    const response = await fetch("/api/waitlist/student", {
-      method: "POST",
-      body: JSON.stringify(student),
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetchData("/student", "POST", student);
 
-    const json = await response.json();
-
-    if (!response.ok) {
-      throw Error("Error while trying to post student to database");
-    }
-
-    if (json) {
-      setStudents(json.students);
-      setForm(initialFormValues);
-      console.log(`new student added`);
-    }
+    setStudents(response.students);
+    setForm(WAITLIST_EMPTY_FIELDS);
+    console.log(`new student added`);
     onClose();
   };
 
@@ -172,7 +133,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
             />
           </Form.Group>
           <Form.Group>
-          {PROGRAM_FIELDS.map((program) => (
+            {PROGRAM_FIELDS.map((program) => (
               <ProgramField
                 value={program.value}
                 label={program.label}
@@ -188,7 +149,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               fieldName={field}
             />
           ))}
-          
+
           <Button type="submit" variant="primary">
             Save Changes
           </Button>
