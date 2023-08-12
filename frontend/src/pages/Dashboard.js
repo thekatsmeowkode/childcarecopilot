@@ -5,13 +5,13 @@ import CoreHoursSquare from "../components/dashboardSquares/CoreHoursSquare";
 import CapacitySquare from "../components/dashboardSquares/CapacitySquare";
 import ProgramSquare from "../components/dashboardSquares/ProgramSquare";
 import Histogram from "../components/dashboardSquares/Histogram";
-import Spinner from "react-bootstrap/Spinner";
+import LoadingSpinner from "../components/dashboardSquares/LoadingSpinner";
 import { formatDate } from "../utils/formatDates";
 import "../css/dashboard.css";
+import { fetchData } from "../api/useApi";
 
 const Dashboard = () => {
   const [revenueDetails, setRevenueDetails] = useState(null);
-  const [totalStudents, setTotalStudents] = useState(null);
   const [staffCoreHours, setStaffCoreHours] = useState(null);
   const [staffEarlyMorning, setStaffEarlyMorning] = useState(null);
   const [staffExtendedDay, setStaffExtendedDay] = useState(null);
@@ -21,80 +21,44 @@ const Dashboard = () => {
   const [histogramData, setHistogramData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
-  const getClassRevenue = async () => {
-    const classRevenue = await fetch("api/school/class-revenue", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const json = await classRevenue.json();
-    return json;
+  const renderComponentOrSpinner = (data, Component) => {
+    return data ? Component : <LoadingSpinner />;
   };
 
-  const getTotalStudents = async () => {
-    const totalStudents = await fetch("api/school/total-students", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const json = await totalStudents.json();
-    return json;
+  const getClassRevenue = async () => {
+    return await fetchData("api/school/class-revenue", "GET");
   };
 
   const getStaffCoreHours = async () => {
-    const coreStaff = await fetch("api/school/staff-required", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const json = await coreStaff.json();
-    return json;
+    return await fetchData("api/school/staff-required", "GET");
   };
 
   const getStaffProgram = async (program) => {
-    const programStaff = await fetch(`api/school/staff-required/${program}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const json = await programStaff.json();
-    return json;
+    return await fetchData(`api/school/staff-required/${program}`, "GET");
   };
 
   const getBoxPlotData = async () => {
-    const plotData = await fetch("/api/school/box-plot-data", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const json = await plotData.json();
-    return json;
+    return await fetchData("/api/school/box-plot-data", "GET");
   };
 
   const getRoomCapacities = async () => {
-    const coreStaff = await fetch("api/school/school-capacity", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const json = await coreStaff.json();
-    console.log(json);
-    return json;
+    return await fetchData("api/school/school-capacity", "GET");
   };
 
   const getHistogramData = async (date) => {
     const histogramDate = date ? date : formatDate(new Date());
 
-    const histogramResponse = await fetch(
+    return await fetchData(
       `/api/waitlist/histogram/data/${histogramDate}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      }
+      "GET"
     );
-    return histogramResponse.json();
   };
 
   const onDateChange = async (e) => {
     const { value } = e.target;
     setSelectedDate(value);
     const newHistogramData = await getHistogramData(formatDate(value));
-    setHistogramData(newHistogramData)
+    setHistogramData(newHistogramData);
   };
 
   useEffect(() => {
@@ -102,7 +66,6 @@ const Dashboard = () => {
       try {
         const [
           revenueData,
-          studentData,
           staffCoreData,
           staffEarlyMorningData,
           extendedDayStaff,
@@ -112,7 +75,6 @@ const Dashboard = () => {
           histogramData,
         ] = await Promise.all([
           getClassRevenue(),
-          getTotalStudents(),
           getStaffCoreHours(),
           getStaffProgram("earlyMorning"),
           getStaffProgram("extendedDay"),
@@ -122,7 +84,6 @@ const Dashboard = () => {
           getHistogramData(),
         ]);
         setRevenueDetails(revenueData);
-        setTotalStudents(studentData);
         setStaffCoreHours(staffCoreData);
         setStaffEarlyMorning(staffEarlyMorningData);
         setStaffExtendedDay(extendedDayStaff);
@@ -140,59 +101,49 @@ const Dashboard = () => {
   return (
     <>
       <main className="dashboard-grid">
-        {revenueDetails ? (
-          <RevenueSquare revenueData={revenueDetails} />
-        ) : (
-          <Spinner animation="grow" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        )}
-        {totalStudents ? (
-          <CapacitySquare
-            roomCapacities={roomCapacities.roomCapacities}
-            currentStudentsByClass={roomCapacities.numStudentsPerClass}
-          />
-        ) : (
-          <Spinner animation="grow" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        )}
-        {staffCoreHours ? (
-          <CoreHoursSquare coreData={staffCoreHours} />
-        ) : (
-          <Spinner animation="grow" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        )}
-        {staffEarlyMorning ? (
-          <ProgramSquare programData={staffEarlyMorning} />
-        ) : (
-          <Spinner animation="grow" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        )}
-        {staffExtendedDay ? (
-          <ProgramSquare programData={staffExtendedDay} />
-        ) : (
-          <Spinner animation="grow" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        )}
-        {staffLateDay ? (
-          <ProgramSquare programData={staffLateDay} />
-        ) : (
-          <Spinner animation="grow" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        )}
-        {boxPlotData ? (
-          <BoxPlot
-            className="boxplot"
-            data={boxPlotData}
-            width={700}
-            height={400}
-          ></BoxPlot>
-        ) : null}
+        {revenueDetails &&
+          renderComponentOrSpinner(
+            revenueDetails,
+            <RevenueSquare revenueData={revenueDetails} />
+          )}
+        {roomCapacities &&
+          renderComponentOrSpinner(
+            roomCapacities,
+            <CapacitySquare
+              roomCapacities={roomCapacities.roomCapacities}
+              currentStudentsByClass={roomCapacities.numStudentsPerClass}
+            />
+          )}
+        {staffCoreHours &&
+          renderComponentOrSpinner(
+            staffCoreHours,
+            <CoreHoursSquare coreData={staffCoreHours} />
+          )}
+        {staffEarlyMorning &&
+          renderComponentOrSpinner(
+            staffEarlyMorning,
+            <ProgramSquare programData={staffEarlyMorning} />
+          )}
+        {staffExtendedDay &&
+          renderComponentOrSpinner(
+            staffExtendedDay,
+            <ProgramSquare programData={staffExtendedDay} />
+          )}
+        {staffLateDay &&
+          renderComponentOrSpinner(
+            staffLateDay,
+            <ProgramSquare programData={staffLateDay} />
+          )}
+        {boxPlotData &&
+          renderComponentOrSpinner(
+            boxPlotData,
+            <BoxPlot
+              className="boxplot"
+              data={boxPlotData}
+              width={700}
+              height={400}
+            ></BoxPlot>
+          )}
         <div>
           {histogramData ? (
             <input
@@ -202,14 +153,11 @@ const Dashboard = () => {
               onChange={onDateChange}
             />
           ) : null}
-
-          {histogramData ? (
-            <Histogram width={600} height={400} data={histogramData} />
-          ) : (
-            <Spinner animation="grow" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-          )}
+          {histogramData &&
+            renderComponentOrSpinner(
+              histogramData,
+              <Histogram width={600} height={400} data={histogramData} />
+            )}
         </div>
       </main>
     </>

@@ -2,15 +2,8 @@ import { useState, useEffect } from "react";
 import WaitlistDetails from "../components/WaitlistDetails";
 import AddStudentWaitlist from "../components/waitlistStudentForms/AddStudentWaitlist";
 import StatusSquares from "../components/waitlistSquares/StatusSquares";
-
-const CATEGORIES = [
-  "sibling",
-  "emailed",
-  "toured",
-  "registered",
-  "enrolled",
-  "declined",
-];
+import { fetchData } from "../api/useApi";
+import { CHECKBOX_FIELDS } from "../constants";
 
 const Waitlist = () => {
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -18,12 +11,12 @@ const Waitlist = () => {
   const [statusData, setStatusData] = useState(null);
 
   const getCategoryData = async () => {
-    const categoryDataPromises = CATEGORIES.map(async (category) => {
-      const catData = await fetch(`api/waitlist/dashboard/${category}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      return catData.json();
+    const categoryDataPromises = CHECKBOX_FIELDS.map(async (category) => {
+      const catData = await fetchData(
+        `api/waitlist/dashboard/${category}`,
+        "GET"
+      );
+      return catData;
     });
 
     const categoryData = await Promise.all(categoryDataPromises);
@@ -31,8 +24,7 @@ const Waitlist = () => {
   };
 
   const fetchWaitlist = async () => {
-    const waitlist = await fetch("/api/waitlist");
-    return waitlist.json();
+    return await fetchData("/api/waitlist", "GET");
   };
 
   useEffect(() => {
