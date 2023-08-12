@@ -37,7 +37,9 @@ router.patch('/:classId/students/:studentId', updateStudent)
 router.post('/:classId/students', addStudent)
 
 //DELETE a student in a class
-router.delete('/:classId/students/:studentId', deleteStudent)
+// router.delete('/:classId/students/:studentId', deleteStudent)
+router.delete('/:classroomName/students/:studentId', deleteStudent)
+
 
 //GET one student
 router.get('/:classId/students/:studentId', getStudent)

@@ -213,20 +213,28 @@ const addStudent = async (req, res) => {
 
 //DELETE student from class
 const deleteStudent = async (req, res) => {
-  const { classId, studentId } = req.params;
+  const { classId, classroomName, studentId} = req.params;
   try {
-    const classroom = await Classroom.findOne({ _id: classId });
+    // const classroom = await Classroom.findOne({ _id: classId });
+    const classroom = await Classroom.findOne({ roomName: classroomName });
 
     if (!classroom) {
       return res.status(404).json({ error: "Class not found" });
     }
 
-    const studentIndex = findIndex(classroom, studentId);
+    const studentIndex = classroom.students.findIndex(
+      (student) => student._id.toString() === studentId.toString()
+    );
+
+    if (studentIndex === -1) {
+      throw Error("Student Index not found");
+    }
 
     classroom.students.splice(studentIndex, 1);
 
     await classroom.save();
-    return res.status(200).json(classroom);
+
+    return res.status(200).json( classroom );
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
@@ -273,9 +281,9 @@ const getUpcomingBirthdays = async (req, res) => {
       const currentDay = currentDate.getDate() - 1;
 
       return (
-        (birthMonth === currentMonth &&
-          birthDay >= currentDay &&
-          birthDay <= upcomingWeekEnd.getDate()) 
+        birthMonth === currentMonth &&
+        birthDay >= currentDay &&
+        birthDay <= upcomingWeekEnd.getDate()
       );
     }
 
