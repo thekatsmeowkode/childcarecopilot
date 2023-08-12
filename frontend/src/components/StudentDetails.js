@@ -3,6 +3,8 @@ import { ClassroomContext } from "../context/ClassroomContext";
 import EditStudentModal from "./EditStudentModal";
 import { formatAge, formatDate } from "../utils/formatDates";
 import formatProgramName from "../utils/formatText";
+import { getClassroomId } from "../utils/getClassroomId";
+import { fetchData } from "../api/useApi";
 
 const StudentDetails = ({ student, setSelectedStudents }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,51 +18,21 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
     setIsModalOpen(true);
   };
 
-  const handleDeleteClick = async (studentId, classroomName) => {
-    const allClassroomsResponse = await fetch("/api/classes/", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+  const handleDeleteClick = async (student) => {
 
-    const classroomJson = await allClassroomsResponse.json();
+    const {classroomName} = student
 
-    const targetClassroom = classroomJson.find(
-      (classroom) => classroom.roomName === classroomName
+    const response = await fetchData(
+      "/api/classes/" + classroomName + "/students/" + 
+      student._id.toString(),
+      "DELETE"
     );
 
-    const classroomId = targetClassroom._id.toString();
+    setSelectedStudents(response.students);
 
-    if (!classroomId) {
-      console.log("Classroom not found");
-      return;
-    }
+    const updatedAllClassroomsResponse = await fetchData("/api/classes/", "GET");
 
-    const response = await fetch(
-      "/api/classes/" + classroomId + "/students/" + studentId.toString(),
-      {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-
-    const json = await response.json();
-
-    if (!response.ok) {
-      console.log("bad response in Delete route");
-    }
-
-    setSelectedStudents(json.students);
-
-    const updatedAllClassroomsResponse = await fetch("/api/classes/", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const updatedJson = await updatedAllClassroomsResponse.json();
-
-    if (updatedAllClassroomsResponse.ok) {
-      dispatch({ type: "DELETE_STUDENT", payload: updatedJson });
-    }
+    dispatch({ type: "DELETE_STUDENT", payload: updatedAllClassroomsResponse });
   };
 
   return (
@@ -92,7 +64,7 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
         </td>
         <td>
           <button
-            onClick={() => handleDeleteClick(student.id, student.classroomName)}
+            onClick={() => handleDeleteClick(student)}
             className="material-symbols-outlined"
           >
             Delete
