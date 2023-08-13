@@ -1,10 +1,13 @@
-import { Form, Button, Modal, InputGroup } from "react-bootstrap";
+// import { Form, Button, InputGroup } from "react-bootstrap";
 import { ClassroomContext } from "../../context/ClassroomContext";
 import { useContext } from "react";
 import ProgramField from "./ProgramField";
 import { STUDENT_EMPTY_FIELDS, PROGRAM_FIELDS } from "../../constants";
 import useForm from "../../hooks/useForm";
 import { fetchData } from "../../hooks/useApi";
+import StudentForm from "./StudentForm";
+import {Form, Modal, InputGroup, FormGroup, Button} from 'react-bootstrap'
+
 
 const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
   const {
@@ -129,6 +132,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
             Save Changes
           </Button>
         </Form>
+
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>

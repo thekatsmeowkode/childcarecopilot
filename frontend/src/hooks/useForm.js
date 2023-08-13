@@ -25,17 +25,16 @@ const useForm = (formState) => {
     }
   };
 
-  const handleSubmit = (e, callback) => {
+  const handleSubmit = async (e, callback) => {
     const form = e.target;
+    e.preventDefault();
 
     if (!form.checkValidity()) {
-      e.preventDefault();
       e.stopPropagation();
     }
     setValidated(true);
 
     if (form.checkValidity() === true) {
-      e.preventDefault()
       callback(e);
     }
   };

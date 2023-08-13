@@ -1,17 +1,9 @@
-import { formatAge, formatDate } from "../utils/formatDates";
+import { formatDate } from "../utils/formatDates";
 import { Fragment, useState } from "react";
-import formatProgramName from "../utils/formatText";
-import { Table } from "react-bootstrap";
+import { formatProgramName } from "../utils/formatText";
+import { Table, Fade } from "react-bootstrap";
 import EditStudentWaitlist from "./studentForms/EditStudentWaitlist";
-
-const CHECKBOX_FIELDS = [
-  "sibling",
-  "emailed",
-  "toured",
-  "registered",
-  "enrolled",
-  "declined",
-];
+import { CHECKBOX_FIELDS } from "../constants";
 
 const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -54,43 +46,45 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
         <tbody>
           {waitlistStudents.map((student) => (
             <Fragment key={student._id}>
-              <tr onClick={() => handleRowClick(student)}>
-                <td>{formatDate(student.startDate)}</td>
-                <td>{student.childName}</td>
-                <td>{formatDate(student.birthdate)}</td>
-                <td>{student.allergies}</td>
-                <td>{student.parentName}</td>
-                <td>{student.email}</td>
-                <td>{student.phone}</td>
-                <td>
-                  <ul>
-                    {student.programs.map((program) => (
-                      <li key={program}>{formatProgramName(program)}</li>
-                    ))}
-                  </ul>
-                </td>
-                {CHECKBOX_FIELDS.map((field) => (
-                  <td key={field}>
-                    {student[field] ? (
-                      <span
-                        role="img"
-                        aria-label="check mark"
-                        className="react-emojis"
-                      >
-                        ✔️
-                      </span>
-                    ) : (
-                      <span
-                        role="img"
-                        aria-label="cross mark"
-                        className="react-emojis"
-                      >
-                        ❌
-                      </span>
-                    )}
+              <Fade in={true}>
+                <tr onClick={() => handleRowClick(student)}>
+                  <td>{formatDate(student.startDate)}</td>
+                  <td>{student.childName}</td>
+                  <td>{formatDate(student.birthdate)}</td>
+                  <td>{student.allergies}</td>
+                  <td>{student.parentName}</td>
+                  <td>{student.email}</td>
+                  <td>{student.phone}</td>
+                  <td>
+                    <ul>
+                      {student.programs.map((program) => (
+                        <li key={program}>{formatProgramName(program)}</li>
+                      ))}
+                    </ul>
                   </td>
-                ))}
-              </tr>
+                  {CHECKBOX_FIELDS.map((field) => (
+                    <td key={field}>
+                      {student[field] ? (
+                        <span
+                          role="img"
+                          aria-label="check mark"
+                          className="react-emojis"
+                        >
+                          ✔️
+                        </span>
+                      ) : (
+                        <span
+                          role="img"
+                          aria-label="cross mark"
+                          className="react-emojis"
+                        >
+                          ❌
+                        </span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              </Fade>
             </Fragment>
           ))}
         </tbody>

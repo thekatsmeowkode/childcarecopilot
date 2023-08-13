@@ -29,11 +29,20 @@ const EditStudentWaitlist = ({
     startDate: new Date(student.startDate),
   });
 
+  const handleDeleteStudent = async (e) => {
+    e.preventDefault();
+    const studentId = student._id;
+    const response = await fetchData("/api/waitlist/" + studentId, "DELETE");
+    setWaitlistStudents(response.students);
+    console.log("student deleted");
+    onClose();
+  };
+
   const handleEditStudent = async (e) => {
     e.preventDefault();
     const student = { ...form };
 
-    const response = await fetchData("api/waitlist/", "PATCH", student);
+    const response = await fetchData("/api/waitlist/", "PATCH", student);
 
     setWaitlistStudents(response.students);
     setForm(WAITLIST_EMPTY_FIELDS);
@@ -164,13 +173,12 @@ const EditStudentWaitlist = ({
           <Button type="submit" variant="primary">
             Save Changes
           </Button>
+          <Button onClick={handleDeleteStudent}>Delete Student</Button>
         </Form>
-      </Modal.Body>
-      <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>
           Cancel
         </Button>
-      </Modal.Footer>
+      </Modal.Body>
     </Modal>
   );
 };
