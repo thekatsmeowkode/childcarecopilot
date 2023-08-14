@@ -11,8 +11,14 @@ const ClassroomDetails = ({ classroom, handleButtonClick }) => {
           variant="text"
           size="large"
           buttonText={classroom.roomName}
-          value={classroom.roomName}
           eventHandler={handleButtonClick}
+          customStyles={{
+            color: "var(--dark-peach)",
+            "&:hover": {
+              backgroundColor: "var(--soft-peach)",
+              color: "var(--darkest-peach)",
+            },
+          }}
         >
           {classroom.roomName}
         </UniversalButton>

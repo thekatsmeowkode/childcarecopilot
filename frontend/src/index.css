@@ -1,11 +1,17 @@
 /* google font */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800&family=VT323&display=swap");
 
+:root {
+  --bright-peach:#f27757;
+  --soft-peach: #fff7f6;
+  --dark-peach: #d96b4e;
+  --complementary-dark-peach: #57d2f2;
+  --darkest-peach: #bd5e45
+}
+
 /* layout */
 :root {
-  --primary: #055ec3;
-  --error: #e7195a;
-  font-size: 16px
+  font-size: 16px;
 }
 
 body {
@@ -15,7 +21,7 @@ body {
 }
 
 header {
-  background: #fff;
+  background: var(--soft-peach);
 }
 
 header .nav-bar {
@@ -51,13 +57,7 @@ header a {
   margin: 20px auto;
   padding: 20px;
   position: relative;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.classroom-details h4 {
-  margin: 0 0 10px 0;
-  font-size: 1.2em;
-  color: var(--primary);
+  box-shadow: 2px 2px 5px rgb(254, 236, 236);
 }
 
 .classroom-details p {
@@ -68,102 +68,34 @@ header a {
 
 .visibility-buttons {
   border-radius: 50%;
+  color:var(--dark-peach);
   position: absolute;
   top: 20px;
   right: 20px;
   cursor: pointer;
-  background: #e2e1e1;
+  background: var(--soft-peach);
   padding: 6px;
+}
+
+.visibility-buttons:hover {
+  background-color:var(--dark-peach);
+  opacity:40%;
+  color:var(--soft-peach)
+}
+
+.delete-button {
   border-radius: 50%;
-  color: #252525;
-}
-
-label,
-input {
-  display: block;
-}
-
-input {
-  padding: 10px;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-/* form button {
-  background: var(--primary);
-  border: 0;
-  color: #fff;
-  padding: 10px;
-  font-family: "Poppins";
-  border-radius: 4px;
+  color:var(--dark-peach);
   cursor: pointer;
-} */
-
-div.error {
-  padding: 10px;
-  background: #ffefef;
-  border: 1px solid var(--error);
-  color: var(--error);
-  border-radius: 4px;
-  margin: 20px 0;
-}
-
-input.error {
-  border: 1px solid var(--error);
-}
-
-.students-grid {
-  /* display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(1fr, 2fr));
-  gap: .25rem; */
+  background: var(--soft-peach);
+  padding: 6px;
+  border-style: none;
 }
 
 .student-details {
   background-color: #f0f0f0;
   padding: 0.5rem;
   border: 1px solid #ccc;
-  /* display:grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr */
-}
-
-.student-details > p {
-  padding: 0.25rem;
-}
-
-table {
-  /* border:1px solid; */
-  width: 100%;
-  border-collapse: collapse;
-  padding: 1rem;
-}
-
-th,
-tr,
-td {
-  border: 1px solid black !important;
-  padding: 0.5rem;
-}
-
-.slider-container {
-  display: flex;
-  gap: 10px;
-}
-
-.waitlist-status-bar {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.status-square {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .birthday {
@@ -204,20 +136,11 @@ h1 {
 }
 
 h3 {
-  font-family: "Lobster Two", cursive
-}
-
-.status-bar-container {
-  display:flex;
-  gap: 5px;
-  align-items:center
-}
-
-.status-bar-title {
+  font-family: "Lobster Two", cursive;
   display:flex;
   justify-content: center;
 }
 
-.status-bar {
-  flex-grow: 3
+li::marker {
+  color: var(--bright-peach);
 }

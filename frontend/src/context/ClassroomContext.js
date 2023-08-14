@@ -7,7 +7,6 @@ export const classroomReducer = (state, action) => {
     case "SET_CLASSROOMS":
       console.log(state)
       return { classrooms: action.payload };
-    //adds new class to the classrooms array in context state
     case "CREATE_CLASSROOM":
       return { classrooms: [action.payload, ...state.classrooms] };
     case "DELETE_CLASSROOM":
@@ -18,7 +17,6 @@ export const classroomReducer = (state, action) => {
       };
     case "DELETE_STUDENT":
       return { classrooms: action.payload };
-
     case "UPDATE_STUDENTS":
       // console.log({"1":action.payload})
       //action.payload = {roomName: 'infants', students: []}

@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { ClassroomContext } from "../context/ClassroomContext";
 import EditStudentModal from "./studentForms/EditStudentModal";
-import { formatAge, formatDate } from "../utils/formatDates";
+import { formatAge, formatDate, formatDateSlashes } from "../utils/formatDates";
 import { formatProgramName } from "../utils/formatText";
 import { fetchData } from "../hooks/useApi";
 import { TableRow, TableCell } from "@mui/material";
@@ -38,7 +38,7 @@ const StudentDetails = ({ student }) => {
         <TableCell>{student.name}</TableCell>
         <TableCell>
           <ul>
-            <li>{formatDate(student.birthdate)}</li>
+            <li>{formatDateSlashes(student.birthdate)}</li>
             <li>{formatAge(student.birthdate)}</li>
           </ul>
         </TableCell>
@@ -56,7 +56,7 @@ const StudentDetails = ({ student }) => {
         <TableCell>
           <button
             onClick={(e) => handleDeleteClick(e, student)}
-            className="material-symbols-outlined"
+            className="material-symbols-outlined delete-button"
           >
             Delete
           </button>

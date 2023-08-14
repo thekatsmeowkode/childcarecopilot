@@ -56,10 +56,20 @@ function monthsToYearsAndMonths(months) {
   return `${years} years ${remainingMonths} months`;
 }
 
+function formatDateSlashes(date) {
+  date = new Date(date)
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+
+  return `${month} / ${day} / ${year.toString().slice(-2)}`;
+}
+
 module.exports = {
   formatAge,
   formatDate,
   calculateAge,
   monthsToYearsAndMonths,
-  formatDateMonthDay
+  formatDateMonthDay,
+  formatDateSlashes
 };

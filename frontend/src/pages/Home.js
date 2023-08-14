@@ -41,14 +41,14 @@ const Home = () => {
   return (
     <div className="home">
       <div className="classrooms">
-        <div className="button add">
           <UniversalButton
             variant="contained"
             eventHandler={() => setIsAddModalOpen(true)}
             icon={<PersonAddIcon />}
             customStyles={{
-              backgroundColor: "#bd5e45",
-              "&:hover": { backgroundColor: "#f27757" },
+              margin:".7rem",
+              backgroundColor: "var(--bright-peach)",
+              "&:hover": { backgroundColor: "var(--darkest-peach)" },
             }}
             buttonText="Add student"
           ></UniversalButton>
@@ -58,7 +58,6 @@ const Home = () => {
               onClose={() => setIsAddModalOpen(false)}
             />
           )}
-        </div>
         {classrooms &&
           classrooms.map((classroom) => (
             <ClassroomDetails
@@ -75,7 +74,7 @@ const Home = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Birthdate</TableCell>
+                <TableCell>Birthdate ( MM / DD / YY )</TableCell>
                 <TableCell>Programs</TableCell>
                 <TableCell>Allergies</TableCell>
                 <TableCell>Phone</TableCell>
