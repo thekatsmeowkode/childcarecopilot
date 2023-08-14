@@ -49,7 +49,7 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
         />
       )}
       <TableContainer>
-        <Table hover>
+        <Table hover sx={{ cursor: "pointer" }}>
           <TableHead>
             <TableRow>
               {TABLE_HEADINGS.map((heading) => 

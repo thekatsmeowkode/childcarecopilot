@@ -44,7 +44,7 @@ const Waitlist = React.memo(() => {
       <section className="waitlist-status-bar">
         {statusData &&
           statusData.map((status) => (
-            <StatusSquares key={Math.random()} data={status} />
+            <StatusSquares key={status.category} data={status} />
           ))}
       </section>
       <button onClick={() => setIsAddOpen(true)}>Add Student</button>
