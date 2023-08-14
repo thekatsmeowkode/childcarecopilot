@@ -19,5 +19,25 @@
   }
 
 .status-square > p {
-    margin:0
+    margin:0;
+}
+
+.table-container {
+    margin-top:1rem;
+}
+
+.waitlist-cell {
+    border-left: 1px dotted lightgray;
+    border-right:1px dotted lightgray;
+}
+
+.waitlist-cell > span {
+    text-align:center;
+    display:flex !important;
+    justify-content:center;
+    align-items:center;
+}
+
+.program-cell {
+    padding-left:0 !important
 }

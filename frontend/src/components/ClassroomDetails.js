@@ -8,15 +8,17 @@ const ClassroomDetails = ({ classroom, handleButtonClick }) => {
     <div className="classroom-details">
       <h4>
         <UniversalButton
-          variant="text"
+          variant="outlined"
           size="large"
           buttonText={classroom.roomName}
           eventHandler={handleButtonClick}
           customStyles={{
+            border: "1px dotted var(--dark-peach)",
             color: "var(--dark-peach)",
             "&:hover": {
               backgroundColor: "var(--soft-peach)",
               color: "var(--darkest-peach)",
+              border: "1px solid var(--darkest-peach)"
             },
           }}
         >

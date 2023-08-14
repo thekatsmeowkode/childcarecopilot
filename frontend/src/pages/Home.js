@@ -34,30 +34,30 @@ const Home = () => {
 
   //displays selected class
   const handleButtonClick = async (e) => {
-    const classroomName = e.target.textContent
+    const classroomName = e.target.textContent;
     setSelectedClassName(classroomName);
   };
 
   return (
     <div className="home">
       <div className="classrooms">
-          <UniversalButton
-            variant="contained"
-            eventHandler={() => setIsAddModalOpen(true)}
-            icon={<PersonAddIcon />}
-            customStyles={{
-              margin:".7rem",
-              backgroundColor: "var(--bright-peach)",
-              "&:hover": { backgroundColor: "var(--darkest-peach)" },
-            }}
-            buttonText="Add student"
-          ></UniversalButton>
-          {isAddModalOpen && (
-            <AddStudentModal
-              isOpen={isAddModalOpen}
-              onClose={() => setIsAddModalOpen(false)}
-            />
-          )}
+        <UniversalButton
+          variant="contained"
+          eventHandler={() => setIsAddModalOpen(true)}
+          icon={<PersonAddIcon />}
+          customStyles={{
+            margin: ".7rem",
+            backgroundColor: "var(--bright-peach)",
+            "&:hover": { backgroundColor: "var(--darkest-peach)" },
+          }}
+          buttonText="Add student"
+        />
+        {isAddModalOpen && (
+          <AddStudentModal
+            isOpen={isAddModalOpen}
+            onClose={() => setIsAddModalOpen(false)}
+          />
+        )}
         {classrooms &&
           classrooms.map((classroom) => (
             <ClassroomDetails
@@ -68,13 +68,13 @@ const Home = () => {
           ))}
       </div>
       <div className="students-grid">
-        <h3>{selectedClassName}</h3>
+        <h3>{selectedClassName ? selectedClassName : "Select a class name to see students"}</h3>
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Birthdate ( MM / DD / YY )</TableCell>
+                <TableCell>Birthdate ( MM / DD / YYYY )</TableCell>
                 <TableCell>Programs</TableCell>
                 <TableCell>Allergies</TableCell>
                 <TableCell>Phone</TableCell>

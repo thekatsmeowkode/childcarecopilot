@@ -14,8 +14,8 @@ const StudentDetails = ({ student }) => {
 
   const handleEditClick = (e) => {
     //formats a date object into a string representation to pre-populate edit form
-    if (e.target.className === 'material-symbols-outlined') {
-      return
+    if (e.target.className === "material-symbols-outlined") {
+      return;
     }
     student.birthdate = formatDate(student.birthdate);
     setSelectedStudent(student);
@@ -23,7 +23,7 @@ const StudentDetails = ({ student }) => {
   };
 
   const handleDeleteClick = async (e, student) => {
-    const {classroomName} = student
+    const { classroomName } = student;
     const classroomsDeletedStudent = await fetchData(
       "/api/classes/" + classroomName + "/students/" + student._id.toString(),
       "DELETE"
@@ -34,7 +34,12 @@ const StudentDetails = ({ student }) => {
 
   return (
     <>
-      <TableRow hover sx={{ cursor: "pointer" }} size="small" onClick={handleEditClick}>
+      <TableRow
+        hover
+        sx={{ cursor: "pointer" }}
+        size="small"
+        onClick={handleEditClick}
+      >
         <TableCell>{student.name}</TableCell>
         <TableCell>
           <ul>
@@ -69,7 +74,6 @@ const StudentDetails = ({ student }) => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           setSelectedStudent={setSelectedStudent}
-          // setSelectedStudents={setSelectedStudents}
         />
       )}
     </>

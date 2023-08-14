@@ -10,7 +10,9 @@ const StatusSquares = ({ data }) => {
         sx={{ padding: "1rem" }}
         elevation={count ? count : 1}
       >
-        <p><strong>{category}</strong></p>
+        <p>
+          <strong>{category}</strong>
+        </p>
         <p>{count}</p>
       </Paper>
     </>

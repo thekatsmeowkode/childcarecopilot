@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import WaitlistDetails from "../components/WaitlistDetails";
 import AddStudentWaitlist from "../components/studentForms/AddStudentWaitlist";
 import StatusSquares from "../components/waitlistSquares/StatusSquares";
+import UniversalButton from "../components/UniversalButton";
 import { fetchData } from "../hooks/useApi";
 import { CHECKBOX_FIELDS } from "../constants";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 const Waitlist = React.memo(() => {
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -42,12 +44,22 @@ const Waitlist = React.memo(() => {
   return (
     <>
       <section className="waitlist-status-bar">
+        <UniversalButton
+          variant="contained"
+          eventHandler={() => setIsAddOpen(true)}
+          icon={<PersonAddIcon />}
+          customStyles={{
+            margin: ".7rem",
+            backgroundColor: "var(--bright-peach)",
+            "&:hover": { backgroundColor: "var(--darkest-peach)" },
+          }}
+          buttonText="Add student"
+        />
         {statusData &&
           statusData.map((status) => (
             <StatusSquares key={status.category} data={status} />
           ))}
       </section>
-      <button onClick={() => setIsAddOpen(true)}>Add Student</button>
       {isAddOpen && (
         <AddStudentWaitlist
           isOpen={isAddOpen}

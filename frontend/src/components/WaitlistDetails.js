@@ -1,5 +1,5 @@
-import { formatDate } from "../utils/formatDates";
-import { Fragment, useState } from "react";
+import { formatDateSlashes } from "../utils/formatDates";
+import { useState } from "react";
 import { formatProgramName } from "../utils/formatText";
 import EditStudentWaitlist from "./studentForms/EditStudentWaitlist";
 import { CHECKBOX_FIELDS } from "../constants";
@@ -48,54 +48,70 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
           onClose={() => setIsEditModalOpen(false)}
         />
       )}
-      <TableContainer>
-        <Table hover sx={{ cursor: "pointer" }}>
+      <TableContainer className="table-container">
+        <Table sx={{ cursor: "pointer" }} stickyHeader="true">
           <TableHead>
             <TableRow>
-              {TABLE_HEADINGS.map((heading) => 
-                <TableCell >{heading}</TableCell>
-              )}
+              {TABLE_HEADINGS.map((heading) => (
+                <TableCell>
+                  <strong>{heading}</strong>
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {waitlistStudents.map((student) => (
-                <TableRow key={student._id} onClick={() => handleRowClick(student)}>
-                  <TableCell>{formatDate(student.startDate)}</TableCell>
-                  <TableCell>{student.childName}</TableCell>
-                  <TableCell>{formatDate(student.birthdate)}</TableCell>
-                  <TableCell>{student.allergies}</TableCell>
-                  <TableCell>{student.parentName}</TableCell>
-                  <TableCell>{student.email}</TableCell>
-                  <TableCell>{student.phone}</TableCell>
-                  <TableCell>
-                    <ul>
-                      {student.programs.map((program) => (
-                        <li key={program}>{formatProgramName(program)}</li>
-                      ))}
-                    </ul>
+              <TableRow
+                hover
+                key={student._id}
+                onClick={() => handleRowClick(student)}
+              >
+                <TableCell className="waitlist-cell">
+                  {formatDateSlashes(student.startDate)}
+                </TableCell>
+                <TableCell className="waitlist-cell">
+                  {student.childName}
+                </TableCell>
+                <TableCell className="waitlist-cell">
+                  {formatDateSlashes(student.birthdate)}
+                </TableCell>
+                <TableCell className="waitlist-cell">
+                  {student.allergies}
+                </TableCell>
+                <TableCell className="waitlist-cell">
+                  {student.parentName}
+                </TableCell>
+                <TableCell className="waitlist-cell">{student.email}</TableCell>
+                <TableCell className="waitlist-cell">{student.phone}</TableCell>
+                <TableCell className="waitlist-cell program-cell">
+                  <ul>
+                    {student.programs.map((program) => (
+                      <li key={program}>{formatProgramName(program)}</li>
+                    ))}
+                  </ul>
+                </TableCell>
+                {CHECKBOX_FIELDS.map((field) => (
+                  <TableCell className="waitlist-cell" key={field}>
+                    {student[field] ? (
+                      <span
+                        role="img"
+                        aria-label="check mark"
+                        className="react-emojis"
+                      >
+                        ✔️
+                      </span>
+                    ) : (
+                      <span
+                        role="img"
+                        aria-label="cross mark"
+                        className="react-emojis"
+                      >
+                        ❌
+                      </span>
+                    )}
                   </TableCell>
-                  {CHECKBOX_FIELDS.map((field) => (
-                    <TableCell key={field}>
-                      {student[field] ? (
-                        <span
-                          role="img"
-                          aria-label="check mark"
-                          className="react-emojis"
-                        >
-                          ✔️
-                        </span>
-                      ) : (
-                        <span
-                          role="img"
-                          aria-label="cross mark"
-                          className="react-emojis"
-                        >
-                          ❌
-                        </span>
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                ))}
+              </TableRow>
             ))}
           </TableBody>
         </Table>
