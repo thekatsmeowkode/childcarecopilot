@@ -5,8 +5,8 @@ import ProgramField from "./ProgramField";
 import { STUDENT_EMPTY_FIELDS, PROGRAM_FIELDS } from "../../constants";
 import useForm from "../../hooks/useForm";
 import { fetchData } from "../../hooks/useApi";
-import {Form, Modal, InputGroup, Button} from 'react-bootstrap'
-
+import { Form, Modal, InputGroup, Button } from "react-bootstrap";
+import UniversalButton from "../UniversalButton";
 
 const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
   const {
@@ -46,7 +46,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
           onSubmit={(e) => handleSubmit(e, handleAddStudent)}
           validated={validated}
         >
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label column={true}>Name:</Form.Label>
             <InputGroup hasValidation>
               <Form.Control
@@ -62,7 +62,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Birthdate</Form.Label>
             <InputGroup hasValidation>
               <Form.Control
@@ -77,7 +77,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Classroom:</Form.Label>
             <InputGroup hasValidation>
               <Form.Select
@@ -97,7 +97,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Allergies:</Form.Label>
             <Form.Control
               type="text"
@@ -106,7 +106,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               onChange={onChangeInput}
             />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Phone Number:</Form.Label>
             <Form.Control
               type="tel"
@@ -116,7 +116,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
             />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             {PROGRAM_FIELDS.map((program) => (
               <ProgramField
                 key={program.label}
@@ -127,17 +127,23 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
               />
             ))}
           </Form.Group>
-          <Button type="submit" variant="primary">
-            Save Changes
-          </Button>
+          <UniversalButton
+            variant="contained"
+            eventHandler={handleAddStudent}
+            customStyles={{
+              margin: ".7rem",
+              backgroundColor: "var(--bright-peach)",
+              "&:hover": { backgroundColor: "var(--darkest-peach)" },
+            }}
+            buttonText="Save changes"
+          />
+          <UniversalButton
+            variant="outlined"
+            eventHandler={onClose}
+            buttonText="Cancel"
+          />
         </Form>
-
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Cancel
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

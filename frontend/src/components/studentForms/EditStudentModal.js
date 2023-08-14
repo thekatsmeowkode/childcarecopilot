@@ -5,17 +5,12 @@ import { PROGRAM_FIELDS } from "../../constants";
 import { fetchData } from "../../hooks/useApi";
 import ProgramField from "./ProgramField";
 import useForm from "../../hooks/useForm";
+import UniversalButton from "../UniversalButton";
 
-const EditStudentModal = ({
-  student,
-  isOpen,
-  onClose,
-  setSelectedStudent,
-}) => {
-  const { form, onChangeInput, handleProgramChange, handleSubmit } =
-    useForm({
-      ...student,
-    });
+const EditStudentModal = ({ student, isOpen, onClose, setSelectedStudent }) => {
+  const { form, onChangeInput, handleProgramChange, handleSubmit } = useForm({
+    ...student,
+  });
   //this remembers the classroom that the student was previously enrolled into
   const incomingDataClassroomMemory = student.classroomName;
 
@@ -37,7 +32,7 @@ const EditStudentModal = ({
       updatedStudent
     );
 
-    dispatch({ type: "UPDATE_STUDENTS", payload: response }); 
+    dispatch({ type: "UPDATE_STUDENTS", payload: response });
 
     setSelectedStudent("");
     onClose();
@@ -50,7 +45,7 @@ const EditStudentModal = ({
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={(e) => handleSubmit(e, handleEditStudent)}>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Name:</Form.Label>
             <Form.Control
               type="text"
@@ -60,7 +55,7 @@ const EditStudentModal = ({
               onChange={onChangeInput}
             />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Birthdate</Form.Label>
             <Form.Control
               type="date"
@@ -69,7 +64,7 @@ const EditStudentModal = ({
               value={form.birthdate}
             />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Classroom:</Form.Label>
             <Form.Select
               aria-label="Choose a classroom"
@@ -83,7 +78,7 @@ const EditStudentModal = ({
               <option value="twos">Twos</option>
             </Form.Select>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Allergies:</Form.Label>
             <Form.Control
               type="text"
@@ -92,7 +87,7 @@ const EditStudentModal = ({
               onChange={onChangeInput}
             />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Phone Number:</Form.Label>
             <Form.Control
               type="text"
@@ -101,7 +96,7 @@ const EditStudentModal = ({
               onChange={onChangeInput}
             />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             {PROGRAM_FIELDS.map((program) => (
               <ProgramField
                 key={program.label}
@@ -112,16 +107,23 @@ const EditStudentModal = ({
               />
             ))}
           </Form.Group>
-          <Button type="submit" variant="primary">
-            Save Changes
-          </Button>
+          <UniversalButton
+            variant="contained"
+            eventHandler={handleEditStudent}
+            customStyles={{
+              margin: ".7rem",
+              backgroundColor: "var(--bright-peach)",
+              "&:hover": { backgroundColor: "var(--dark-peach)" },
+            }}
+            buttonText="Save changes"
+          />
+          <UniversalButton
+            variant="outlined"
+            eventHandler={onClose}
+            buttonText="Cancel"
+          />
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Cancel
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

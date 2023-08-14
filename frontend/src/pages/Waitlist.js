@@ -12,10 +12,7 @@ const Waitlist = React.memo(() => {
 
   const getCategoryData = async () => {
     const categoryDataPromises = CHECKBOX_FIELDS.map(async (category) => {
-      return await fetchData(
-        `api/waitlist/dashboard/${category}`,
-        "GET"
-      );
+      return await fetchData(`api/waitlist/dashboard/${category}`, "GET");
     });
 
     const categoryData = await Promise.all(categoryDataPromises);

@@ -1,4 +1,4 @@
-import { Form, Button, Modal, InputGroup } from "react-bootstrap";
+import { Form, Row, Modal, InputGroup, Col } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import CheckboxField from "./CheckboxField";
 import ProgramField from "./ProgramField";
@@ -8,6 +8,7 @@ import {
   WAITLIST_EMPTY_FIELDS,
 } from "../../constants";
 import { fetchData } from "../../hooks/useApi";
+import UniversalButton from "../UniversalButton";
 
 const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
   const {
@@ -42,7 +43,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
           onSubmit={(e) => handleSubmit(e, handleAddStudent)}
           validated={validated}
         >
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Child's Name:</Form.Label>
             <InputGroup hasValidation>
               <Form.Control
@@ -58,7 +59,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Caregiver Contact Name:</Form.Label>
             <InputGroup hasValidation>
               <Form.Control
@@ -74,7 +75,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Child's Birthdate</Form.Label>
             <InputGroup hasValidation>
               <Form.Control
@@ -89,7 +90,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Requested Start Date</Form.Label>
             <InputGroup hasValidation>
               <Form.Control
@@ -104,7 +105,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Allergies:</Form.Label>
             <Form.Control
               type="text"
@@ -113,7 +114,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               onChange={onChangeInput}
             />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Phone Number:</Form.Label>
             <Form.Control
               type="tel"
@@ -123,7 +124,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
             />
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="input-field">
             <Form.Label>Email:</Form.Label>
             <Form.Control
               type="text"
@@ -132,7 +133,8 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               onChange={onChangeInput}
             />
           </Form.Group>
-          <Form.Group>
+          <Row className="mb-3 input-field">
+          <Form.Group as={Col} xs={7} className="input-field">
             {PROGRAM_FIELDS.map((program) => (
               <ProgramField
                 value={program.value}
@@ -142,6 +144,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               />
             ))}
           </Form.Group>
+          <Form.Group as={Col}>
           {CHECKBOX_FIELDS.map((field) => (
             <CheckboxField
               onChangeInput={onChangeInput}
@@ -149,17 +152,27 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
               fieldName={field}
             />
           ))}
+          </Form.Group>
+          </Row>
 
-          <Button type="submit" variant="primary">
-            Save Changes
-          </Button>
+<UniversalButton
+            variant="contained"
+            eventHandler={handleAddStudent}
+            customStyles={{
+              margin: ".7rem",
+              backgroundColor: "var(--bright-peach)",
+              "&:hover": { backgroundColor: "var(--darkest-peach)" },
+            }}
+            buttonText="Save changes"
+          />
+          <UniversalButton
+            variant="outlined"
+            eventHandler={onClose}
+            buttonText="Cancel"
+          />
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Cancel
-        </Button>
-      </Modal.Footer>
+  
     </Modal>
   );
 };

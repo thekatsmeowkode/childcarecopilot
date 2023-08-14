@@ -6,7 +6,9 @@
   --soft-peach: #fff7f6;
   --dark-peach: #d96b4e;
   --complementary-dark-peach: #57d2f2;
-  --darkest-peach: #bd5e45
+  --cancel-peach: #f25785;
+  --darkest-peach: #bd5e45;
+  --dark-cancel-peach: #d94e77
 }
 
 /* layout */
@@ -20,6 +22,7 @@ body {
   font-family: "Montserrat";
 }
 
+/* STUDENTS PAGE AND NAVBAR */
 header {
   background: var(--soft-peach);
 }
@@ -44,7 +47,6 @@ header a {
   margin: 0 auto;
 }
 
-/* homepage */
 .home {
   display: grid;
   grid-template-columns: 1fr 5fr;
@@ -143,4 +145,11 @@ h3 {
 
 li::marker {
   color: var(--bright-peach);
+}
+
+/* MODALS */
+
+.input-field {
+  padding: 1rem;
+  padding-top: 0;
 }
