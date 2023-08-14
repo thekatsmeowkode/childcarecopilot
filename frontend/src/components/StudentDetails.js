@@ -2,75 +2,66 @@ import { useContext, useState } from "react";
 import { ClassroomContext } from "../context/ClassroomContext";
 import EditStudentModal from "./studentForms/EditStudentModal";
 import { formatAge, formatDate } from "../utils/formatDates";
-import {formatProgramName} from "../utils/formatText";
+import { formatProgramName } from "../utils/formatText";
 import { fetchData } from "../hooks/useApi";
+import { TableRow, TableCell } from "@mui/material";
+import { PROGRAM_NAMES } from "../constants";
 
-const StudentDetails = ({ student, setSelectedStudents }) => {
+const StudentDetails = ({ student }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const { dispatch } = useContext(ClassroomContext);
 
-  const handleEditClick = () => {
+  const handleEditClick = (e) => {
     //formats a date object into a string representation to pre-populate edit form
+    if (e.target.className === 'material-symbols-outlined') {
+      return
+    }
     student.birthdate = formatDate(student.birthdate);
     setSelectedStudent(student);
     setIsModalOpen(true);
   };
 
-  const handleDeleteClick = async (student) => {
-    const { classroomName } = student;
-
-    const response = await fetchData(
+  const handleDeleteClick = async (e, student) => {
+    const {classroomName} = student
+    const classroomsDeletedStudent = await fetchData(
       "/api/classes/" + classroomName + "/students/" + student._id.toString(),
       "DELETE"
     );
 
-    setSelectedStudents(response.students);
-
-    const updatedAllClassroomsResponse = await fetchData(
-      "/api/classes/",
-      "GET"
-    );
-
-    dispatch({ type: "DELETE_STUDENT", payload: updatedAllClassroomsResponse });
+    dispatch({ type: "DELETE_STUDENT", payload: classroomsDeletedStudent });
   };
 
   return (
     <>
-      <tr>
-        <td>{student.name}</td>
-        <td>
+      <TableRow hover sx={{ cursor: "pointer" }} size="small" onClick={handleEditClick}>
+        <TableCell>{student.name}</TableCell>
+        <TableCell>
           <ul>
             <li>{formatDate(student.birthdate)}</li>
             <li>{formatAge(student.birthdate)}</li>
           </ul>
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
           <ol>
-            {student.programs.map((program) => (
-              <li key={program}>{formatProgramName(program)}</li>
-            ))}
+            {PROGRAM_NAMES.map((program) =>
+              student.programs.includes(program) ? (
+                <li key={program}>{formatProgramName(program)}</li>
+              ) : null
+            )}
           </ol>
-        </td>
-        <td>{student.allergies}</td>
-        <td>{student.classroomName}</td>
-        <td>
+        </TableCell>
+        <TableCell>{student.allergies}</TableCell>
+        <TableCell>{student.phone}</TableCell>
+        <TableCell>
           <button
-            onClick={handleEditClick}
-            className="material-symbols-outlined"
-          >
-            Edit
-          </button>
-        </td>
-        <td>
-          <button
-            onClick={() => handleDeleteClick(student)}
+            onClick={(e) => handleDeleteClick(e, student)}
             className="material-symbols-outlined"
           >
             Delete
           </button>
-        </td>
-      </tr>
+        </TableCell>
+      </TableRow>
 
       {selectedStudent && (
         <EditStudentModal
@@ -78,7 +69,7 @@ const StudentDetails = ({ student, setSelectedStudents }) => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           setSelectedStudent={setSelectedStudent}
-          setSelectedStudents={setSelectedStudents}
+          // setSelectedStudents={setSelectedStudents}
         />
       )}
     </>

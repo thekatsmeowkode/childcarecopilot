@@ -1,4 +1,5 @@
 import { useState } from "react";
+import UniversalButton from "./UniversalButton";
 
 const ClassroomDetails = ({ classroom, handleButtonClick }) => {
   const [viewToggled, setViewToggled] = useState(false);
@@ -6,20 +7,22 @@ const ClassroomDetails = ({ classroom, handleButtonClick }) => {
   return (
     <div className="classroom-details">
       <h4>
-        <button
-          onClick={(e) => {
-            handleButtonClick(e);
-          }}
+        <UniversalButton
+          variant="text"
+          size="large"
+          buttonText={classroom.roomName}
+          value={classroom.roomName}
+          eventHandler={handleButtonClick}
         >
           {classroom.roomName}
-        </button>
+        </UniversalButton>
       </h4>
       {classroom.students.map((student) =>
-        viewToggled ? <p key={student.name}>{student && student.name}</p> : null
+        viewToggled ? <p key={student._id}>{student && student.name}</p> : null
       )}
       <span
         onClick={() => setViewToggled(!viewToggled)}
-        className="material-symbols-outlined"
+        className="material-symbols-outlined visibility-buttons"
       >
         {viewToggled ? "visibility_off" : "visibility"}
       </span>

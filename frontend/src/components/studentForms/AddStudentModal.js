@@ -5,8 +5,7 @@ import ProgramField from "./ProgramField";
 import { STUDENT_EMPTY_FIELDS, PROGRAM_FIELDS } from "../../constants";
 import useForm from "../../hooks/useForm";
 import { fetchData } from "../../hooks/useApi";
-import StudentForm from "./StudentForm";
-import {Form, Modal, InputGroup, FormGroup, Button} from 'react-bootstrap'
+import {Form, Modal, InputGroup, Button} from 'react-bootstrap'
 
 
 const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
@@ -28,10 +27,10 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
     //this post response returns complete json of the updated classroom {_id:3423, roomName: infants, students:[{}{}]
     const response = await fetchData("/api/classes/students", "POST", student);
 
-    setSelectedStudents(response.students);
+    // setSelectedStudents(response.students);
     setForm(STUDENT_EMPTY_FIELDS);
     console.log(`new student added`);
-    dispatch({ type: "ADD_STUDENT_TO_CLASSROOM", payload: response });
+    dispatch({ type: "UPDATE_STUDENTS", payload: response });
 
     onClose();
   };
@@ -48,7 +47,7 @@ const AddStudentModal = ({ isOpen, onClose, setSelectedStudents }) => {
           validated={validated}
         >
           <Form.Group>
-            <Form.Label>Name:</Form.Label>
+            <Form.Label column={true}>Name:</Form.Label>
             <InputGroup hasValidation>
               <Form.Control
                 type="text"

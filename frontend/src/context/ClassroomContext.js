@@ -5,6 +5,7 @@ export const ClassroomContext = createContext();
 export const classroomReducer = (state, action) => {
   switch (action.type) {
     case "SET_CLASSROOMS":
+      console.log(state)
       return { classrooms: action.payload };
     //adds new class to the classrooms array in context state
     case "CREATE_CLASSROOM":
@@ -17,33 +18,8 @@ export const classroomReducer = (state, action) => {
       };
     case "DELETE_STUDENT":
       return { classrooms: action.payload };
-    // case "UPDATE_CLASSROOM_NAME":
-    //   return {
-    //     classrooms: state.classrooms.map((classroom) =>
-    //       classroom._id === action.payload._id
-    //         ? { ...classroom, roomName: action.payload.roomName }
-    //         : classroom
-    //     ),
-    //   };
-    case "UPDATE_STUDENT":
-      const { id, classroomName, ...updatedData } = action.payload;
 
-      // Update the student details in the client-side state
-      const updatedClassrooms = state.classrooms.map((classroom) =>
-        classroom.roomName === classroomName
-          ? {
-              ...classroom,
-              students: classroom.students.map((student) =>
-                student.id === id ? { ...student, ...updatedData } : student
-              ),
-            }
-          : classroom
-      );
-      return {
-        classrooms: updatedClassrooms,
-      };
-
-    case "ADD_STUDENT_TO_CLASSROOM":
+    case "UPDATE_STUDENTS":
       // console.log({"1":action.payload})
       //action.payload = {roomName: 'infants', students: []}
       // console.log({"2":state.classrooms})

@@ -66,7 +66,8 @@ header a {
   color: #6b6a6a;
 }
 
-.classroom-details span {
+.visibility-buttons {
+  border-radius: 50%;
   position: absolute;
   top: 20px;
   right: 20px;
@@ -92,7 +93,7 @@ input {
   box-sizing: border-box;
 }
 
-form button {
+/* form button {
   background: var(--primary);
   border: 0;
   color: #fff;
@@ -100,7 +101,7 @@ form button {
   font-family: "Poppins";
   border-radius: 4px;
   cursor: pointer;
-}
+} */
 
 div.error {
   padding: 10px;

@@ -1,9 +1,33 @@
 import { formatDate } from "../utils/formatDates";
 import { Fragment, useState } from "react";
 import { formatProgramName } from "../utils/formatText";
-import { Table, Fade } from "react-bootstrap";
 import EditStudentWaitlist from "./studentForms/EditStudentWaitlist";
 import { CHECKBOX_FIELDS } from "../constants";
+import {
+  TableRow,
+  TableCell,
+  Table,
+  TableContainer,
+  TableHead,
+  TableBody,
+} from "@mui/material";
+
+const TABLE_HEADINGS = [
+  "Requested Start Date",
+  "Child's Name",
+  "Birthdate",
+  "Allergies",
+  "Parent's Name",
+  "Email",
+  "Phone",
+  "Programs",
+  "Sibling",
+  "Emailed",
+  "Toured",
+  "Registered",
+  "Enrolled",
+  "Declined",
+];
 
 const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -24,46 +48,34 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
           onClose={() => setIsEditModalOpen(false)}
         />
       )}
-      <Table hover variant="dark">
-        <thead>
-          <tr>
-            <th>Requested Start Date</th>
-            <th>Child's Name</th>
-            <th>Birthdate</th>
-            <th>Allergies</th>
-            <th>Parent's Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Programs</th>
-            <th>Sibling?</th>
-            <th>Emailed</th>
-            <th>Toured</th>
-            <th>Registered</th>
-            <th>Enrolled</th>
-            <th>Declined</th>
-          </tr>
-        </thead>
-        <tbody>
-          {waitlistStudents.map((student) => (
-            <Fragment key={student._id}>
-              <Fade in={true}>
-                <tr onClick={() => handleRowClick(student)}>
-                  <td>{formatDate(student.startDate)}</td>
-                  <td>{student.childName}</td>
-                  <td>{formatDate(student.birthdate)}</td>
-                  <td>{student.allergies}</td>
-                  <td>{student.parentName}</td>
-                  <td>{student.email}</td>
-                  <td>{student.phone}</td>
-                  <td>
+      <TableContainer>
+        <Table hover>
+          <TableHead>
+            <TableRow>
+              {TABLE_HEADINGS.map((heading) => 
+                <TableCell >{heading}</TableCell>
+              )}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {waitlistStudents.map((student) => (
+                <TableRow key={student._id} onClick={() => handleRowClick(student)}>
+                  <TableCell>{formatDate(student.startDate)}</TableCell>
+                  <TableCell>{student.childName}</TableCell>
+                  <TableCell>{formatDate(student.birthdate)}</TableCell>
+                  <TableCell>{student.allergies}</TableCell>
+                  <TableCell>{student.parentName}</TableCell>
+                  <TableCell>{student.email}</TableCell>
+                  <TableCell>{student.phone}</TableCell>
+                  <TableCell>
                     <ul>
                       {student.programs.map((program) => (
                         <li key={program}>{formatProgramName(program)}</li>
                       ))}
                     </ul>
-                  </td>
+                  </TableCell>
                   {CHECKBOX_FIELDS.map((field) => (
-                    <td key={field}>
+                    <TableCell key={field}>
                       {student[field] ? (
                         <span
                           role="img"
@@ -81,14 +93,13 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
                           ❌
                         </span>
                       )}
-                    </td>
+                    </TableCell>
                   ))}
-                </tr>
-              </Fade>
-            </Fragment>
-          ))}
-        </tbody>
-      </Table>
+                </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 };

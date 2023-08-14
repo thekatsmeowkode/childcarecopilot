@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react";
 import { useClassroomContext } from "../hooks/useClassroomContext";
+import {
+  Table,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material";
+import UniversalButton from "../components/UniversalButton";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 //components
 import ClassroomDetails from "../components/ClassroomDetails";
@@ -9,7 +19,6 @@ import { fetchData } from "../hooks/useApi";
 
 const Home = () => {
   const { classrooms, dispatch } = useClassroomContext();
-  const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedClassName, setSelectedClassName] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
@@ -25,27 +34,28 @@ const Home = () => {
 
   //displays selected class
   const handleButtonClick = async (e) => {
-    const classroomName = e.target.textContent;
-
-    const oneClassroomResponse = await fetchData(
-      "/api/classes/" + classroomName,
-      "GET"
-    );
-
+    const classroomName = e.target.textContent
     setSelectedClassName(classroomName);
-    setSelectedStudents([...oneClassroomResponse.students]);
   };
 
   return (
     <div className="home">
       <div className="classrooms">
         <div className="button add">
-          <button onClick={() => setIsAddModalOpen(true)}>add student</button>
+          <UniversalButton
+            variant="contained"
+            eventHandler={() => setIsAddModalOpen(true)}
+            icon={<PersonAddIcon />}
+            customStyles={{
+              backgroundColor: "#bd5e45",
+              "&:hover": { backgroundColor: "#f27757" },
+            }}
+            buttonText="Add student"
+          ></UniversalButton>
           {isAddModalOpen && (
             <AddStudentModal
               isOpen={isAddModalOpen}
               onClose={() => setIsAddModalOpen(false)}
-              setSelectedStudents={setSelectedStudents}
             />
           )}
         </div>
@@ -60,27 +70,30 @@ const Home = () => {
       </div>
       <div className="students-grid">
         <h3>{selectedClassName}</h3>
-        <table>
-          <tbody>
-            <tr>
-              <th>Name</th>
-              <th>Birthdate</th>
-              <th>Programs</th>
-              <th>Allergies</th>
-              <th>Classroom</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-            {selectedStudents &&
-              selectedStudents.map((student) => (
-                <StudentDetails
-                  key={student._id}
-                  setSelectedStudents={setSelectedStudents}
-                  student={student}
-                ></StudentDetails>
-              ))}
-          </tbody>
-        </table>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Birthdate</TableCell>
+                <TableCell>Programs</TableCell>
+                <TableCell>Allergies</TableCell>
+                <TableCell>Phone</TableCell>
+                <TableCell>Delete</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {selectedClassName &&
+                classrooms.map((classroom) =>
+                  classroom.roomName === selectedClassName
+                    ? classroom.students.map((student) => (
+                        <StudentDetails key={student._id} student={student} />
+                      ))
+                    : null
+                )}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </div>
   );

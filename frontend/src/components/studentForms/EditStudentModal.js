@@ -11,9 +11,8 @@ const EditStudentModal = ({
   isOpen,
   onClose,
   setSelectedStudent,
-  setSelectedStudents,
 }) => {
-  const { form, setForm, onChangeInput, handleProgramChange, handleSubmit } =
+  const { form, onChangeInput, handleProgramChange, handleSubmit } =
     useForm({
       ...student,
     });
@@ -38,10 +37,9 @@ const EditStudentModal = ({
       updatedStudent
     );
 
-    dispatch({ type: "UPDATE_STUDENT", payload: response }); // await dispatch({type:"UPDATE_STUDENT", payload:classroomWithUpdatedStudentInside})
+    dispatch({ type: "UPDATE_STUDENTS", payload: response }); 
 
     setSelectedStudent("");
-    setSelectedStudents(response.students);
     onClose();
   };
 
