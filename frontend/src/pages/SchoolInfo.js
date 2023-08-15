@@ -1,7 +1,9 @@
 import { useEffect } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, InputGroup } from "react-bootstrap";
 import useForm from "../hooks/useForm";
 import { fetchData } from "../hooks/useApi";
+import "../css/schoolInfo.css";
+import UniversalButton from "../components/UniversalButton";
 
 const SchoolInfo = () => {
   const { form, setForm, onChangeInput, handleSubmit, validated } = useForm({
@@ -15,13 +17,12 @@ const SchoolInfo = () => {
     squareFootageTwos: 0,
     squareFootageCrib: 0,
     squareFootageNoCrib: 0,
-    numberBathrooms: 0,
+    ratioBirthToTwo: 0,
+    ratioTwoToThree: 0,
     oneTo3SnackMilk: 0,
     oneTo3SnackGrains: 0,
     oneTo3SnackProtein: 0,
     oneTo3SnackVegFruit: 0,
-    ratioBirthToTwo: 0,
-    ratioTwoToThree: 0,
     kidsPerEmergencyCrib: 0,
   });
 
@@ -67,182 +68,262 @@ const SchoolInfo = () => {
       noValidate
       onSubmit={(e) => handleSubmit(e, updateSchool)}
       validated={validated}
+      className="school-info"
     >
-      <Form.Group>
-        <Form.Label>Cost of Core Hours (8:30-3:30)</Form.Label>
-        <Form.Control
-          type="number"
-          name="costCoreProgram"
-          value={form.costCoreProgram}
-          onChange={onChangeInput}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Cost of Early Morning Program (7:30-8:30)</Form.Label>
-        <Form.Control
-          type="number"
-          name="costEarlyMorning"
-          value={form.costEarlyMorning}
-          onChange={onChangeInput}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Cost of Extended Day (3:30-4:30)</Form.Label>
-        <Form.Control
-          type="number"
-          placeholder="Cost"
-          name="costExtendedDay"
-          value={form.costExtendedDay}
-          onChange={onChangeInput}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Cost of Late Day (4:30-5:30)</Form.Label>
-        <Form.Control
-          type="number"
-          placeholder="Cost"
-          name="costLateDay"
-          value={form.costLateDay}
-          onChange={onChangeInput}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Square Footage Infant Room</Form.Label>
-        <Form.Control
-          type="number"
-          name="squareFootageInfants"
-          onChange={onChangeInput}
-          value={form.squareFootageInfants}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Square Footage Crawlers Room</Form.Label>
-        <Form.Control
-          type="number"
-          name="squareFootageCrawlers"
-          onChange={onChangeInput}
-          value={form.squareFootageCrawlers}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Square Footage Toddlers Room</Form.Label>
-        <Form.Control
-          type="number"
-          name="squareFootageToddlers"
-          onChange={onChangeInput}
-          value={form.squareFootageToddlers}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Square Footage Twos Room</Form.Label>
-        <Form.Control
-          type="number"
-          name="squareFootageTwos"
-          onChange={onChangeInput}
-          value={form.squareFootageTwos}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Square footage required by child with crib</Form.Label>
-        <Form.Control
-          type="number"
-          name="squareFootageCrib"
-          onChange={onChangeInput}
-          value={form.squareFootageCrib}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>
-          Square footage required by child <strong>without</strong> crib
-        </Form.Label>
-        <Form.Control
-          type="number"
-          name="squareFootageNoCrib"
-          onChange={onChangeInput}
-          value={form.squareFootageNoCrib}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Number of bathrooms</Form.Label>
-        <Form.Control
-          type="number"
-          name="numberBathrooms"
-          onChange={onChangeInput}
-          value={form.numberBathrooms}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>One To Three Year Old Milk Requirements @ Snack</Form.Label>
-        <Form.Control
-          type="number"
-          name="oneTo3SnackMilk"
-          onChange={onChangeInput}
-          value={form.oneTo3SnackMilk}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>
-          One To Three Year Old Grain Requirements @ Snack
-        </Form.Label>
-        <Form.Control
-          type="number"
-          name="oneTo3SnackGrains"
-          onChange={onChangeInput}
-          value={form.oneTo3SnackGrains}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>
-          One To Three Year Old Protein Requirements @ Snack
-        </Form.Label>
-        <Form.Control
-          type="number"
-          name="oneTo3SnackProtein"
-          onChange={onChangeInput}
-          value={form.oneTo3SnackProtein}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>
-          One To Three Year Old Vegetable OR Fruit Requirements @ Snack
-        </Form.Label>
-        <Form.Control
-          type="number"
-          name="oneTo3SnackVegFruit"
-          onChange={onChangeInput}
-          value={form.oneTo3SnackVegFruit}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Ratio 0-2 Years</Form.Label>
-        <Form.Control
-          type="number"
-          name="ratioBirthToTwo"
-          onChange={onChangeInput}
-          value={form.ratioBirthToTwo}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Ratio 2+ Years</Form.Label>
-        <Form.Control
-          type="number"
-          name="ratioTwoToThree"
-          onChange={onChangeInput}
-          value={form.ratioTwoToThree}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Children Per Emergency Crib</Form.Label>
-        <Form.Control
-          type="number"
-          name="kidsPerEmergencyCrib"
-          onChange={onChangeInput}
-          value={form.kidsPerEmergencyCrib}
-        />
-      </Form.Group>
-      <Button type="submit" variant="primary">
-        Save Changes
-      </Button>
+      <section>
+        <h3>Revenue</h3>
+        <Form.Group>
+          <Form.Label>Cost of Core Hours (8:30-3:30)</Form.Label>
+          <InputGroup>
+          <InputGroup.Text>
+            $
+          </InputGroup.Text>
+          <Form.Control
+            type="number"
+            name="costCoreProgram"
+            value={form.costCoreProgram}
+            onChange={onChangeInput}
+          />
+          </InputGroup>
+          <Form.Label>Cost of Early Morning Program (7:30-8:30)</Form.Label>
+          <InputGroup>
+          <InputGroup.Text>
+            $
+          </InputGroup.Text>
+          <Form.Control
+            type="number"
+            name="costEarlyMorning"
+            value={form.costEarlyMorning}
+            onChange={onChangeInput}
+          />
+          </InputGroup>
+          <Form.Label>Cost of Extended Day (3:30-4:30)</Form.Label>
+          <InputGroup>
+          <InputGroup.Text>
+            $
+          </InputGroup.Text>
+          <Form.Control
+            type="number"
+            placeholder="Cost"
+            name="costExtendedDay"
+            value={form.costExtendedDay}
+            onChange={onChangeInput}
+          />
+          </InputGroup>
+          <Form.Label>Cost of Late Day (4:30-5:30)</Form.Label>
+          <InputGroup>
+          <InputGroup.Text>
+            $
+          </InputGroup.Text>
+          <Form.Control
+            type="number"
+            placeholder="Cost"
+            name="costLateDay"
+            value={form.costLateDay}
+            onChange={onChangeInput}
+          />
+          </InputGroup>
+        </Form.Group>
+      </section>
+      <section>
+        <h3> Square Footage </h3>
+        <Form.Group>
+          <Form.Label>Infant Room</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="squareFootageInfants"
+            onChange={onChangeInput}
+            value={form.squareFootageInfants}
+          />
+          <InputGroup.Text>
+            square feet
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Crawlers Room</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="squareFootageCrawlers"
+            onChange={onChangeInput}
+            value={form.squareFootageCrawlers}
+          />
+          <InputGroup.Text>
+            square feet
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Toddlers Room</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="squareFootageToddlers"
+            onChange={onChangeInput}
+            value={form.squareFootageToddlers}
+          />
+          <InputGroup.Text>
+            square feet
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Twos</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="squareFootageTwos"
+            onChange={onChangeInput}
+            value={form.squareFootageTwos}
+          />
+          <InputGroup.Text>
+            square feet
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Child with crib</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="squareFootageCrib"
+            onChange={onChangeInput}
+            value={form.squareFootageCrib}
+          />
+          <InputGroup.Text>
+            square feet
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Child <strong>without</strong> crib
+          </Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="squareFootageNoCrib"
+            onChange={onChangeInput}
+            value={form.squareFootageNoCrib}
+          />
+           <InputGroup.Text>
+            square feet
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+      </section>
+      <section>
+        <h3>Snack Requirements (1-3 years)</h3>
+        <Form.Group>
+          <Form.Label>Milk</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="oneTo3SnackMilk"
+            onChange={onChangeInput}
+            value={form.oneTo3SnackMilk}
+          />
+           <InputGroup.Text id="basic-addon1">
+            ounces
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Grains</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="oneTo3SnackGrains"
+            onChange={onChangeInput}
+            value={form.oneTo3SnackGrains}
+          />
+           <InputGroup.Text id="basic-addon1">
+            ounces
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Protein</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="oneTo3SnackProtein"
+            onChange={onChangeInput}
+            value={form.oneTo3SnackProtein}
+          />
+           <InputGroup.Text>
+            ounces
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Vegetable OR Fruit</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="oneTo3SnackVegFruit"
+            onChange={onChangeInput}
+            value={form.oneTo3SnackVegFruit}
+          />
+           <InputGroup.Text >
+            ounces
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+      </section>
+      <section>
+        <h3>Ratio</h3>
+        <Form.Group>
+          <Form.Label>Ratio 0-2 Years</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="ratioBirthToTwo"
+            onChange={onChangeInput}
+            value={form.ratioBirthToTwo}
+          />
+           <InputGroup.Text id="basic-addon1">
+            Children : 1 Adult
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Ratio 2+ Years</Form.Label>
+          <InputGroup>
+          <Form.Control
+            type="number"
+            name="ratioTwoToThree"
+            onChange={onChangeInput}
+            value={form.ratioTwoToThree}
+          />
+
+          <InputGroup.Text id="basic-addon1">
+            Children : 1 Adult
+          </InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Children Per Emergency Crib</Form.Label>
+          <Form.Control
+            type="number"
+            name="kidsPerEmergencyCrib"
+            onChange={onChangeInput}
+            value={form.kidsPerEmergencyCrib}
+          />
+        </Form.Group>
+      </section>
+      <UniversalButton
+        variant="contained"
+        eventHandler={updateSchool}
+        customStyles={{
+          margin: ".7rem",
+          backgroundColor: "var(--bright-peach)",
+          "&:hover": { backgroundColor: "var(--darkest-peach)" },
+        }}
+        buttonText="Save changes"
+      />
     </Form>
   );
 };

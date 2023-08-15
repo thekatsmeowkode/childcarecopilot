@@ -134,28 +134,28 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
             />
           </Form.Group>
           <Row className="mb-3 input-field">
-          <Form.Group as={Col} xs={7} className="input-field">
-            {PROGRAM_FIELDS.map((program) => (
-              <ProgramField
-                value={program.value}
-                label={program.label}
-                handleProgramChange={handleProgramChange}
-                form={form}
-              />
-            ))}
-          </Form.Group>
-          <Form.Group as={Col}>
-          {CHECKBOX_FIELDS.map((field) => (
-            <CheckboxField
-              onChangeInput={onChangeInput}
-              form={form}
-              fieldName={field}
-            />
-          ))}
-          </Form.Group>
+            <Form.Group as={Col} xs={7} className="input-field">
+              {PROGRAM_FIELDS.map((program) => (
+                <ProgramField
+                  value={program.value}
+                  label={program.label}
+                  handleProgramChange={handleProgramChange}
+                  form={form}
+                />
+              ))}
+            </Form.Group>
+            <Form.Group as={Col}>
+              {CHECKBOX_FIELDS.map((field) => (
+                <CheckboxField
+                  onChangeInput={onChangeInput}
+                  form={form}
+                  fieldName={field}
+                />
+              ))}
+            </Form.Group>
           </Row>
 
-<UniversalButton
+          <UniversalButton
             variant="contained"
             eventHandler={handleAddStudent}
             customStyles={{
@@ -172,7 +172,6 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
           />
         </Form>
       </Modal.Body>
-  
     </Modal>
   );
 };
