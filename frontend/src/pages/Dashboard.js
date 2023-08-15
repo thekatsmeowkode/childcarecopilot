@@ -3,7 +3,6 @@ import BoxPlot from "../components/dashboardSquares/BoxPlot";
 import DoughnutChart from "../components/dashboardSquares/DoughnutChart";
 import CapacitySquare from "../components/dashboardSquares/CapacitySquare";
 import Histogram from "../components/dashboardSquares/Histogram";
-import FoodSquare from "../components/dashboardSquares/FoodSquare";
 import LoadingSpinner from "../components/dashboardSquares/LoadingSpinner";
 import { formatDate } from "../utils/formatDates";
 import "../css/dashboard.css";
@@ -21,10 +20,7 @@ const Dashboard = React.memo(() => {
   const [histogramData, setHistogramData] = useState(null);
   const [foodData, setFoodData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
-
-  const renderComponentOrSpinner = (data, Component) => {
-    return data ? Component : <LoadingSpinner />;
-  };
+  const [isLoading, setIsLoading] = useState(true);
 
   const getClassRevenue = async () => {
     return await fetchData("api/school/class-revenue", "GET");
@@ -104,78 +100,89 @@ const Dashboard = React.memo(() => {
       }
     };
     fetchData();
+    setIsLoading(false)
   }, []);
 
   return (
     <div className="dashboard-container">
-      <div className="first-row">
-        <div className="histogram-container">
-          {histogramData &&
-            renderComponentOrSpinner(
-              histogramData,
-              <Histogram
-                width={600}
-                height={400}
-                data={histogramData}
-                className="histogram"
-              />
-            )}
-          <div className="histogram-input">
-            <label>Update histogram: </label>
-            {histogramData ? (
-              <input
-                type="date"
-                min={formatDate(new Date())}
-                value={selectedDate}
-                onChange={onDateChange}
-              />
-            ) : null}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <div className="first-row">
+            <div className="histogram-container">
+              <div className="histogram-input">
+                <label>Update histogram: </label>
+                {histogramData ? (
+                  <input
+                    type="date"
+                    min={formatDate(new Date())}
+                    value={selectedDate}
+                    onChange={onDateChange}
+                  />
+                ) : null}
+              </div>
+              {histogramData &&
+                (histogramData,
+                (
+                  <Histogram
+                    width={600}
+                    height={400}
+                    data={histogramData}
+                    className="histogram"
+                  />
+                ))}
+            </div>
+            <div className="staff-needs-table">
+              <h3>Staffing Requirements</h3>
+              {staffLateDay &&
+                staffExtendedDay &&
+                staffEarlyMorning &&
+                staffCoreHours && (
+                  <TeacherRequiredSquare
+                    className="teacher-required-square"
+                    staffLateData={staffLateDay}
+                    staffEarlyData={staffEarlyMorning}
+                    staffExtendedData={staffExtendedDay}
+                    staffCoreData={staffCoreHours}
+                    revenueData={revenueDetails}
+                    roomCapacityData={roomCapacities.numStudentsPerClass}
+                  />
+                )}
+            </div>
           </div>
-        </div>
-        {staffLateDay &&
-          staffExtendedDay &&
-          staffEarlyMorning &&
-          staffCoreHours && (
-            <TeacherRequiredSquare
-              staffLateData={staffLateDay}
-              staffEarlyData={staffEarlyMorning}
-              staffExtendedData={staffExtendedDay}
-              staffCoreData={staffCoreHours}
-              revenueData={revenueDetails}
-              roomCapacityData={roomCapacities.numStudentsPerClass}
-            />
-          )}
-      </div>
-      <div className="second-row">
-        <div className='capacity-container'>
-          <h3>Current Enrollment</h3>
-        {roomCapacities && (
-          <CapacitySquare
-            className="capacity-square"
-            roomCapacities={roomCapacities.roomCapacities}
-            currentStudentsByClass={roomCapacities.numStudentsPerClass}
-          />
-        )}
-        </div>
-        <div className="doughnut-box">
-          <h3>Food requirements</h3>
-          <div className="doughnut-chart">
-          {foodData && (
-            <DoughnutChart className="doughnut" foodData={foodData} />
-          )}
+          <div className="second-row">
+            <div className="capacity-container">
+              <h3>Current Enrollment</h3>
+              {roomCapacities && (
+                <CapacitySquare
+                  className="capacity-square"
+                  roomCapacities={roomCapacities.roomCapacities}
+                  currentStudentsByClass={roomCapacities.numStudentsPerClass}
+                />
+              )}
+            </div>
+            <div className="doughnut-box">
+              <h3>Food requirements</h3>
+              <div className="doughnut-chart">
+                {foodData && (
+                  <DoughnutChart className="doughnut" foodData={foodData} />
+                )}
+              </div>
+            </div>
+            {boxPlotData &&
+              (boxPlotData,
+              (
+                <BoxPlot
+                  className="boxplot"
+                  data={boxPlotData}
+                  width={500}
+                  height={400}
+                ></BoxPlot>
+              ))}
           </div>
-        </div>
-        {boxPlotData &&
-          (boxPlotData,
-          (
-            <BoxPlot
-              className="boxplot"
-              data={boxPlotData}
-              width={500}
-              height={400}
-            ></BoxPlot>
-          ))}
-      </div>
+        </>
+      )}
     </div>
   );
 });

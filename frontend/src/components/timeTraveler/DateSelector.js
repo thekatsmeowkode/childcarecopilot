@@ -1,7 +1,9 @@
-import { Form, InputGroup, Button } from "react-bootstrap";
+import { Form, InputGroup } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { formatDate } from "../../utils/formatDates";
 import { fetchData } from "../../hooks/useApi";
+import UniversalButton from "../UniversalButton";
+import { formatDateSlashes } from "../../utils/formatDates";
 
 const TODAYS_DATE = new Date();
 
@@ -24,12 +26,13 @@ const DateSelector = ({ setSelectedDate, setAgeTargetStudents }) => {
 
   return (
     <Form
+      className="input-fields"
       noValidate
       onSubmit={(e) => handleSubmit(e, getChildrenOverDate)}
       validated={validated}
     >
       <Form.Group>
-        <Form.Label>Select a future date</Form.Label>
+        <Form.Label> Select a future date</Form.Label>
         <InputGroup hasValidation>
           <Form.Control
             type="date"
@@ -45,7 +48,7 @@ const DateSelector = ({ setSelectedDate, setAgeTargetStudents }) => {
         </InputGroup>
       </Form.Group>
       <Form.Group>
-        <Form.Label>Select a target age in months </Form.Label>
+        <Form.Label> Select a target age in months </Form.Label>
         <InputGroup hasValidation>
           <Form.Control
             type="number"
@@ -61,7 +64,22 @@ const DateSelector = ({ setSelectedDate, setAgeTargetStudents }) => {
           </Form.Control.Feedback>
         </InputGroup>
       </Form.Group>
-      <Button type="submit">See possibilities</Button>
+      <UniversalButton
+        variant="contained"
+        eventHandler={getChildrenOverDate}
+        customStyles={{
+          margin: ".7rem",
+          backgroundColor: "var(--bright-peach)",
+          "&:hover": { backgroundColor: "var(--darkest-peach)" },
+        }}
+        buttonText={
+          form.inputMonthsOld > 0
+            ? `Click to see children ${
+                form.inputMonthsOld
+              } months old by ${formatDateSlashes(form.selectedDate)}`
+            : "Submit"
+        }
+      />
     </Form>
   );
 };

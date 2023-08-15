@@ -20,6 +20,7 @@
 
 .first-row {
   display: flex;
+  justify-content: space-evenly;
 }
 
 .second-row {
@@ -27,6 +28,7 @@
   grid-template-columns: 1fr 1fr 1fr;
   margin-top:1rem;
   gap:2rem;
+  justify-content: space-evenly;
 }
 
 .histogram-container {
@@ -58,4 +60,13 @@
     margin-top:1rem;
     flex-direction: column;
     justify-content: flex-start;
+}
+
+.staff-needs-table {
+    display:flex;
+    flex-direction:column
+}
+
+.teacher-required-square {
+    border: 1px dotted gray
 }
