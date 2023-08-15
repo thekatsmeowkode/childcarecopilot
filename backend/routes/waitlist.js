@@ -7,7 +7,8 @@ const {
   getOneStudentId,
   getNumWLStudentsByCategory,
   getStudentsOlderThanTargetDate,
-  getHistogramData
+  getHistogramData,
+  deleteStudent
 } = require("../controllers/waitlistController");
 
 const router = express.Router();
@@ -19,6 +20,8 @@ router.post("/student", addStudentWL);
 router.get("/", getWaitlistStudents);
 
 router.patch("/:studentId", editStudent);
+
+router.delete("/:studentId", deleteStudent)
 
 router.get("/:studentName", getOneStudentId);
 

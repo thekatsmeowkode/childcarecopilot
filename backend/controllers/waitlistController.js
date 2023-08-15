@@ -102,6 +102,33 @@ const editStudent = async (req, res) => {
   }
 };
 
+const deleteStudent = async (req, res) => {
+  const { studentId } = req.params;
+
+  try {
+    const waitlist = await Waitlist.findById(CURRENT_WAITLIST_ID);
+
+    if (!waitlist) {
+      return res.status(404).json({ error: 'Waitlist not found' });
+    }
+
+    const studentIndex = waitlist.students.findIndex(
+      (student) => student._id.toString() === studentId
+    );
+
+    if (studentIndex === -1) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    waitlist.students.splice(studentIndex, 1);
+    await waitlist.save();
+
+    return res.status(200).json(waitlist);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const getOneStudentId = async (req, res) => {
   const { studentName } = req.params;
 
@@ -251,4 +278,5 @@ module.exports = {
   getNumWLStudentsByCategory,
   getStudentsOlderThanTargetDate,
   getHistogramData,
+  deleteStudent
 };

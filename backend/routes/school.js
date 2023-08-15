@@ -8,7 +8,8 @@ const {
   getStaffRequiredCore,
   getStaffPerProgram,
   getBoxPlotData,
-  getSchoolCapacity
+  getSchoolCapacity,
+  getFoodRequirements
 } = require("../controllers/schoolController");
 
 const router = express.Router();
@@ -30,5 +31,7 @@ router.get("/staff-required/:program", getStaffPerProgram)
 router.get('/box-plot-data', getBoxPlotData)
 
 router.get('/school-capacity', getSchoolCapacity)
+
+router.get('/get-food-requirements', getFoodRequirements)
 
 module.exports = router;

@@ -2,6 +2,7 @@ const School = require("../models/SchoolModel");
 const Classroom = require("../models/ClassModel");
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
+const SCHOOL_ID = "64c84bb803361397826fd4fa";
 //helper functions----------------------------------------------------
 
 const divideAges = async (program) => {
@@ -141,7 +142,13 @@ const getNumStudentsByClass = async () => {
   try {
     const classrooms = await Classroom.find();
 
-    const countPerRoom = { infants: 0, crawlers: 0, toddlers: 0, twos: 0, total:0 };
+    const countPerRoom = {
+      infants: 0,
+      crawlers: 0,
+      toddlers: 0,
+      twos: 0,
+      total: 0,
+    };
 
     classrooms.forEach((classroom) => {
       const roomName = classroom.roomName;
@@ -150,7 +157,7 @@ const getNumStudentsByClass = async () => {
       }, 0);
     });
 
-    countPerRoom.total = await getNumStudents()
+    countPerRoom.total = await getNumStudents();
 
     return countPerRoom;
   } catch (error) {
@@ -183,14 +190,9 @@ const getSchool = async (req, res) => {
 //PATCH the school
 const updateSchool = async (req, res) => {
   try {
-    await School.findByIdAndUpdate("64c84bb803361397826fd4fa", req.body),
-      function (err, docs) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("Updated User: ", docs);
-        }
-      };
+    const school = await School.findByIdAndUpdate(SCHOOL_ID, req.body);
+    console.log(school);
+    res.status(200).json({ school });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -226,18 +228,18 @@ const getClassRevenue = async (req, res) => {
     const revenue = {
       title: "Total Revenue",
       earlyMorning: {
-        message: "Early Morning Program:",
+        message: "Early Morning:",
         value: schoolData.costEarlyMorning * counts.earlyMorning,
       },
       extendedDay: {
-        message: "Extended Day Program:",
+        message: "Extended Day:",
         value: schoolData.costExtendedDay * counts.extendedDay,
       },
       lateDay: {
-        message: "Late Day Program:",
+        message: "Late Day:",
         value: schoolData.costLateDay * counts.lateDay,
       },
-      schoolTotal: { message: "School Monthly Revenue:", value: 0 },
+      schoolTotal: { message: "School Monthly:", value: 0 },
     };
     //this has to happen after the revenue object is created
     revenue.schoolTotal.value =
@@ -286,29 +288,29 @@ const getStaffRequiredCore = async (req, res) => {
     const studentCount = await getNumStudentsByClass();
 
     const staffCoreHours = {
-      title: "Staff Required Core Hours",
+      title: "Core Hours",
       infants: {
-        message: "Infant Room Teachers",
+        message: "Infants",
         numTeachers: getStaffRequired("infants", schoolData, dividedAges),
         numStudents: studentCount.infants,
       },
       crawlers: {
-        message: "Crawlers Room Teachers",
+        message: "Crawlers",
         numTeachers: getStaffRequired("crawlers", schoolData, dividedAges),
         numStudents: studentCount.crawlers,
       },
       toddlers: {
-        message: "Toddler Room Teachers",
+        message: "Toddlers",
         numTeachers: getStaffRequired("toddlers", schoolData, dividedAges),
         numStudents: studentCount.toddlers,
       },
       twos: {
-        message: "Twos Room Teachers",
+        message: "Twos",
         numTeachers: getStaffRequired("twos", schoolData, dividedAges),
         numStudents: studentCount.twos,
       },
 
-      schoolTotal: { message: "Core Hours Staff Required ", numTeachers: 0 },
+      schoolTotal: { message: "Total", numTeachers: 0 },
     };
     //this has to happen after the revenue object is created
     staffCoreHours.schoolTotal.numTeachers =
@@ -359,29 +361,29 @@ const getStaffPerProgram = async (req, res) => {
 
     const staffPerProgram = {
       dataLabel: program,
-      title: "Staff Required " + textOutput,
+      title: textOutput,
       infants: {
-        message: "Infant Room Teachers",
+        message: "Infants",
         numTeachers: getStaffRequired("infants", schoolData, dividedAges),
         numStudents: studentsPerProgram.infants[program],
       },
       crawlers: {
-        message: "Crawlers Room Teachers",
+        message: "Crawlers",
         numTeachers: getStaffRequired("crawlers", schoolData, dividedAges),
         numStudents: studentsPerProgram.crawlers[program],
       },
       toddlers: {
-        message: "Toddler Room Teachers",
+        message: "Toddlers",
         numTeachers: getStaffRequired("toddlers", schoolData, dividedAges),
         numStudents: studentsPerProgram.toddlers[program],
       },
       twos: {
-        message: "Twos Room Teachers",
+        message: "Twos",
         numTeachers: getStaffRequired("twos", schoolData, dividedAges),
         numStudents: studentsPerProgram.twos[program],
       },
 
-      schoolTotal: { message: textOutput + " Staff Required", numTeachers: 0 },
+      schoolTotal: { message: "Total", numTeachers: 0 },
     };
     //this has to happen after the revenue object is created
     staffPerProgram.schoolTotal.numTeachers =
@@ -474,6 +476,69 @@ const getSchoolCapacity = async (req, res) => {
   }
 };
 
+const getFoodRequirements = async (req, res) => {
+  try {
+    let studentCount = 0;
+    const classrooms = await Classroom.find();
+    const schoolData = await School.findOne();
+
+    const {
+      oneTo3SnackGrains,
+      oneTo3SnackProtein,
+      oneTo3SnackMilk,
+      oneTo3SnackVegFruit,
+    } = schoolData;
+    //values multiplied by 2 because 2 snacks daily
+    let foodRequired = {
+      title: "Food Required @ Snack",
+      grains: {
+        label: "Grains",
+        measurement: "oz.",
+        value: oneTo3SnackGrains * studentCount * 2,
+      },
+      milk: {
+        label: "Milk",
+        measurement: "oz.",
+        value: oneTo3SnackMilk * studentCount * 2,
+      },
+      protein: {
+        label: "Protein",
+        measurement: "oz.",
+        value: oneTo3SnackProtein * studentCount * 2,
+      },
+      vegFruit: {
+        label: "Veg/Fruit",
+        measurement: "oz.",
+        value: 0,
+      },
+    };
+
+    const today = new Date();
+
+    classrooms.forEach((classroom) => {
+      classroom.students.forEach((student) => {
+        const differenceInDays = Math.floor(
+          (today - student.birthdate) / MS_PER_DAY
+        );
+        //1095 is the number of days in 2 years
+        //this checks if student is between 1 and 3 years old
+        if (differenceInDays < 1095 && differenceInDays > 365) {
+          studentCount += 1;
+        }
+      });
+    });
+
+    foodRequired.vegFruit.value = oneTo3SnackVegFruit * studentCount * 2;
+    foodRequired.protein.value = oneTo3SnackProtein * studentCount * 2;
+    foodRequired.grains.value = oneTo3SnackGrains * studentCount * 2;
+    foodRequired.milk.value = oneTo3SnackMilk * studentCount * 2;
+
+    res.status(200).json(foodRequired);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   addSchool,
   getSchool,
@@ -484,4 +549,5 @@ module.exports = {
   getStaffPerProgram,
   getBoxPlotData,
   getSchoolCapacity,
+  getFoodRequirements,
 };

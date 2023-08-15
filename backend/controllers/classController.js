@@ -10,10 +10,11 @@ const checkIdValidity = (id) => {
 
 const findIndex = (classroom, studentId) => {
   const studentIndex = classroom.students.findIndex(
-    (student) => student.id && student.id.toString() === studentId.toString()
+    (student) => student._id.toString() === studentId.toString()
   );
+
   if (studentIndex === -1) {
-    return res.status(404).json({ error: "Student not found" });
+    throw Error("Student Index not found");
   } else {
     return studentIndex;
   }
@@ -33,16 +34,14 @@ const getClassrooms = async (req, res) => {
 //GET class by id
 const getClassroom = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { targetClass } = req.params;
 
-    checkIdValidity(id);
-
-    const classroom = await Classroom.findById(id);
+    const classroom = await Classroom.findOne({roomName: targetClass});
 
     if (!classroom) {
       return res
         .status(404)
-        .json({ error: "No classroom found for requested id" });
+        .json({ error: "No classroom found for requested room name" });
     }
 
     res.status(200).json(classroom);
@@ -87,11 +86,9 @@ const deleteClassroom = async (req, res) => {
       (classroom) => classroom.roomName === roomName
     );
 
-    const id = targetClass._id;
-
-    checkIdValidity(id);
-
-    const classroom = await Classroom.findOneAndDelete({ _id: id });
+    const classroom = await Classroom.findOneAndDelete({
+      _id: targetClass._id,
+    });
 
     if (!classroom) {
       return res.status(400).json({ error: "Classroom id does not exist" });
@@ -130,10 +127,9 @@ const updateClassroom = async (req, res) => {
 ///////////////////STUDENT Routes///////////////////////////////
 //UPDATE student from class
 const updateStudent = async (req, res) => {
-  const { classId, studentId } = req.params;
+  const { targetClass, studentId } = req.params;
 
   const {
-    id,
     name,
     birthdate,
     allergies,
@@ -142,7 +138,6 @@ const updateStudent = async (req, res) => {
     classroomName,
     incomingDataClassroomMemory,
   } = req.body;
-  checkIdValidity(classId);
 
   try {
     const oldClassroom = await Classroom.findOne({
@@ -155,14 +150,13 @@ const updateStudent = async (req, res) => {
     await oldClassroom.save();
 
     //add new student
-    const classroom = await Classroom.findOne({ _id: classId });
+    const classroom = await Classroom.findOne({ roomName: targetClass });
 
     if (!classroom) {
       return res.status(404).json({ error: "Classroom not found" });
     }
 
     const newStudent = {
-      id: new ObjectId(),
       name,
       birthdate: new Date(birthdate),
       phone,
@@ -183,18 +177,17 @@ const updateStudent = async (req, res) => {
 
 //POST student to class
 const addStudent = async (req, res) => {
-  const { classId } = req.params;
+  // const { targetClass } = req.params;
   const { name, birthdate, phone, allergies, programs, classroomName } =
     req.body;
   try {
-    const classroom = await Classroom.findOne({ _id: classId });
+    const classroom = await Classroom.findOne({ roomName: classroomName });
 
     if (!classroom) {
       return res.status(404).json({ error: "Classroom not found" });
     }
 
     const newStudent = {
-      id: new ObjectId(),
       name,
       birthdate: new Date(birthdate),
       phone,
@@ -213,28 +206,23 @@ const addStudent = async (req, res) => {
 
 //DELETE student from class
 const deleteStudent = async (req, res) => {
-  const { classId, classroomName, studentId} = req.params;
+  const { classroomName, studentId } = req.params;
   try {
-    // const classroom = await Classroom.findOne({ _id: classId });
     const classroom = await Classroom.findOne({ roomName: classroomName });
 
     if (!classroom) {
       return res.status(404).json({ error: "Class not found" });
     }
 
-    const studentIndex = classroom.students.findIndex(
-      (student) => student._id.toString() === studentId.toString()
-    );
-
-    if (studentIndex === -1) {
-      throw Error("Student Index not found");
-    }
+    const studentIndex = findIndex(classroom, studentId);
 
     classroom.students.splice(studentIndex, 1);
 
     await classroom.save();
 
-    return res.status(200).json( classroom );
+    const updatedClassrooms = await Classroom.find()
+
+    return res.status(200).json(updatedClassrooms);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
@@ -243,9 +231,9 @@ const deleteStudent = async (req, res) => {
 
 //GET student from class
 const getStudent = async (req, res) => {
-  const { classId, studentId } = req.params;
+  const { targetClass, studentId } = req.params;
   try {
-    const classroom = await Classroom.findOne({ _id: classId });
+    const classroom = await Classroom.findOne({ roomName: targetClass });
 
     if (!classroom) {
       res.status(400).json({ error: "Classroom does not exist" });

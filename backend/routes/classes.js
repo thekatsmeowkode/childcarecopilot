@@ -19,7 +19,7 @@ const router = express.Router();
 router.get("/", getClassrooms);
 
 // GET a single class
-router.get("/:id", getClassroom);
+router.get("/:targetClass", getClassroom);
 
 // POST a class
 router.post("/", createClassroom);
@@ -31,18 +31,17 @@ router.delete("/admin/:roomName", deleteClassroom);
 router.patch("/:id", updateClassroom);
 
 //UPDATE a student in a class
-router.patch('/:classId/students/:studentId', updateStudent)
+router.patch('/:targetClass/students/:studentId', updateStudent)
 
 //POST a student to a class
-router.post('/:classId/students', addStudent)
+router.post('/students', addStudent)
 
 //DELETE a student in a class
 // router.delete('/:classId/students/:studentId', deleteStudent)
 router.delete('/:classroomName/students/:studentId', deleteStudent)
 
-
 //GET one student
-router.get('/:classId/students/:studentId', getStudent)
+router.get('/:targetClass/students/:studentId', getStudent)
 
 //Get upcoming birthdays
 router.get('/navbar/birthdays', getUpcomingBirthdays)

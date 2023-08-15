@@ -33,9 +33,6 @@ const schoolSchema = new Schema(
         squareFootageNoCrib: {
             type:Number
         },
-        numberBathrooms: {
-            type:Number
-        },
         oneTo3SnackVegFruit: {
             type:Number
         },
