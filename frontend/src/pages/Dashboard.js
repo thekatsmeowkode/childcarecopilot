@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import BoxPlot from "../components/dashboardSquares/BoxPlot";
-import RevenueSquare from "../components/dashboardSquares/RevenueSquare";
-import CoreHoursSquare from "../components/dashboardSquares/CoreHoursSquare";
+import DoughnutChart from "../components/dashboardSquares/DoughnutChart";
 import CapacitySquare from "../components/dashboardSquares/CapacitySquare";
-import ProgramSquare from "../components/dashboardSquares/ProgramSquare";
 import Histogram from "../components/dashboardSquares/Histogram";
-import FoodSquare from '../components/dashboardSquares/FoodSquare'
+import FoodSquare from "../components/dashboardSquares/FoodSquare";
 import LoadingSpinner from "../components/dashboardSquares/LoadingSpinner";
 import { formatDate } from "../utils/formatDates";
 import "../css/dashboard.css";
 import { fetchData } from "../hooks/useApi";
+import TeacherRequiredSquare from "../components/dashboardSquares/TeacherRequiredSquare";
 
 const Dashboard = React.memo(() => {
   const [revenueDetails, setRevenueDetails] = useState(null);
@@ -20,7 +19,7 @@ const Dashboard = React.memo(() => {
   const [boxPlotData, setBoxPlotData] = useState(null);
   const [roomCapacities, setRoomCapacities] = useState(null);
   const [histogramData, setHistogramData] = useState(null);
-  const [foodData, setFoodData] = useState(null) 
+  const [foodData, setFoodData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
   const renderComponentOrSpinner = (data, Component) => {
@@ -64,11 +63,8 @@ const Dashboard = React.memo(() => {
   };
 
   const getFoodData = async () => {
-    return await fetchData(
-      `/api/school/get-food-requirements`,
-      "GET"
-    );
-  }
+    return await fetchData(`/api/school/get-food-requirements`, "GET");
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +78,7 @@ const Dashboard = React.memo(() => {
           boxPlotDatas,
           roomCapacityData,
           histogramData,
-          foodData
+          foodData,
         ] = await Promise.all([
           getClassRevenue(),
           getStaffCoreHours(),
@@ -92,7 +88,7 @@ const Dashboard = React.memo(() => {
           getBoxPlotData(),
           getRoomCapacities(),
           getHistogramData(),
-          getFoodData()
+          getFoodData(),
         ]);
         setRevenueDetails(revenueData);
         setStaffCoreHours(staffCoreData);
@@ -102,7 +98,7 @@ const Dashboard = React.memo(() => {
         setBoxPlotData(boxPlotDatas);
         setRoomCapacities(roomCapacityData);
         setHistogramData(histogramData);
-        setFoodData(foodData)
+        setFoodData(foodData);
       } catch (error) {
         console.error("Error fetching dashboard data", error);
       }
@@ -111,73 +107,76 @@ const Dashboard = React.memo(() => {
   }, []);
 
   return (
-    <>
-      <div className="dashboard-container">
-      <div className="dashboard-tables">
-        {revenueDetails &&
-          renderComponentOrSpinner(
-            revenueDetails,
-            <RevenueSquare revenueData={revenueDetails} />
-          )}
-        {roomCapacities &&
-          renderComponentOrSpinner(
-            roomCapacities,
-            <CapacitySquare
-              roomCapacities={roomCapacities.roomCapacities}
-              currentStudentsByClass={roomCapacities.numStudentsPerClass}
+    <div className="dashboard-container">
+      <div className="first-row">
+        <div className="histogram-container">
+          {histogramData &&
+            renderComponentOrSpinner(
+              histogramData,
+              <Histogram
+                width={600}
+                height={400}
+                data={histogramData}
+                className="histogram"
+              />
+            )}
+          <div className="histogram-input">
+            <label>Update histogram: </label>
+            {histogramData ? (
+              <input
+                type="date"
+                min={formatDate(new Date())}
+                value={selectedDate}
+                onChange={onDateChange}
+              />
+            ) : null}
+          </div>
+        </div>
+        {staffLateDay &&
+          staffExtendedDay &&
+          staffEarlyMorning &&
+          staffCoreHours && (
+            <TeacherRequiredSquare
+              staffLateData={staffLateDay}
+              staffEarlyData={staffEarlyMorning}
+              staffExtendedData={staffExtendedDay}
+              staffCoreData={staffCoreHours}
+              revenueData={revenueDetails}
+              roomCapacityData={roomCapacities.numStudentsPerClass}
             />
           )}
-          {foodData&& <FoodSquare foodData={foodData}/>}
+      </div>
+      <div className="second-row">
+        <div className='capacity-container'>
+          <h3>Current Enrollment</h3>
+        {roomCapacities && (
+          <CapacitySquare
+            className="capacity-square"
+            roomCapacities={roomCapacities.roomCapacities}
+            currentStudentsByClass={roomCapacities.numStudentsPerClass}
+          />
+        )}
+        </div>
+        <div className="doughnut-box">
+          <h3>Food requirements</h3>
+          <div className="doughnut-chart">
+          {foodData && (
+            <DoughnutChart className="doughnut" foodData={foodData} />
+          )}
+          </div>
+        </div>
         {boxPlotData &&
-          renderComponentOrSpinner(
-            boxPlotData,
+          (boxPlotData,
+          (
             <BoxPlot
               className="boxplot"
               data={boxPlotData}
               width={500}
               height={400}
             ></BoxPlot>
-          )}
-        <div>
-          {histogramData ? (
-            <input
-              type="date"
-              min={formatDate(new Date())}
-              value={selectedDate}
-              onChange={onDateChange}
-            />
-          ) : null}
-          {histogramData &&
-            renderComponentOrSpinner(
-              histogramData,
-              <Histogram width={600} height={400} data={histogramData} />
-            )}
-        </div>
+          ))}
       </div>
-      <div className="staff-squares">
-        {staffCoreHours &&
-          renderComponentOrSpinner(
-            staffCoreHours,
-            <CoreHoursSquare coreData={staffCoreHours} />
-          )}
-        {staffEarlyMorning &&
-          renderComponentOrSpinner(
-            staffEarlyMorning,
-            <ProgramSquare programData={staffEarlyMorning} />
-          )}
-        {staffExtendedDay &&
-          renderComponentOrSpinner(
-            staffExtendedDay,
-            <ProgramSquare programData={staffExtendedDay} />
-          )}
-        {staffLateDay &&
-          renderComponentOrSpinner(
-            staffLateDay,
-            <ProgramSquare programData={staffLateDay} />
-          )}
-      </div>
-      </div>
-    </>
+    </div>
   );
 });
 

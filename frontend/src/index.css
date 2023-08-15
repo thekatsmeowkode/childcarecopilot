@@ -30,7 +30,7 @@ header {
 header .nav-bar {
   max-width: 100%;
   margin: 0 auto;
-  padding: 10px 20px;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;

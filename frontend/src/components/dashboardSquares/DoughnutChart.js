@@ -3,26 +3,41 @@ import {Doughnut} from 'react-chartjs-2'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-const DoughnutChart = ({revenueData}) => {
-    const {revenue: {earlyMorning, extendedDay, lateDay, schoolTotal}} = revenueData
-    console.log(earlyMorning)
+const DoughnutChart = ({foodData}) => {
 
-    const schoolTotalLessPrograms = schoolTotal.value - earlyMorning.value - lateDay.value - extendedDay.value
+    const {milk, vegFruit, protein, grains} = foodData
+
+    const chartOptions = {
+        maintainAspectRatio: false, 
+        responsive: true,
+        width: 50, 
+        height: 50, 
+        plugins: {
+            legend: {
+              labels: {
+                fontSize: 10, // Adjust the font size of legend labels
+              },
+              position: 'bottom', // You can adjust the legend position if needed
+              boxWidth: 10, // Adjust the width of the legend color boxes
+            },
+          },
+      };
+
     const data = {
-        labels: [earlyMorning.message, extendedDay.message, lateDay.message, schoolTotal.message],
+        labels: [milk.label, vegFruit.label, protein.label, grains.label],
         datasets: [
             {
-                label: "School Revenue",
-                data:[earlyMorning.value, extendedDay.value, lateDay.value, schoolTotalLessPrograms],
-                backgroundColor: ["#ead4f5", "#bba9c4", "#8c7f93", "#eedcf7"],
-                borderColor: ["#463f49", "#463f49", "#463f49", "#463f49"],
+                label: "Ounces required",
+                data:[milk.value, vegFruit.value, protein.value, grains.value, ],
+                backgroundColor: ["#f7b09e", "#347e91", "#ea3f12", '#57d2f2'],
+                borderColor: ["#793b2b"],
                 borderWidth: 1
             }
         ]
     }
 
     return (
-        <Doughnut responsive="false" className="doughnut" data={data}/>
+        <Doughnut options={chartOptions} data={data}/>
     )
 }
 

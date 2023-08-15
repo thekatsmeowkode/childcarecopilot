@@ -16,13 +16,11 @@
     "chart.js": "^4.3.3",
     "chartjs-chart-box-and-violin-plot": "^4.0.0",
     "d3": "^7.8.5",
-    "d3_exploding_boxplot": "^0.2.1",
     "d3-boxplot": "^1.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
-    "react-material-ui-form-validator": "^3.0.1",
     "react-router-dom": "^6.14.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"

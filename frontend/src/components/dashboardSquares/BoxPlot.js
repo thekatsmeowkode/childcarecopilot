@@ -71,7 +71,7 @@ const BoxPlot = ({ width, height, data }) => {
           min={yScale(min)}
           max={yScale(max)}
           stroke="black"
-          fill={"#fcded7"}
+          fill={"#9cd4e4"}
         />
         {allCircles}
       </g>
