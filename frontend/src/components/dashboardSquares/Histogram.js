@@ -5,7 +5,7 @@ const MARGIN = { top: 30, right: 30, bottom: 40, left: 50 };
 const BUCKET_NUMBER = 12;
 const BUCKET_PADDING = 4;
 
-const COLORS = ["#ead4f5", "#0dcaf0"];
+const COLORS = ["#f2775782", "#0dcaf0"];
 
 export const Histogram = ({ width, height, data }) => {
   const axesRef = useRef(null);

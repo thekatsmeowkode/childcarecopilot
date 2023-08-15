@@ -5,6 +5,7 @@ import CoreHoursSquare from "../components/dashboardSquares/CoreHoursSquare";
 import CapacitySquare from "../components/dashboardSquares/CapacitySquare";
 import ProgramSquare from "../components/dashboardSquares/ProgramSquare";
 import Histogram from "../components/dashboardSquares/Histogram";
+import FoodSquare from '../components/dashboardSquares/FoodSquare'
 import LoadingSpinner from "../components/dashboardSquares/LoadingSpinner";
 import { formatDate } from "../utils/formatDates";
 import "../css/dashboard.css";
@@ -19,6 +20,7 @@ const Dashboard = React.memo(() => {
   const [boxPlotData, setBoxPlotData] = useState(null);
   const [roomCapacities, setRoomCapacities] = useState(null);
   const [histogramData, setHistogramData] = useState(null);
+  const [foodData, setFoodData] = useState(null) 
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
   const renderComponentOrSpinner = (data, Component) => {
@@ -61,6 +63,13 @@ const Dashboard = React.memo(() => {
     setHistogramData(newHistogramData);
   };
 
+  const getFoodData = async () => {
+    return await fetchData(
+      `/api/school/get-food-requirements`,
+      "GET"
+    );
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -73,6 +82,7 @@ const Dashboard = React.memo(() => {
           boxPlotDatas,
           roomCapacityData,
           histogramData,
+          foodData
         ] = await Promise.all([
           getClassRevenue(),
           getStaffCoreHours(),
@@ -82,6 +92,7 @@ const Dashboard = React.memo(() => {
           getBoxPlotData(),
           getRoomCapacities(),
           getHistogramData(),
+          getFoodData()
         ]);
         setRevenueDetails(revenueData);
         setStaffCoreHours(staffCoreData);
@@ -91,6 +102,7 @@ const Dashboard = React.memo(() => {
         setBoxPlotData(boxPlotDatas);
         setRoomCapacities(roomCapacityData);
         setHistogramData(histogramData);
+        setFoodData(foodData)
       } catch (error) {
         console.error("Error fetching dashboard data", error);
       }
@@ -100,7 +112,8 @@ const Dashboard = React.memo(() => {
 
   return (
     <>
-      <main className="dashboard-grid">
+      <div className="dashboard-container">
+      <div className="dashboard-tables">
         {revenueDetails &&
           renderComponentOrSpinner(
             revenueDetails,
@@ -114,6 +127,34 @@ const Dashboard = React.memo(() => {
               currentStudentsByClass={roomCapacities.numStudentsPerClass}
             />
           )}
+          {foodData&& <FoodSquare foodData={foodData}/>}
+        {boxPlotData &&
+          renderComponentOrSpinner(
+            boxPlotData,
+            <BoxPlot
+              className="boxplot"
+              data={boxPlotData}
+              width={500}
+              height={400}
+            ></BoxPlot>
+          )}
+        <div>
+          {histogramData ? (
+            <input
+              type="date"
+              min={formatDate(new Date())}
+              value={selectedDate}
+              onChange={onDateChange}
+            />
+          ) : null}
+          {histogramData &&
+            renderComponentOrSpinner(
+              histogramData,
+              <Histogram width={600} height={400} data={histogramData} />
+            )}
+        </div>
+      </div>
+      <div className="staff-squares">
         {staffCoreHours &&
           renderComponentOrSpinner(
             staffCoreHours,
@@ -134,32 +175,8 @@ const Dashboard = React.memo(() => {
             staffLateDay,
             <ProgramSquare programData={staffLateDay} />
           )}
-        {boxPlotData &&
-          renderComponentOrSpinner(
-            boxPlotData,
-            <BoxPlot
-              className="boxplot"
-              data={boxPlotData}
-              width={700}
-              height={400}
-            ></BoxPlot>
-          )}
-        <div>
-          {histogramData ? (
-            <input
-              type="date"
-              min={formatDate(new Date())}
-              value={selectedDate}
-              onChange={onDateChange}
-            />
-          ) : null}
-          {histogramData &&
-            renderComponentOrSpinner(
-              histogramData,
-              <Histogram width={600} height={400} data={histogramData} />
-            )}
-        </div>
-      </main>
+      </div>
+      </div>
     </>
   );
 });

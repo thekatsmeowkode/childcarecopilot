@@ -1,31 +1,40 @@
-import { Table } from "react-bootstrap";
 import { PROGRAM_NAMES } from "../../constants";
 import { formatAmountInDollars } from "../../utils/formatText";
+import {
+  Table,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material";
 
 const RevenueSquare = ({ revenueData }) => {
   const { revenue } = revenueData;
 
   return (
     <>
+    <TableContainer>
       <Table>
-        <thead>
-          <tr>
-            <th colSpan={2}>{revenue.title}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{revenue.schoolTotal.message}</td>
-            <td>{formatAmountInDollars(revenue.schoolTotal.value)}</td>
-          </tr>
+        <TableHead>
+          <TableRow>
+            <TableHead colSpan={2}>{revenue.title}</TableHead>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell>{revenue.schoolTotal.message}</TableCell>
+            <TableCell>{formatAmountInDollars(revenue.schoolTotal.value)}</TableCell>
+          </TableRow>
           {PROGRAM_NAMES.map((program) => (
-            <tr key={program}>
-              <td>{revenue[program]["message"]}</td>
-              <td>{formatAmountInDollars(revenue[program]["value"])}</td>
-            </tr>
+            <TableRow key={program}>
+              <TableCell>{revenue[program]["message"]}</TableCell>
+              <TableCell>{formatAmountInDollars(revenue[program]["value"])}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
+        </TableBody>
       </Table>
+      </TableContainer>
     </>
   );
 };

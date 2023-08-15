@@ -10,42 +10,44 @@ export const CLASS_LABELS = {
 };
 
 export const PROGRAM_FIELDS = [
-    { value: "earlyMorning", label: "Early Morning (7:30-8:30)" },
-    { value: "extendedDay", label: "Extended Day (3:30-4:30)" },
-    { value: "lateDay", label: "Late Day (4:30-5:30)" },
-  ];
+  { value: "earlyMorning", label: "Early Morning (7:30-8:30)" },
+  { value: "extendedDay", label: "Extended Day (3:30-4:30)" },
+  { value: "lateDay", label: "Late Day (4:30-5:30)" },
+];
 
 export const CHECKBOX_FIELDS = [
-    "sibling",
-    "emailed",
-    "toured",
-    "registered",
-    "enrolled",
-    "declined",
-  ];
+  "sibling",
+  "emailed",
+  "toured",
+  "registered",
+  "enrolled",
+  "declined",
+];
 
 export const WAITLIST_EMPTY_FIELDS = {
-    childName: "",
-    parentName: "",
-    birthdate: "",
-    startDate: "",
-    allergies: "",
-    phone: "",
-    email: "",
-    programs: [],
-    sibling: false,
-    emailed: false,
-    toured: false,
-    registered: false,
-    enrolled: false,
-    declined: false,
-  };
+  childName: "",
+  parentName: "",
+  birthdate: "",
+  startDate: "",
+  allergies: "",
+  phone: "",
+  email: "",
+  programs: [],
+  sibling: false,
+  emailed: false,
+  toured: false,
+  registered: false,
+  enrolled: false,
+  declined: false,
+};
 
-  export const STUDENT_EMPTY_FIELDS = {
-    name: "",
-    birthdate: "",
-    classroomName: "",
-    allergies: "",
-    phone: "",
-    programs: [],
-  }
+export const STUDENT_EMPTY_FIELDS = {
+  name: "",
+  birthdate: "",
+  classroomName: "",
+  allergies: "",
+  phone: "",
+  programs: [],
+};
+
+export const FOOD_CATEGORIES = ["milk", "grains", "protein", "vegFruit"];

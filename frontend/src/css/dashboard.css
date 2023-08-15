@@ -1,13 +1,13 @@
-.dashboard-grid {
+/* .dashboard-grid {
     width:100%;
     display:grid;
     gap: 1rem;
     grid-template-columns: 1fr 1fr 1fr
-}
-
+} */
+/* 
 .boxplot {
     grid-column: 1 / span 2
-}
+} */
 
 .status-bar-container {
     display: flex;
@@ -23,3 +23,21 @@
   .status-bar {
     flex-grow: 3;
   }
+
+.dashboard-tables {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr); /* 2 rows with equal distribution */
+    grid-template-columns: repeat(3, 1fr); /* 3 columns with equal distribution */
+}
+
+.staff-squares {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1rem;
+}
+
+.dashboard-container {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:1rem;
+}
