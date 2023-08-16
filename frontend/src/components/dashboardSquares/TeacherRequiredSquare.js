@@ -38,6 +38,23 @@ const TeacherRequiredSquare = ({
               <TableCell colSpan={2}>{staffExtendedDay.title}</TableCell>
               <TableCell colSpan={2}>{staffLateDay.title}</TableCell>
             </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>{revenue.title}</TableCell>
+              <TableCell colSpan={2}>
+                {formatAmountInDollars(revenue.schoolTotal.value)}
+              </TableCell>
+              <TableCell colSpan={2}>
+                {formatAmountInDollars(revenue.earlyMorning.value)}
+              </TableCell>
+              <TableCell colSpan={2}>
+                {formatAmountInDollars(revenue.extendedDay.value)}
+              </TableCell>
+              <TableCell colSpan={2}>
+                {formatAmountInDollars(revenue.lateDay.value)}
+              </TableCell>
+            </TableRow>
             <TableRow>
               <TableCell> </TableCell>
               <HeaderIcons />
@@ -45,8 +62,6 @@ const TeacherRequiredSquare = ({
               <HeaderIcons />
               <HeaderIcons />
             </TableRow>
-          </TableHead>
-          <TableBody>
             {CLASS_NAMES.map((classroom) => (
               <TableRow key={Math.random()}>
                 <TableCell>{staffCoreHours[classroom]["message"]}</TableCell>
@@ -82,21 +97,6 @@ const TeacherRequiredSquare = ({
               <TableCell>{counts.extendedDay}</TableCell>
               <TableCell>{staffLateDay.schoolTotal.numTeachers}</TableCell>
               <TableCell>{counts.lateDay}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>{revenue.title}</TableCell>
-              <TableCell colSpan={2}>
-                {formatAmountInDollars(revenue.schoolTotal.value)}
-              </TableCell>
-              <TableCell colSpan={2}>
-                {formatAmountInDollars(revenue.earlyMorning.value)}
-              </TableCell>
-              <TableCell colSpan={2}>
-                {formatAmountInDollars(revenue.extendedDay.value)}
-              </TableCell>
-              <TableCell colSpan={2}>
-                {formatAmountInDollars(revenue.lateDay.value)}
-              </TableCell>
             </TableRow>
           </TableBody>
         </Table>

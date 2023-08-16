@@ -10,11 +10,12 @@ import {
 } from "@mui/material";
 import UniversalButton from "../components/UniversalButton";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import UniversalModal from "../components/UniversalModal";
+import AddStudentForm from "../components/studentForms/AddStudentForm";
 
 //components
 import ClassroomDetails from "../components/ClassroomDetails";
 import StudentDetails from "../components/StudentDetails";
-import AddStudentModal from "../components/studentForms/AddStudentModal";
 import { fetchData } from "../hooks/useApi";
 
 const Home = () => {
@@ -53,9 +54,11 @@ const Home = () => {
           buttonText="Add student"
         />
         {isAddModalOpen && (
-          <AddStudentModal
+          <UniversalModal
             isOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
+            formComponent={<AddStudentForm/>}
+            modalTitle={"Add Student"}
           />
         )}
         {classrooms &&

@@ -1,11 +1,12 @@
 import { useContext, useState } from "react";
 import { ClassroomContext } from "../context/ClassroomContext";
-import EditStudentModal from "./studentForms/EditStudentModal";
+import EditStudentForm from "./studentForms/EditStudentForm";
 import { formatAge, formatDate, formatDateSlashes } from "../utils/formatDates";
 import { formatProgramName } from "../utils/formatText";
 import { fetchData } from "../hooks/useApi";
 import { TableRow, TableCell } from "@mui/material";
 import { PROGRAM_NAMES } from "../constants";
+import UniversalModal from "./UniversalModal";
 
 const StudentDetails = ({ student }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,6 +35,16 @@ const StudentDetails = ({ student }) => {
 
   return (
     <>
+      {/* controls edit modal */}
+      {selectedStudent && (
+        <UniversalModal
+          onClose={() => setIsModalOpen(false)}
+          setSelectedStudent={setSelectedStudent}
+          formComponent={<EditStudentForm />}
+          student={selectedStudent}
+          isOpen={isModalOpen}
+        />
+      )}
       <TableRow
         hover
         sx={{ cursor: "pointer" }}
@@ -67,15 +78,6 @@ const StudentDetails = ({ student }) => {
           </button>
         </TableCell>
       </TableRow>
-
-      {selectedStudent && (
-        <EditStudentModal
-          student={selectedStudent}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          setSelectedStudent={setSelectedStudent}
-        />
-      )}
     </>
   );
 };

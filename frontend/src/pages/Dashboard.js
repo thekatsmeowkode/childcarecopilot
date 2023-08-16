@@ -112,7 +112,7 @@ const Dashboard = React.memo(() => {
           <div className="first-row">
             <div className="histogram-container">
               <div className="histogram-input">
-                <label>Update histogram: </label>
+                <h3>Students</h3>
                 {histogramData ? (
                   <input
                     type="date"

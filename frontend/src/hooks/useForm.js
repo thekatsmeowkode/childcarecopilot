@@ -25,16 +25,20 @@ const useForm = (formState) => {
     }
   };
 
-  const handleSubmit = async (e, callback) => {
-    const form = e.target;
-    e.preventDefault();
+  const handleSubmit = async (e, callback, ref) => {
+    e.preventDefault()
+    // const form = e.target;
+    console.log(ref.current.checkValidity())
+    // console.log(form.checkValidity())
+    const isValid = ref.current.checkValidity()
 
-    if (!form.checkValidity()) {
+    if (!isValid) {
       e.stopPropagation();
     }
+
     setValidated(true);
 
-    if (form.checkValidity() === true) {
+    if (isValid) {
       callback(e);
     }
   };
