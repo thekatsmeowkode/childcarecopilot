@@ -16,10 +16,11 @@ app.use((req, res, next) => {
   next();
 });
 
+const BASE_URL = "https://cccopilot-server.onrender.com"
 //routes
-app.use("/api/classes", classRoutes);
-app.use('/api/school', schoolRoutes);
-app.use('/api/waitlist', waitlistRoutes)
+app.use(BASE_URL + "/api/classes", classRoutes);
+app.use(BASE_URL + '/api/school', schoolRoutes);
+app.use(BASE_URL + '/api/waitlist', waitlistRoutes)
 
 //connect to db
 mongoose
