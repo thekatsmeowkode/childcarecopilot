@@ -17,6 +17,7 @@ app.use((req, res, next) => {
 });
 
 const BASE_URL = "https://cccopilot-server.onrender.com"
+const PORT = process.env.PORT || 3030
 //routes
 app.use(BASE_URL + "/api/classes", classRoutes);
 app.use(BASE_URL + '/api/school', schoolRoutes);
@@ -27,8 +28,8 @@ mongoose
   .connect(process.env.CONNECTION)
   .then(() => {
     //listen for requests
-    app.listen(process.env.PORT, () => {
-      console.log("listening on port 4000");
+    app.listen(PORT, () => {
+      console.log(`listening on port ${PORT}`);
     });
   })
   .catch((error) => {
