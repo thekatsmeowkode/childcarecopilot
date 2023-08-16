@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
 import { useClassroomContext } from "../hooks/useClassroomContext";
-import {
-  Table,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-} from "@mui/material";
 import UniversalButton from "../components/UniversalButton";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import UniversalModal from "../components/UniversalModal";
@@ -57,8 +49,8 @@ const Home = () => {
           <UniversalModal
             isOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
-            formComponent={<AddStudentForm/>}
-            modalTitle={"Add Student"}
+            formComponent={<AddStudentForm />}
+            modalTitle="Add Student"
           />
         )}
         {classrooms &&
@@ -71,31 +63,14 @@ const Home = () => {
           ))}
       </div>
       <div className="students-grid">
-        <h3>{selectedClassName ? selectedClassName : "Select a class name to see students"}</h3>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Birthdate ( MM / DD / YYYY )</TableCell>
-                <TableCell>Programs</TableCell>
-                <TableCell>Allergies</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {selectedClassName &&
-                classrooms.map((classroom) =>
-                  classroom.roomName === selectedClassName
-                    ? classroom.students.map((student) => (
-                        <StudentDetails key={student._id} student={student} />
-                      ))
-                    : null
-                )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <h3>
+          {selectedClassName
+            ? selectedClassName
+            : "Select a class name to see students"}
+        </h3>
+        {selectedClassName && (
+          <StudentDetails selectedClassName={selectedClassName} />
+        )}
       </div>
     </div>
   );

@@ -47,6 +47,7 @@ const Waitlist = React.memo(() => {
     {/* controls edit modal */}
       {isAddOpen && (
         <UniversalModal
+          modalTitle="Add Student"
           isOpen={isAddOpen}
           formComponent={<AddStudentWaitlist/>}
           onClose={() => setIsAddOpen(false)}

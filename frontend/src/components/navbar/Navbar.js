@@ -65,6 +65,17 @@ const Navbar = () => {
         >
           Dashboard
         </Link>
+        <Link
+          to="https://childcare-aware-weather-app.netlify.app/"
+          className="material-symbols-outlined"
+          onClick={() => {
+            console.info(
+              "Go to an external website that tells you if it is safe for children to go outdoors from your zip code"
+            );
+          }}
+        >
+          device_thermostat
+        </Link>
         <BirthdayPopover />
       </div>
     </header>

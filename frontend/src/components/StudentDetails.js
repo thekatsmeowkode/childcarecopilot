@@ -4,18 +4,26 @@ import EditStudentForm from "./studentForms/EditStudentForm";
 import { formatAge, formatDate, formatDateSlashes } from "../utils/formatDates";
 import { formatProgramName } from "../utils/formatText";
 import { fetchData } from "../hooks/useApi";
-import { TableRow, TableCell } from "@mui/material";
+import {
+  Table,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material";
 import { PROGRAM_NAMES } from "../constants";
 import UniversalModal from "./UniversalModal";
 
-const StudentDetails = ({ student }) => {
+const StudentDetails = ({ selectedClassName }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const { dispatch } = useContext(ClassroomContext);
+  const { classrooms, dispatch } = useContext(ClassroomContext);
 
-  const handleEditClick = (e) => {
+  const handleEditClick = (e, student) => {
     //formats a date object into a string representation to pre-populate edit form
-    if (e.target.className === "material-symbols-outlined") {
+    if (e.target.className.includes("delete")) {
+      e.stopPropagation()
       return;
     }
     student.birthdate = formatDate(student.birthdate);
@@ -38,6 +46,7 @@ const StudentDetails = ({ student }) => {
       {/* controls edit modal */}
       {selectedStudent && (
         <UniversalModal
+          modalTitle="Edit Student"
           onClose={() => setIsModalOpen(false)}
           setSelectedStudent={setSelectedStudent}
           formComponent={<EditStudentForm />}
@@ -45,39 +54,63 @@ const StudentDetails = ({ student }) => {
           isOpen={isModalOpen}
         />
       )}
-      <TableRow
-        hover
-        sx={{ cursor: "pointer" }}
-        size="small"
-        onClick={handleEditClick}
-      >
-        <TableCell>{student.name}</TableCell>
-        <TableCell>
-          <ul>
-            <li>{formatDateSlashes(student.birthdate)}</li>
-            <li>{formatAge(student.birthdate)}</li>
-          </ul>
-        </TableCell>
-        <TableCell>
-          <ol>
-            {PROGRAM_NAMES.map((program) =>
-              student.programs.includes(program) ? (
-                <li key={program}>{formatProgramName(program)}</li>
-              ) : null
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Birthdate ( MM / DD / YYYY )</TableCell>
+              <TableCell>Programs</TableCell>
+              <TableCell>Allergies</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Delete</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {classrooms.map((classroom) =>
+              classroom.roomName === selectedClassName
+                ? classroom.students.map((student) => (
+                    <TableRow
+                      hover
+                      sx={{ cursor: "pointer" }}
+                      size="small"
+                      onClick={(e) => handleEditClick(e, student)}
+                    >
+                      <TableCell>{student.name}</TableCell>
+                      <TableCell>
+                        <ul>
+                          <li>{formatDateSlashes(student.birthdate)}</li>
+                          <li>{formatAge(student.birthdate)}</li>
+                        </ul>
+                      </TableCell>
+                      <TableCell>
+                        <ol>
+                          {PROGRAM_NAMES.map((program) =>
+                            student.programs.includes(program) ? (
+                              <li key={program}>
+                                {formatProgramName(program)}
+                              </li>
+                            ) : null
+                          )}
+                        </ol>
+                      </TableCell>
+                      <TableCell>{student.allergies}</TableCell>
+                      <TableCell>{student.phone}</TableCell>
+                      <TableCell className='delete'>
+                        <button
+                          onClick={(e) => handleDeleteClick(e, student)}
+                          className="material-symbols-outlined delete delete-button"
+                        >
+                          Delete
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                : null
             )}
-          </ol>
-        </TableCell>
-        <TableCell>{student.allergies}</TableCell>
-        <TableCell>{student.phone}</TableCell>
-        <TableCell>
-          <button
-            onClick={(e) => handleDeleteClick(e, student)}
-            className="material-symbols-outlined delete-button"
-          >
-            Delete
-          </button>
-        </TableCell>
-      </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 };

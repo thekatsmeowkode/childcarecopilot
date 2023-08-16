@@ -2,7 +2,7 @@ import { formatDateSlashes } from "../utils/formatDates";
 import { useState } from "react";
 import { formatProgramName } from "../utils/formatText";
 import EditStudentWaitlist from "./studentForms/EditStudentWaitlist";
-import { CHECKBOX_FIELDS } from "../constants";
+import { CHECKBOX_FIELDS, PROGRAM_NAMES } from "../constants";
 import {
   TableRow,
   TableCell,
@@ -41,9 +41,11 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
 
   return (
     <>
+      {/* controls edit student modal */}
       {isEditModalOpen && (
         <UniversalModal
-          formComponent={<EditStudentWaitlist/>}
+          modalTitle="Edit Student"
+          formComponent={<EditStudentWaitlist />}
           student={selectedStudent}
           setWaitlistStudents={setWaitlistStudents}
           isOpen={isEditModalOpen}
@@ -51,11 +53,11 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
         />
       )}
       <TableContainer className="table-container">
-        <Table sx={{ cursor: "pointer" }} stickyHeader="true">
+        <Table size="small" sx={{ cursor: "pointer" }} stickyHeader={true}>
           <TableHead>
             <TableRow>
               {TABLE_HEADINGS.map((heading) => (
-                <TableCell>
+                <TableCell sx={{fontSize:'.8rem'}} size="small">
                   <strong>{heading}</strong>
                 </TableCell>
               ))}
@@ -64,7 +66,7 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
           <TableBody>
             {waitlistStudents.map((student) => (
               <TableRow
-                className='waitlist-cells'
+                className="waitlist-cells"
                 hover
                 key={student._id}
                 onClick={() => handleRowClick(student)}
@@ -87,14 +89,16 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
                 <TableCell className="waitlist-cell">{student.email}</TableCell>
                 <TableCell className="waitlist-cell">{student.phone}</TableCell>
                 <TableCell className="waitlist-cell program-cell">
-                  <ul>
-                    {student.programs.map((program) => (
-                      <li key={program}>{formatProgramName(program)}</li>
-                    ))}
-                  </ul>
+                  <ol>
+                    {PROGRAM_NAMES.map((program) =>
+                      student.programs.includes(program) ? (
+                        <li key={program}>{formatProgramName(program)}</li>
+                      ) : null
+                    )}
+                  </ol>
                 </TableCell>
                 {CHECKBOX_FIELDS.map((field) => (
-                  <TableCell className="waitlist-cell" key={field}>
+                  <TableCell className="waitlist-cell" size="small" key={field}>
                     {student[field] ? (
                       <span
                         role="img"
