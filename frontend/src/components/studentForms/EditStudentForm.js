@@ -89,7 +89,7 @@ const EditStudentModal = ({ student, isOpen, onClose, setSelectedStudent }) => {
             <option value="twos">Twos</option>
           </Form.Select>
           <Form.Control.Feedback type="invalid">
-            Please input a birthdate.
+            Please input a class name.
           </Form.Control.Feedback>
         </InputGroup>
       </Form.Group>

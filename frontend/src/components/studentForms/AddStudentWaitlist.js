@@ -1,4 +1,4 @@
-import { Form, Row, Modal, InputGroup, Col } from "react-bootstrap";
+import { Form, Row, InputGroup, Col } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import CheckboxField from "./CheckboxField";
 import ProgramField from "./ProgramField";
@@ -7,10 +7,11 @@ import {
   CHECKBOX_FIELDS,
   WAITLIST_EMPTY_FIELDS,
 } from "../../constants";
+import {useRef} from 'react'
 import { fetchData } from "../../hooks/useApi";
 import UniversalButton from "../UniversalButton";
 
-const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
+const AddStudentWaitlist = ({ setStudents, onClose }) => {
   const {
     form,
     setForm,
@@ -19,6 +20,8 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
     handleSubmit,
     validated,
   } = useForm(WAITLIST_EMPTY_FIELDS);
+
+  const formRef = useRef(null)
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
@@ -33,14 +36,9 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
   };
 
   return (
-    <Modal show={isOpen} onHide={onClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Add Student Details</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
         <Form
           noValidate
-          onSubmit={(e) => handleSubmit(e, handleAddStudent)}
+          ref={formRef}
           validated={validated}
         >
           <Form.Group className="input-field">
@@ -71,7 +69,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
                 required
               />
               <Form.Control.Feedback type="invalid">
-                Please input a name.
+                Please input the caregiver's name
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
@@ -101,7 +99,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
                 required
               />
               <Form.Control.Feedback type="invalid">
-                Please input a birthdate.
+                Please input a start date.
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
@@ -157,7 +155,7 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
 
           <UniversalButton
             variant="contained"
-            eventHandler={handleAddStudent}
+            eventHandler={(e) => handleSubmit(e, handleAddStudent, formRef)}
             customStyles={{
               margin: ".7rem",
               backgroundColor: "var(--bright-peach)",
@@ -171,8 +169,6 @@ const AddStudentWaitlist = ({ setStudents, isOpen, onClose }) => {
             buttonText="Cancel"
           />
         </Form>
-      </Modal.Body>
-    </Modal>
   );
 };
 

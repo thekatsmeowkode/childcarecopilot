@@ -1,4 +1,5 @@
-import { Modal, Form, InputGroup, Col, Row } from "react-bootstrap";
+import { Form, InputGroup, Col, Row } from "react-bootstrap";
+import {useRef} from 'react'
 import '../../css/waitlist.css'
 import useForm from "../../hooks/useForm";
 import { formatDate } from "../../utils/formatDates";
@@ -31,6 +32,8 @@ const EditStudentWaitlist = ({
     startDate: new Date(student.startDate),
   });
 
+  const formRef = useRef(null)
+
   const handleDeleteStudent = async (e) => {
     e.preventDefault();
     const studentId = student._id;
@@ -55,14 +58,9 @@ const EditStudentWaitlist = ({
   };
 
   return (
-    <Modal show={isOpen} onHide={onClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Student Details</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
         <Form
           noValidate
-          onSubmit={(e) => handleSubmit(e, handleEditStudent)}
+          ref={formRef}
           validated={validated}
         >
           <Form.Group className="input-field">
@@ -93,7 +91,7 @@ const EditStudentWaitlist = ({
                 required
               />
               <Form.Control.Feedback type="invalid">
-                Please input a name.
+                Please input a caregiver name.
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
@@ -195,7 +193,7 @@ const EditStudentWaitlist = ({
             />
             <UniversalButton
               variant="contained"
-              eventHandler={handleDeleteStudent}
+              eventHandler={(e) => handleSubmit(e, handleDeleteStudent, formRef)}
               customStyles={{
                 backgroundColor: "var(--cancel-peach)",
                 "&:hover": { backgroundColor: "var(--dark-cancel-peach)" },
@@ -204,8 +202,6 @@ const EditStudentWaitlist = ({
             />
           </div>
         </Form>
-      </Modal.Body>
-    </Modal>
   );
 };
 

@@ -11,6 +11,7 @@ import {
   TableHead,
   TableBody,
 } from "@mui/material";
+import UniversalModal from "./UniversalModal";
 
 const TABLE_HEADINGS = [
   "Requested Start Date",
@@ -41,7 +42,8 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
   return (
     <>
       {isEditModalOpen && (
-        <EditStudentWaitlist
+        <UniversalModal
+          formComponent={<EditStudentWaitlist/>}
           student={selectedStudent}
           setWaitlistStudents={setWaitlistStudents}
           isOpen={isEditModalOpen}
@@ -62,6 +64,7 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
           <TableBody>
             {waitlistStudents.map((student) => (
               <TableRow
+                className='waitlist-cells'
                 hover
                 key={student._id}
                 onClick={() => handleRowClick(student)}

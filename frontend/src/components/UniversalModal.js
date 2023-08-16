@@ -8,6 +8,8 @@ const UniversalModal = ({
   modalTitle,
   student,
   setSelectedStudent,
+  setWaitlistStudents,
+  setStudents
 }) => {
   return (
     <Modal show={isOpen} onHide={onClose}>
@@ -19,6 +21,8 @@ const UniversalModal = ({
           onClose,
           student,
           setSelectedStudent,
+          setStudents,
+          setWaitlistStudents
         })}
       </Modal.Body>
     </Modal>

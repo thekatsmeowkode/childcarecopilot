@@ -6,6 +6,7 @@ import UniversalButton from "../components/UniversalButton";
 import { fetchData } from "../hooks/useApi";
 import { CHECKBOX_FIELDS } from "../constants";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import UniversalModal from "../components/UniversalModal";
 
 const Waitlist = React.memo(() => {
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -43,6 +44,15 @@ const Waitlist = React.memo(() => {
 
   return (
     <>
+    {/* controls edit modal */}
+      {isAddOpen && (
+        <UniversalModal
+          isOpen={isAddOpen}
+          formComponent={<AddStudentWaitlist/>}
+          onClose={() => setIsAddOpen(false)}
+          setStudents={setWaitlistStudents}
+        />
+      )}
       <section className="waitlist-status-bar">
         <UniversalButton
           variant="contained"
@@ -60,13 +70,6 @@ const Waitlist = React.memo(() => {
             <StatusSquares key={status.category} data={status} />
           ))}
       </section>
-      {isAddOpen && (
-        <AddStudentWaitlist
-          isOpen={isAddOpen}
-          onClose={() => setIsAddOpen(false)}
-          setStudents={setWaitlistStudents}
-        />
-      )}
       <WaitlistDetails
         waitlistStudents={waitlistStudents}
         setWaitlistStudents={setWaitlistStudents}
