@@ -1,43 +1,48 @@
 .button-container {
-    display:flex;
-    justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .waitlist-status-bar {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-  }
-  
-  .status-square {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin:0;
-    padding:0
-  }
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.status-square {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
 
 .status-square > p {
-    margin:0;
+  margin: 0;
 }
 
 .table-container {
-    margin-top:1rem;
+  margin-top: 1rem;
 }
 
 .waitlist-cell {
-    border-left: 1px dotted lightgray;
-    border-right:1px dotted lightgray;
+  border-left: 1px dotted lightgray;
+  border-right: 1px dotted lightgray;
 }
 
 .waitlist-cell > span {
-    text-align:center;
-    display:flex !important;
-    justify-content:center;
-    align-items:center;
+  text-align: center;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 }
 
 .program-cell {
-    padding-left:0 !important
+  padding-left: 0 !important;
+}
+
+.MuiTableRow-head {
+  font-size: 0.8rem;
+  background-color: var(--soft-peach)
 }

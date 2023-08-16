@@ -8,7 +8,8 @@
   --complementary-dark-peach: #57d2f2;
   --cancel-peach: #f25785;
   --darkest-peach: #bd5e45;
-  --dark-cancel-peach: #d94e77
+  --dark-cancel-peach: #d94e77;
+  --dark-teal: #2b6f81
 }
 
 /* layout */
@@ -33,12 +34,17 @@ header .nav-bar {
   padding: 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  box-shadow: 2px 2px 5px rgb(213, 206, 206);
 }
 
 header a {
   color: #2e2c2c;
   text-decoration: none;
+}
+
+header a:hover {
+  color: var(--dark-teal)
 }
 
 .pages {
@@ -129,7 +135,9 @@ header a {
 }
 
 .logo {
-  max-height: 150px;
+  max-height: 110px;
+  padding:0;
+  margin:0
 }
 
 h1 {

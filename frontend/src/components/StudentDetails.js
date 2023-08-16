@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { ClassroomContext } from "../context/ClassroomContext";
 import EditStudentForm from "./studentForms/EditStudentForm";
-import { formatAge, formatDate, formatDateSlashes } from "../utils/formatDates";
+import { formatAge, formatDate } from "../utils/formatDates";
 import { formatProgramName } from "../utils/formatText";
 import { fetchData } from "../hooks/useApi";
 import {
@@ -79,7 +79,7 @@ const StudentDetails = ({ selectedClassName }) => {
                       <TableCell>{student.name}</TableCell>
                       <TableCell>
                         <ul>
-                          <li>{formatDateSlashes(student.birthdate)}</li>
+                          <li>{formatDate(student.birthdate)}</li>
                           <li>{formatAge(student.birthdate)}</li>
                         </ul>
                       </TableCell>

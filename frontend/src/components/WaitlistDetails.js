@@ -1,4 +1,4 @@
-import { formatDateSlashes } from "../utils/formatDates";
+import { formatDate } from "../utils/formatDates";
 import { useState } from "react";
 import { formatProgramName } from "../utils/formatText";
 import EditStudentWaitlist from "./studentForms/EditStudentWaitlist";
@@ -52,12 +52,19 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
           onClose={() => setIsEditModalOpen(false)}
         />
       )}
-      <TableContainer className="table-container">
+      <TableContainer sx={{ fontSize: ".8rem"}} className="table-container">
         <Table size="small" sx={{ cursor: "pointer" }} stickyHeader={true}>
           <TableHead>
             <TableRow>
               {TABLE_HEADINGS.map((heading) => (
-                <TableCell sx={{fontSize:'.8rem'}} size="small">
+                <TableCell className="waitlist-cell"
+                  sx={{
+                    backgroundColor: "var(--soft-peach)",
+                    fontSize: ".8rem",
+                    borderTop: '1px dotted lightgray'
+                  }}
+                  size="small"
+                >
                   <strong>{heading}</strong>
                 </TableCell>
               ))}
@@ -72,13 +79,13 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
                 onClick={() => handleRowClick(student)}
               >
                 <TableCell className="waitlist-cell">
-                  {formatDateSlashes(student.startDate)}
+                  {formatDate(student.startDate)}
                 </TableCell>
                 <TableCell className="waitlist-cell">
                   {student.childName}
                 </TableCell>
                 <TableCell className="waitlist-cell">
-                  {formatDateSlashes(student.birthdate)}
+                  {formatDate(student.birthdate)}
                 </TableCell>
                 <TableCell className="waitlist-cell">
                   {student.allergies}

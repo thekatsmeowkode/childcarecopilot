@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import BirthdayPopover from "./BirthdayPopover";
 import copilotLogo from "../../assets/copilot_logo.png";
 
@@ -16,14 +15,24 @@ const Navbar = () => {
           <h1>Child Care Copilot</h1>
         </Link>
         <Link
-          to="/school"
+          to="/"
           onClick={() => {
             console.info(
-              "Edit school rules like ratio, square footage, on school metric page."
+              "See the currently enrolled students on the students page."
             );
           }}
         >
-          Edit School Metrics
+          Students
+        </Link>
+        <Link
+          to="/dashboard"
+          onClick={() => {
+            console.info(
+              "See data about the school enrollment, revenue, capacity and food requirements on the dashboard page."
+            );
+          }}
+        >
+          Dashboard
         </Link>
         <Link
           onClick={() => {
@@ -46,24 +55,14 @@ const Navbar = () => {
           See the future
         </Link>
         <Link
-          to="/"
+          to="/school"
           onClick={() => {
             console.info(
-              "See the currently enrolled students on the students page."
+              "Edit school rules like ratio, square footage, on school metric page."
             );
           }}
         >
-          Students
-        </Link>
-        <Link
-          to="/dashboard"
-          onClick={() => {
-            console.info(
-              "See data about the school enrollment, revenue, capacity and food requirements on the dashboard page."
-            );
-          }}
-        >
-          Dashboard
+          School Metrics
         </Link>
         <Link
           to="https://childcare-aware-weather-app.netlify.app/"
