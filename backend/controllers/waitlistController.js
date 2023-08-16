@@ -3,6 +3,34 @@ const Classroom = require("../models/ClassModel");
 
 CURRENT_WAITLIST_ID = "64cd36161a8b00969deefeb4";
 
+
+function extractDateArguments(dateTimeString) {
+  console.log(dateTimeString)
+  const [datePart, timePart] = dateTimeString.split(' ');
+  const dateParts = datePart.split('-');
+  
+  if (dateParts.length !== 3) {
+    throw new Error('Invalid date format. Expected format: YYYY-MM-DD');
+  }
+
+  const year = parseInt(dateParts[0]);
+  const month = parseInt(dateParts[1]) - 1; // Month is zero-based in Date objects
+  const day = parseInt(dateParts[2]);
+
+  let hour = 0;
+  let minute = 0;
+
+  if (timePart) {
+    const [hourPart, minutePart] = timePart.split(':');
+    hour = parseInt(hourPart);
+    minute = parseInt(minutePart);
+  }
+
+  console.log(year, month, day, hour, minute)
+  return new Date(year, month, day, hour, minute);
+}
+
+
 const addStudentWL = async (req, res) => {
   const {
     childName,
@@ -30,10 +58,10 @@ const addStudentWL = async (req, res) => {
     const newStudent = {
       childName,
       parentName,
-      birthdate: new Date(birthdate),
+      birthdate: extractDateArguments(birthdate),
       allergies,
       phone,
-      startDate: new Date(startDate),
+      startDate: extractDateArguments(startDate),
       email,
       programs,
       sibling,
@@ -78,7 +106,22 @@ const getWaitlistStudents = async (req, res) => {
 
 const editStudent = async (req, res) => {
   const { studentId } = req.params;
-  const updatedStudentData = req.body;
+  const {
+    childName,
+    parentName,
+    birthdate,
+    allergies,
+    phone,
+    startDate,
+    email,
+    programs,
+    sibling,
+    emailed,
+    toured,
+    registered,
+    enrolled,
+    declined,
+  } = req.body;
 
   try {
     const waitlist = await Waitlist.findById({ _id: CURRENT_WAITLIST_ID });
@@ -91,9 +134,24 @@ const editStudent = async (req, res) => {
       (student) => student._id.toString() === studentId
     );
 
-    console.log(studentIndex);
-    waitlist.students[studentIndex] = updatedStudentData;
-    console.log(waitlist);
+    const newStudent = {
+      childName,
+      parentName,
+      birthdate: extractDateArguments(birthdate),
+      allergies,
+      phone,
+      startDate: extractDateArguments(startDate),
+      email,
+      programs,
+      sibling,
+      emailed,
+      toured,
+      registered,
+      enrolled,
+      declined,
+    };
+
+    waitlist.students[studentIndex] = newStudent;
     await waitlist.save();
 
     res.status(200).json(waitlist);
