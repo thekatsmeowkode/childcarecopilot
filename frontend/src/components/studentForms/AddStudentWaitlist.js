@@ -27,7 +27,7 @@ const AddStudentWaitlist = ({ setStudents, onClose }) => {
     e.preventDefault();
     const student = { ...form };
 
-    const response = await fetchData("/api/waitlist/student", "POST", student);
+    const response = await fetchData("api/waitlist/student", "POST", student);
 
     setStudents(response.students);
     setForm(WAITLIST_EMPTY_FIELDS);

@@ -31,7 +31,7 @@ const SchoolInfo = () => {
   }, []);
 
   const fetchSchool = async () => {
-    const schoolResponse = await fetchData("/api/school/", "GET");
+    const schoolResponse = await fetchData("api/school/", "GET");
     setForm(schoolResponse[0]);
   };
 
@@ -59,7 +59,7 @@ const SchoolInfo = () => {
   const updateSchool = async (e) => {
     e.preventDefault();
     const school = { ...form };
-    const response = await fetchData("/api/school/", "PATCH", school);
+    const response = await fetchData("api/school/", "PATCH", school);
     setForm({ ...response });
   };
 

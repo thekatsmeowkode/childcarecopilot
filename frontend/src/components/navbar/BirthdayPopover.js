@@ -7,7 +7,7 @@ const BirthdayPopover = () => {
   const [birthdayData, setBirthdayData] = useState(null);
 
   const handleMouseEnter = async () => {
-    const response = await fetchData("/api/classes/navbar/birthdays", "GET");
+    const response = await fetchData("api/classes/navbar/birthdays", "GET");
     setBirthdayData(response.upcomingBirthdays);
   };
 
@@ -32,9 +32,9 @@ const BirthdayPopover = () => {
                         ? "birthday"
                         : ""
                     }
-                  >{`${student.name} ${formatDateMonthDay(
-                    student.birthdate
-                  )}`}</p>
+                  >{`${formatDateMonthDay(student.birthdate)} ${
+                    student.name
+                  }`}</p>
                 </Fragment>
               ))}
           </Popover.Body>

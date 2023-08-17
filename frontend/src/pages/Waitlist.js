@@ -12,7 +12,7 @@ const Waitlist = React.memo(() => {
   const [waitlistStudents, setWaitlistStudents] = useState([]);
 
   const fetchWaitlist = async () => {
-    return await fetchData("/api/waitlist", "GET");
+    return await fetchData("api/waitlist", "GET");
   };
 
   useEffect(() => {

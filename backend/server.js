@@ -26,7 +26,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// const BASE_URL = "https://cccopilot-server.onrender.com"
 const PORT = process.env.PORT || 4000
 
 //routes

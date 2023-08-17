@@ -59,7 +59,7 @@ const StudentDetails = ({ selectedClassName }) => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell>Birthdate ( MM / DD / YYYY )</TableCell>
+              <TableCell>Birthdate ( YYYY-MM-DD )</TableCell>
               <TableCell>Programs</TableCell>
               <TableCell>Allergies</TableCell>
               <TableCell>Phone</TableCell>

@@ -35,7 +35,7 @@ const Dashboard = React.memo(() => {
   };
 
   const getBoxPlotData = async () => {
-    return await fetchData("/api/school/box-plot-data", "GET");
+    return await fetchData("api/school/box-plot-data", "GET");
   };
 
   const getRoomCapacities = async () => {
@@ -46,7 +46,7 @@ const Dashboard = React.memo(() => {
     const histogramDate = date ? date : formatDate(new Date());
 
     return await fetchData(
-      `/api/waitlist/histogram/data/${histogramDate}`,
+      `api/waitlist/histogram/data/${histogramDate}`,
       "GET"
     );
   };
@@ -59,7 +59,7 @@ const Dashboard = React.memo(() => {
   };
 
   const getFoodData = async () => {
-    return await fetchData(`/api/school/get-food-requirements`, "GET");
+    return await fetchData(`api/school/get-food-requirements`, "GET");
   };
 
   useEffect(() => {

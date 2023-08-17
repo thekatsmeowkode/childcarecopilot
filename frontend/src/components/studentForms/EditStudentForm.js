@@ -26,7 +26,7 @@ const EditStudentModal = ({ student, isOpen, onClose, setSelectedStudent }) => {
     };
 
     const response = await fetchData(
-      "/api/classes/" +
+      "api/classes/" +
         updatedStudent.classroomName +
         "/students/" +
         updatedStudent._id.toString(),

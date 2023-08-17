@@ -26,7 +26,7 @@ const AddStudentForm = ({ onClose }) => {
     const student = { ...form };
 
     //this post response returns complete json of the updated classroom {_id:3423, roomName: infants, students:[{}{}]
-    const response = await fetchData("/api/classes/students", "POST", student);
+    const response = await fetchData("api/classes/students", "POST", student);
 
     // setSelectedStudents(response.students);
     setForm(STUDENT_EMPTY_FIELDS);

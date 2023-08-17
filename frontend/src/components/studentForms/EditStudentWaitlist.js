@@ -37,7 +37,7 @@ const EditStudentWaitlist = ({
   const handleDeleteStudent = async (e) => {
     e.preventDefault();
     const studentId = student._id;
-    const response = await fetchData("/api/waitlist/" + studentId, "DELETE");
+    const response = await fetchData("api/waitlist/" + studentId, "DELETE");
     setWaitlistStudents(response.students);
     console.log("student deleted");
     onClose();
@@ -49,7 +49,7 @@ const EditStudentWaitlist = ({
 
     console.log(student)
 
-    const response = await fetchData("/api/waitlist/" + student._id.toString(), "PATCH", student);
+    const response = await fetchData("api/waitlist/" + student._id.toString(), "PATCH", student);
 
     setWaitlistStudents(response.students);
     setForm(WAITLIST_EMPTY_FIELDS);
