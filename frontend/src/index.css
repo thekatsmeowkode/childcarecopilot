@@ -161,3 +161,7 @@ li::marker {
   padding: 1rem;
   padding-top: 0;
 }
+
+a {
+  color: var(--dark-teal)
+}

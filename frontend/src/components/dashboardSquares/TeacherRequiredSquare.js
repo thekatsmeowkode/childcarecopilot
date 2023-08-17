@@ -95,20 +95,16 @@ const TeacherRequiredSquare = ({
                 <TableCell>{staffLateDay[classroom]["numStudents"]}</TableCell>
               </TableRow>
             ))}
-            <TableRow
-              sx={{
-                borderRight: "1px dotted lightgray",
-              }}
-            >
-              <TableCell>{staffCoreHours.schoolTotal.message}</TableCell>
-              <TableCell>{staffCoreHours.schoolTotal.numTeachers}</TableCell>
-              <TableCell>{totalStudents}</TableCell>
-              <TableCell>{staffEarlyMorning.schoolTotal.numTeachers}</TableCell>
-              <TableCell>{counts.earlyMorning}</TableCell>
-              <TableCell>{staffExtendedDay.schoolTotal.numTeachers}</TableCell>
-              <TableCell>{counts.extendedDay}</TableCell>
-              <TableCell>{staffLateDay.schoolTotal.numTeachers}</TableCell>
-              <TableCell>{counts.lateDay}</TableCell>
+            <TableRow>
+              <TableCell className="dashboard-cell">{staffCoreHours.schoolTotal.message}</TableCell>
+              <TableCell className="dashboard-cell">{staffCoreHours.schoolTotal.numTeachers}</TableCell>
+              <TableCell className="dashboard-cell">{totalStudents}</TableCell>
+              <TableCell className="dashboard-cell">{staffEarlyMorning.schoolTotal.numTeachers}</TableCell>
+              <TableCell className="dashboard-cell">{counts.earlyMorning}</TableCell>
+              <TableCell className="dashboard-cell">{staffExtendedDay.schoolTotal.numTeachers}</TableCell>
+              <TableCell className="dashboard-cell">{counts.extendedDay}</TableCell>
+              <TableCell className="dashboard-cell">{staffLateDay.schoolTotal.numTeachers}</TableCell>
+              <TableCell className="dashboard-cell">{counts.lateDay}</TableCell>
             </TableRow>
           </TableBody>
         </Table>

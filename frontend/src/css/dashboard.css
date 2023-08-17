@@ -70,3 +70,8 @@
 .teacher-required-square {
     border: 1px dotted gray
 }
+
+.dashboard-cell {
+  border-left: 1px dotted lightgray;
+  border-right: 1px dotted lightgray;
+}
