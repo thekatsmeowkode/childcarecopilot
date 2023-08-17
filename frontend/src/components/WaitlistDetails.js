@@ -42,11 +42,10 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
     setSelectedStudent(student);
   };
 
-  const handleSortClick = async () => {
-    sortButton === "asc" ? setSortButton("desc") : setSortButton("asc");
+  const handleSortClick = async (sortFunc) => {
     let queryParams = {}
     
-    if (sortButton === "asc") {
+    if (sortFunc === "asc") {
       queryParams = { order: "asc" };
     } else {
       queryParams = { order: "desc" };
@@ -61,6 +60,7 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
 
     const sortedStudents = response.students
 
+    setSortButton(sortFunc === 'asc' ? 'desc' : 'asc')
     setWaitlistStudents(sortedStudents)
   };
 
@@ -83,9 +83,9 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
             <TableRow>
               <TableCell>
                 {sortButton === "asc" ? (
-                  <ArrowCircleUpIcon onClick={handleSortClick} />
+                  <ArrowCircleUpIcon onClick={() => handleSortClick("asc")} />
                 ) : (
-                  <ArrowCircleDownIcon onClick={handleSortClick} />
+                  <ArrowCircleDownIcon onClick={() => handleSortClick("desc")} />
                 )}
               </TableCell>
               {TABLE_HEADINGS.map((heading) => (
