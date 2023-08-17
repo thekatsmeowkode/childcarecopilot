@@ -1,5 +1,5 @@
 import { CLASS_NAMES } from "../../constants";
-import '../../css/dashboard.css'
+import "../../css/dashboard.css";
 import {
   Table,
   TableContainer,
@@ -73,38 +73,58 @@ const TeacherRequiredSquare = ({
             </TableRow>
             {CLASS_NAMES.map((classroom) => (
               <TableRow key={Math.random()}>
-                <TableCell>{staffCoreHours[classroom]["message"]}</TableCell>
-                <TableCell>
+                <TableCell className="dashboard-cell">
+                  {staffCoreHours[classroom]["message"]}
+                </TableCell>
+                <TableCell className="dashboard-cell">
                   {staffCoreHours[classroom]["numTeachers"]}
                 </TableCell>
-                <TableCell>
+                <TableCell className="dashboard-cell">
                   {staffCoreHours[classroom]["numStudents"]}
                 </TableCell>
-                <TableCell>
+                <TableCell className="dashboard-cell">
                   {staffEarlyMorning[classroom]["numTeachers"]}
                 </TableCell>
-                <TableCell>
+                <TableCell className="dashboard-cell">
                   {staffEarlyMorning[classroom]["numStudents"]}
                 </TableCell>
-                <TableCell>
+                <TableCell className="dashboard-cell">
                   {staffExtendedDay[classroom]["numTeachers"]}
                 </TableCell>
-                <TableCell>
+                <TableCell className="dashboard-cell">
                   {staffExtendedDay[classroom]["numStudents"]}
                 </TableCell>
-                <TableCell>{staffLateDay[classroom]["numTeachers"]}</TableCell>
-                <TableCell>{staffLateDay[classroom]["numStudents"]}</TableCell>
+                <TableCell className="dashboard-cell">
+                  {staffLateDay[classroom]["numTeachers"]}
+                </TableCell>
+                <TableCell className="dashboard-cell">
+                  {staffLateDay[classroom]["numStudents"]}
+                </TableCell>
               </TableRow>
             ))}
             <TableRow>
-              <TableCell className="dashboard-cell">{staffCoreHours.schoolTotal.message}</TableCell>
-              <TableCell className="dashboard-cell">{staffCoreHours.schoolTotal.numTeachers}</TableCell>
+              <TableCell className="dashboard-cell">
+                {staffCoreHours.schoolTotal.message}
+              </TableCell>
+              <TableCell className="dashboard-cell">
+                {staffCoreHours.schoolTotal.numTeachers}
+              </TableCell>
               <TableCell className="dashboard-cell">{totalStudents}</TableCell>
-              <TableCell className="dashboard-cell">{staffEarlyMorning.schoolTotal.numTeachers}</TableCell>
-              <TableCell className="dashboard-cell">{counts.earlyMorning}</TableCell>
-              <TableCell className="dashboard-cell">{staffExtendedDay.schoolTotal.numTeachers}</TableCell>
-              <TableCell className="dashboard-cell">{counts.extendedDay}</TableCell>
-              <TableCell className="dashboard-cell">{staffLateDay.schoolTotal.numTeachers}</TableCell>
+              <TableCell className="dashboard-cell">
+                {staffEarlyMorning.schoolTotal.numTeachers}
+              </TableCell>
+              <TableCell className="dashboard-cell">
+                {counts.earlyMorning}
+              </TableCell>
+              <TableCell className="dashboard-cell">
+                {staffExtendedDay.schoolTotal.numTeachers}
+              </TableCell>
+              <TableCell className="dashboard-cell">
+                {counts.extendedDay}
+              </TableCell>
+              <TableCell className="dashboard-cell">
+                {staffLateDay.schoolTotal.numTeachers}
+              </TableCell>
               <TableCell className="dashboard-cell">{counts.lateDay}</TableCell>
             </TableRow>
           </TableBody>
