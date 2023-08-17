@@ -26,14 +26,13 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const BASE_URL = "https://cccopilot-server.onrender.com"
+// const BASE_URL = "https://cccopilot-server.onrender.com"
 const PORT = process.env.PORT || 4000
-console.log(process.env.PORT)
 
 //routes
-app.use(BASE_URL + "/api/classes", classRoutes);
-app.use(BASE_URL + '/api/school', schoolRoutes);
-app.use(BASE_URL + '/api/waitlist', waitlistRoutes)
+app.use("/api/classes", classRoutes);
+app.use('/api/school', schoolRoutes);
+app.use('/api/waitlist', waitlistRoutes)
 
 //connect to db
 mongoose
