@@ -8,7 +8,8 @@ const {
   getNumWLStudentsByCategory,
   getStudentsOlderThanTargetDate,
   getHistogramData,
-  deleteStudent
+  deleteStudent,
+  getSortedAges
 } = require("../controllers/waitlistController");
 
 const router = express.Router();
@@ -31,5 +32,7 @@ router.get("/dashboard/:category", getNumWLStudentsByCategory);
 router.get('/:selectedDate/:inputMonthsOld', getStudentsOlderThanTargetDate)
 
 router.get('/histogram/data/:selectedDate', getHistogramData)
+
+router.get('/get-sorted-ages', getSortedAges)
 
 module.exports = router;

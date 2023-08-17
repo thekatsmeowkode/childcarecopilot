@@ -3,14 +3,13 @@ const Classroom = require("../models/ClassModel");
 
 CURRENT_WAITLIST_ID = "64cd36161a8b00969deefeb4";
 
-
 function extractDateArguments(dateTimeString) {
-  console.log(dateTimeString)
-  const [datePart, timePart] = dateTimeString.split(' ');
-  const dateParts = datePart.split('-');
-  
+  console.log(dateTimeString);
+  const [datePart, timePart] = dateTimeString.split(" ");
+  const dateParts = datePart.split("-");
+
   if (dateParts.length !== 3) {
-    throw new Error('Invalid date format. Expected format: YYYY-MM-DD');
+    throw new Error("Invalid date format. Expected format: YYYY-MM-DD");
   }
 
   const year = parseInt(dateParts[0]);
@@ -21,15 +20,29 @@ function extractDateArguments(dateTimeString) {
   let minute = 0;
 
   if (timePart) {
-    const [hourPart, minutePart] = timePart.split(':');
+    const [hourPart, minutePart] = timePart.split(":");
     hour = parseInt(hourPart);
     minute = parseInt(minutePart);
   }
 
-  console.log(year, month, day, hour, minute)
+  console.log(year, month, day, hour, minute);
   return new Date(year, month, day, hour, minute);
 }
 
+function calculateAge(birthdate) {
+  const today = moment();
+  const birthMoment = moment(birthdate);
+
+  const years = today.diff(birthMoment, "years");
+  birthMoment.add(years, "years");
+
+  const months = today.diff(birthMoment, "months");
+  birthMoment.add(months, "months");
+
+  const days = today.diff(birthMoment, "days");
+
+  return { years, months, days };
+}
 
 const addStudentWL = async (req, res) => {
   const {
@@ -167,7 +180,7 @@ const deleteStudent = async (req, res) => {
     const waitlist = await Waitlist.findById(CURRENT_WAITLIST_ID);
 
     if (!waitlist) {
-      return res.status(404).json({ error: 'Waitlist not found' });
+      return res.status(404).json({ error: "Waitlist not found" });
     }
 
     const studentIndex = waitlist.students.findIndex(
@@ -175,7 +188,7 @@ const deleteStudent = async (req, res) => {
     );
 
     if (studentIndex === -1) {
-      return res.status(404).json({ error: 'Student not found' });
+      return res.status(404).json({ error: "Student not found" });
     }
 
     waitlist.students.splice(studentIndex, 1);
@@ -327,6 +340,35 @@ const getHistogramData = async (req, res) => {
   }
 };
 
+const getSortedAges = async (req, res) => {
+  try {
+    const waitlist = await Waitlist.findById({ _id: CURRENT_WAITLIST_ID });
+
+    if (!waitlist) {
+      return res.status(404).json({ error: "Waitlist not found" });
+    }
+
+    const order = req.query.order === "asc" ? 1 : -1;
+
+    let sortedStudents = waitlist.students.sort((a, b) => {
+      const ageA = calculateAge(a.birthdate);
+      const ageB = calculateAge(b.birthdate);
+
+      if (ageA.years !== ageB.years) {
+        return order * (ageA.years - ageB.years);
+      }
+      if (ageA.months !== ageB.months) {
+        return order * (ageA.months - ageB.months);
+      }
+      return order * (ageA.days - ageB.days);
+    });
+
+    res.status(200).json(sortedStudents);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   addStudentWL,
   createWaitlist,
@@ -336,5 +378,6 @@ module.exports = {
   getNumWLStudentsByCategory,
   getStudentsOlderThanTargetDate,
   getHistogramData,
-  deleteStudent
+  deleteStudent,
+  getSortedAges
 };
