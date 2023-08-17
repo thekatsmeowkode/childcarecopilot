@@ -17,7 +17,9 @@ app.use((req, res, next) => {
 });
 
 const BASE_URL = "https://cccopilot-server.onrender.com"
-const PORT = process.env.PORT || 3030
+const PORT = process.env.PORT || 4000
+console.log(process.env.PORT)
+
 //routes
 app.use(BASE_URL + "/api/classes", classRoutes);
 app.use(BASE_URL + '/api/school', schoolRoutes);
