@@ -41,14 +41,14 @@ const SortButton = ({
       {sortButton === "asc" ? (
         <span>
           <ArrowCircleUpIcon onClick={() => handleSortClick("asc", toSort)} />
-          {" " + buttonText}
+          <strong>{" " + buttonText}</strong>
         </span>
       ) : (
         <span>
           <ArrowCircleDownIcon
             onClick={() => handleSortClick("desc", toSort)}
           />
-          {" " + buttonText}
+          <strong>{" " + buttonText}</strong>
         </span>
       )}
     </>

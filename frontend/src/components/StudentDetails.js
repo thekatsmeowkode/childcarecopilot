@@ -59,7 +59,7 @@ const StudentDetails = ({ selectedClassName }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell><strong>Name</strong></TableCell>
               <TableCell>
                 <SortButton
                   toSort="birthdate"
@@ -68,10 +68,10 @@ const StudentDetails = ({ selectedClassName }) => {
                   selectedClassName={selectedClassName}
                 />
               </TableCell>
-              <TableCell>Programs</TableCell>
-              <TableCell>Allergies</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Delete</TableCell>
+              <TableCell><strong>Programs</strong></TableCell>
+              <TableCell><strong>Allergies</strong></TableCell>
+              <TableCell><strong>Phone</strong></TableCell>
+              <TableCell><strong>Delete</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

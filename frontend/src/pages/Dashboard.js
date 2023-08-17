@@ -10,6 +10,7 @@ import { fetchData } from "../hooks/useApi";
 import TeacherRequiredSquare from "../components/dashboardSquares/TeacherRequiredSquare";
 
 const Dashboard = React.memo(() => {
+  const [isLoading, setIsLoading] = useState(true);
   const [revenueDetails, setRevenueDetails] = useState(null);
   const [staffCoreHours, setStaffCoreHours] = useState(null);
   const [staffEarlyMorning, setStaffEarlyMorning] = useState(null);
@@ -20,7 +21,6 @@ const Dashboard = React.memo(() => {
   const [histogramData, setHistogramData] = useState(null);
   const [foodData, setFoodData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
-  const [isLoading, setIsLoading] = useState(true);
 
   const getClassRevenue = async () => {
     return await fetchData("api/school/class-revenue", "GET");
@@ -163,12 +163,13 @@ const Dashboard = React.memo(() => {
               )}
             </div>
             <div className="doughnut-box">
-              <h3>Food requirements</h3>
+              <h3>Food Requirements Per Day</h3>
               <div className="doughnut-chart">
                 {foodData && (
                   <DoughnutChart className="doughnut" foodData={foodData} />
                 )}
               </div>
+              <p>Amounts based on 2 snacks per day for 1-3 year olds</p>
             </div>
             {boxPlotData &&
               (boxPlotData,
