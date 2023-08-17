@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 
 // Set up CORS options
 const corsOptions = {
-  origin: 'http://localhost:3000', // Allow requests from this origin
+  origin: 'https://cccopilot.onrender.com', // Allow requests from this origin
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
   credentials: true, // Allow cookies and headers to be sent in the request
 };
