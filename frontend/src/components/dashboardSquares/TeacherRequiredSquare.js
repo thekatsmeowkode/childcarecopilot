@@ -1,4 +1,5 @@
 import { CLASS_NAMES } from "../../constants";
+import '../../css/dashboard.css'
 import {
   Table,
   TableContainer,
