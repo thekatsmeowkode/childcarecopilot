@@ -45,21 +45,21 @@ const BoxPlot = ({ width, height, data }) => {
     }
 
     const { min, q1, median, q3, max } = sumStats;
-
-    const allCircles = groupData.map((value, i) => (
-      <circle
-        key={i}
-        cx={
-          xScale.bandwidth() / 2 -
-          JITTER_WIDTH / 2 +
-          Math.random() * JITTER_WIDTH
-        }
-        cy={yScale(value)}
-        r={2}
-        fill="grey"
-        fillOpacity={0.3}
-      />
-    ));
+    console.log(sumStats)
+    // const allCircles = groupData.map((value, i) => (
+    //   <circle
+    //     key={i}
+    //     cx={
+    //       xScale.bandwidth() / 2 -
+    //       JITTER_WIDTH / 2 +
+    //       Math.random() * JITTER_WIDTH
+    //     }
+    //     cy={yScale(value)}
+    //     r={2}
+    //     fill="grey"
+    //     fillOpacity={0.3}
+    //   />
+    // ));
 
     return (
       <g key={i} transform={`translate(${xScale(group)},0)`}>
