@@ -73,7 +73,7 @@ const BoxPlot = ({ width, height, data }) => {
           stroke="black"
           fill={"#9cd4e4"}
         />
-        {allCircles}
+        {/* {allCircles} */}
       </g>
     );
   });
