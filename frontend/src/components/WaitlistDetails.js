@@ -52,12 +52,14 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
       queryParams = { order: "desc" };
     }
 
-    let sortedStudents = await fetchData(
+    let response = await fetchData(
       "api/waitlist/sort/data/sorted/get-sorted-ages",
       "GET",
       null,
       queryParams
     );
+
+    const sortedStudents = response.students
 
     setWaitlistStudents(sortedStudents)
   };
@@ -102,7 +104,7 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {waitlistStudents.map((student) => (
+            {waitlistStudents && waitlistStudents.map((student) => (
               <TableRow
                 className="waitlist-cells"
                 hover
