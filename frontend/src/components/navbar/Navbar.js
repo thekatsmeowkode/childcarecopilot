@@ -6,11 +6,13 @@ const Navbar = () => {
   return (
     <header>
       <div className="nav-bar">
-        <img
-          className="logo"
-          src={copilotLogo}
-          alt="baby riding on a spaceship that looks like a baby bottle"
-        />
+        <a href="https://www.linkedin.com/in/jayriverking/">
+          <img
+            className="logo"
+            src={copilotLogo}
+            alt="baby riding on a spaceship that looks like a baby bottle"
+          />
+        </a>
         <Link to="/">
           <h1>Child Care Copilot</h1>
         </Link>
