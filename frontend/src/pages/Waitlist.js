@@ -54,10 +54,10 @@ const Waitlist = React.memo(() => {
         {/* displays squares on top of waitlist */}
         {waitlistStudents && <StatusSquares waitlistData={waitlistStudents} />}
       </section>
-      <WaitlistDetails
+      {waitlistStudents && <WaitlistDetails
         waitlistStudents={waitlistStudents}
         setWaitlistStudents={setWaitlistStudents}
-      />
+      />}
     </>
   );
 });

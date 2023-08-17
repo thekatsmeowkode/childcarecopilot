@@ -14,11 +14,11 @@ import {
 import UniversalModal from "./UniversalModal";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
+import SortButton from "./SortButton";
 import { fetchData } from "../hooks/useApi";
 
 const TABLE_HEADINGS = [
   "Child's Name",
-  "Birthdate",
   "Allergies",
   "Parent's Name",
   "Email",
@@ -35,33 +35,16 @@ const TABLE_HEADINGS = [
 const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [sortButton, setSortButton] = useState("asc");
+
+  const headingColors = {
+    backgroundColor: "var(--soft-peach)",
+    fontSize: ".8rem",
+    borderTop: "1px dotted lightgray",
+  };
 
   const handleRowClick = (student) => {
     setIsEditModalOpen(true);
     setSelectedStudent(student);
-  };
-
-  const handleSortClick = async (sortFunc) => {
-    let queryParams = {}
-    
-    if (sortFunc === "asc") {
-      queryParams = { order: "asc" };
-    } else {
-      queryParams = { order: "desc" };
-    }
-
-    let response = await fetchData(
-      "api/waitlist/sort/data/sorted/get-sorted-ages",
-      "GET",
-      null,
-      queryParams
-    );
-
-    const sortedStudents = response.students
-
-    setSortButton(sortFunc === 'asc' ? 'desc' : 'asc')
-    setWaitlistStudents(sortedStudents)
   };
 
   return (
@@ -81,21 +64,26 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
         <Table size="small" sx={{ cursor: "pointer" }} stickyHeader={true}>
           <TableHead>
             <TableRow>
-              <TableCell>
-                {sortButton === "asc" ? (
-                  <ArrowCircleUpIcon onClick={() => handleSortClick("asc")} />
-                ) : (
-                  <ArrowCircleDownIcon onClick={() => handleSortClick("desc")} />
-                )}
+              <TableCell sx={headingColors} className="waitlist-cell">
+                <SortButton
+                  toSort="birthdate"
+                  buttonText="Birthdate"
+                  setWaitlistStudents={setWaitlistStudents}
+                  origin="waitlist"
+                />
+              </TableCell>
+              <TableCell sx={headingColors} className="waitlist-cell">
+                <SortButton
+                  toSort="startDate"
+                  buttonText="Start Date"
+                  setWaitlistStudents={setWaitlistStudents}
+                  origin="waitlist"
+                />
               </TableCell>
               {TABLE_HEADINGS.map((heading) => (
                 <TableCell
                   className="waitlist-cell"
-                  sx={{
-                    backgroundColor: "var(--soft-peach)",
-                    fontSize: ".8rem",
-                    borderTop: "1px dotted lightgray",
-                  }}
+                  sx={headingColors}
                   size="small"
                 >
                   <strong>{heading}</strong>
@@ -104,7 +92,7 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {waitlistStudents && waitlistStudents.map((student) => (
+            {waitlistStudents.map((student) => (
               <TableRow
                 className="waitlist-cells"
                 hover
@@ -112,13 +100,13 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
                 onClick={() => handleRowClick(student)}
               >
                 <TableCell className="waitlist-cell">
+                  {formatDate(student.birthdate)}
+                </TableCell>
+                <TableCell className="waitlist-cell">
                   {formatDate(student.startDate)}
                 </TableCell>
                 <TableCell className="waitlist-cell">
                   {student.childName}
-                </TableCell>
-                <TableCell className="waitlist-cell">
-                  {formatDate(student.birthdate)}
                 </TableCell>
                 <TableCell className="waitlist-cell">
                   {student.allergies}

@@ -47,8 +47,6 @@ const EditStudentWaitlist = ({
     e.preventDefault();
     const student = { ...form };
 
-    console.log(student)
-
     const response = await fetchData("api/waitlist/" + student._id.toString(), "PATCH", student);
 
     setWaitlistStudents(response.students);

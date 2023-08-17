@@ -1,10 +1,16 @@
-const BASE_URL = "https://cccopilot-server.onrender.com/";
+// const BASE_URL = "https://cccopilot-server.onrender.com/";
+const BASE_URL = "http://localhost:3001/";
 
 const createHeaders = () => ({
   "Content-Type": "application/json",
 });
 
-export const fetchData = async (endpoint, method, data = null, queryParams = {}) => {
+export const fetchData = async (
+  endpoint,
+  method,
+  data = null,
+  queryParams = {}
+) => {
   try {
     const queryString = new URLSearchParams(queryParams).toString();
     const options = {
@@ -16,7 +22,10 @@ export const fetchData = async (endpoint, method, data = null, queryParams = {})
       options.body = JSON.stringify(data);
     }
 
-    const response = await fetch(BASE_URL + endpoint, options);
+    const response = await fetch(
+      BASE_URL + endpoint + "?" + queryString,
+      options
+    );
 
     if (!response.ok) {
       throw new Error("Network response was not ok");

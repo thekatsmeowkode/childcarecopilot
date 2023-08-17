@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { PROGRAM_NAMES } from "../constants";
 import UniversalModal from "./UniversalModal";
+import SortButton from "./SortButton";
 
 const StudentDetails = ({ selectedClassName }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +24,7 @@ const StudentDetails = ({ selectedClassName }) => {
   const handleEditClick = (e, student) => {
     //formats a date object into a string representation to pre-populate edit form
     if (e.target.className.includes("delete")) {
-      e.stopPropagation()
+      e.stopPropagation();
       return;
     }
     student.birthdate = formatDate(student.birthdate);
@@ -59,7 +60,14 @@ const StudentDetails = ({ selectedClassName }) => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell>Birthdate ( YYYY-MM-DD )</TableCell>
+              <TableCell>
+                <SortButton
+                  toSort="birthdate"
+                  buttonText="Birthdate"
+                  origin="classes"
+                  selectedClassName={selectedClassName}
+                />
+              </TableCell>
               <TableCell>Programs</TableCell>
               <TableCell>Allergies</TableCell>
               <TableCell>Phone</TableCell>
@@ -96,7 +104,7 @@ const StudentDetails = ({ selectedClassName }) => {
                       </TableCell>
                       <TableCell>{student.allergies}</TableCell>
                       <TableCell>{student.phone}</TableCell>
-                      <TableCell className='delete'>
+                      <TableCell className="delete">
                         <button
                           onClick={(e) => handleDeleteClick(e, student)}
                           className="material-symbols-outlined delete delete-button"
