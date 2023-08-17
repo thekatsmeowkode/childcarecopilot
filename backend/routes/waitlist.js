@@ -33,6 +33,6 @@ router.get('/:selectedDate/:inputMonthsOld', getStudentsOlderThanTargetDate)
 
 router.get('/histogram/data/:selectedDate', getHistogramData)
 
-router.get('/get-sorted-ages', getSortedAges)
+router.get('/sort/get-sorted-ages', getSortedAges)
 
 module.exports = router;

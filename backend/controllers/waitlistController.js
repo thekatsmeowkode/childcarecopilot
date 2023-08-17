@@ -1,5 +1,6 @@
 const Waitlist = require("../models/WaitlistModel");
 const Classroom = require("../models/ClassModel");
+const moment = require('moment')
 
 CURRENT_WAITLIST_ID = "64cd36161a8b00969deefeb4";
 
@@ -363,7 +364,7 @@ const getSortedAges = async (req, res) => {
       return order * (ageA.days - ageB.days);
     });
 
-    res.status(200).json(sortedStudents);
+    res.status(200).json({students:sortedStudents});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
