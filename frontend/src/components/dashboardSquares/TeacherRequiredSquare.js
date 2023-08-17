@@ -33,10 +33,18 @@ const TeacherRequiredSquare = ({
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
-              <TableCell colSpan={2}>{staffCoreHours.title}</TableCell>
-              <TableCell colSpan={2}>{staffEarlyMorning.title}</TableCell>
-              <TableCell colSpan={2}>{staffExtendedDay.title}</TableCell>
-              <TableCell colSpan={2}>{staffLateDay.title}</TableCell>
+              <TableCell colSpan={2}>
+                <strong>{staffCoreHours.title}</strong>
+              </TableCell>
+              <TableCell colSpan={2}>
+                <strong>{staffEarlyMorning.title}</strong>
+              </TableCell>
+              <TableCell colSpan={2}>
+                <strong>{staffExtendedDay.title}</strong>
+              </TableCell>
+              <TableCell colSpan={2}>
+                <strong>{staffLateDay.title}</strong>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -87,7 +95,11 @@ const TeacherRequiredSquare = ({
                 <TableCell>{staffLateDay[classroom]["numStudents"]}</TableCell>
               </TableRow>
             ))}
-            <TableRow>
+            <TableRow
+              sx={{
+                borderRight: "1px dotted lightgray",
+              }}
+            >
               <TableCell>{staffCoreHours.schoolTotal.message}</TableCell>
               <TableCell>{staffCoreHours.schoolTotal.numTeachers}</TableCell>
               <TableCell>{totalStudents}</TableCell>

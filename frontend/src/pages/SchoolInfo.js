@@ -226,7 +226,7 @@ const SchoolInfo = () => {
             value={form.oneTo3SnackMilk}
           />
            <InputGroup.Text id="basic-addon1">
-            ounces
+            ounces per serving
           </InputGroup.Text>
           </InputGroup>
         </Form.Group>
@@ -240,7 +240,7 @@ const SchoolInfo = () => {
             value={form.oneTo3SnackGrains}
           />
            <InputGroup.Text id="basic-addon1">
-            ounces
+            ounces per serving
           </InputGroup.Text>
           </InputGroup>
         </Form.Group>
@@ -254,7 +254,7 @@ const SchoolInfo = () => {
             value={form.oneTo3SnackProtein}
           />
            <InputGroup.Text>
-            ounces
+            ounces per serving
           </InputGroup.Text>
           </InputGroup>
         </Form.Group>
@@ -268,10 +268,11 @@ const SchoolInfo = () => {
             value={form.oneTo3SnackVegFruit}
           />
            <InputGroup.Text >
-            ounces
+            ounces per serving
           </InputGroup.Text>
           </InputGroup>
         </Form.Group>
+        <a href="https://www.ecfr.gov/current/title-7/subtitle-B/chapter-II/subchapter-A/part-226/subpart-E/section-226.20">Food Guidelines</a>
       </section>
       <section>
         <h3>Ratio</h3>
@@ -304,20 +305,13 @@ const SchoolInfo = () => {
           </InputGroup.Text>
           </InputGroup>
         </Form.Group>
-        <Form.Group>
-          <Form.Label>Children Per Emergency Crib</Form.Label>
-          <Form.Control
-            type="number"
-            name="kidsPerEmergencyCrib"
-            onChange={onChangeInput}
-            value={form.kidsPerEmergencyCrib}
-          />
-        </Form.Group>
+        <a href='https://ccmis.dhs.state.ia.us/providerportal/DocumentViewer.aspx?ID=15'>DHS Standards</a>
       </section>
       <UniversalButton
         variant="contained"
         eventHandler={updateSchool}
         customStyles={{
+          maxWidth: '150px',
           margin: ".7rem",
           backgroundColor: "var(--bright-peach)",
           "&:hover": { backgroundColor: "var(--darkest-peach)" },

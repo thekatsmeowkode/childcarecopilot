@@ -26,7 +26,7 @@ const ClassroomDetails = ({ classroom, handleButtonClick }) => {
         </UniversalButton>
       </h4>
       {classroom.students.map((student) =>
-        viewToggled ? <p key={student._id}>{student && student.name}</p> : null
+        viewToggled ? <p key={student._id}>{student.birthdate} {student && student.name}</p> : null
       )}
       <span
         onClick={() => setViewToggled(!viewToggled)}
