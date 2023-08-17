@@ -1,5 +1,6 @@
 import { useState } from "react";
 import UniversalButton from "./UniversalButton";
+import { formatDate } from "../utils/formatDates";
 
 const ClassroomDetails = ({ classroom, handleButtonClick }) => {
   const [viewToggled, setViewToggled] = useState(false);
@@ -26,7 +27,7 @@ const ClassroomDetails = ({ classroom, handleButtonClick }) => {
         </UniversalButton>
       </h4>
       {classroom.students.map((student) =>
-        viewToggled ? <p key={student._id}>{student.birthdate} {student && student.name}</p> : null
+        viewToggled ? <p key={student._id}>{formatDate(student.birthdate)} {student && student.name}</p> : null
       )}
       <span
         onClick={() => setViewToggled(!viewToggled)}
