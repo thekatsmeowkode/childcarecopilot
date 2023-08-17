@@ -10,7 +10,8 @@ const {
   addStudent,
   deleteStudent,
   getStudent,
-  getUpcomingBirthdays
+  getUpcomingBirthdays,
+  getSortedAges
 } = require("../controllers/classController");
 
 const router = express.Router();
@@ -45,5 +46,7 @@ router.get('/:targetClass/students/:studentId', getStudent)
 
 //Get upcoming birthdays
 router.get('/navbar/birthdays', getUpcomingBirthdays)
+
+router.get('/sort/:classroomName/sorted/get-sorted-ages/:toSort', getSortedAges)
 
 module.exports = router;

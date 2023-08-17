@@ -342,6 +342,8 @@ const getHistogramData = async (req, res) => {
 };
 
 const getSortedAges = async (req, res) => {
+  const { toSort } = req.params
+
   try {
     const waitlist = await Waitlist.findById({ _id: CURRENT_WAITLIST_ID });
 
@@ -352,8 +354,8 @@ const getSortedAges = async (req, res) => {
     const order = req.query.order === "asc" ? 1 : -1;
 
     let sortedStudents = waitlist.students.sort((a, b) => {
-      const ageA = calculateAge(a.birthdate);
-      const ageB = calculateAge(b.birthdate);
+      const ageA = calculateAge(a[toSort]);
+      const ageB = calculateAge(b[toSort]);
 
       if (ageA.years !== ageB.years) {
         return order * (ageA.years - ageB.years);

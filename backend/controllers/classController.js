@@ -1,6 +1,7 @@
 const { ObjectId } = require("bson");
 const Classroom = require("../models/ClassModel");
 const mongoose = require("mongoose");
+const moment = require('moment')
 
 const checkIdValidity = (id) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -31,6 +32,21 @@ function extractDateArguments(dateTimeString) {
   // }
   console.log(year, month, day, hour, minute)
   return new Date(year, month, day, hour, minute);
+}
+
+function calculateAge(birthdate) {
+  const today = moment();
+  const birthMoment = moment(birthdate);
+
+  const years = today.diff(birthMoment, "years");
+  birthMoment.add(years, "years");
+
+  const months = today.diff(birthMoment, "months");
+  birthMoment.add(months, "months");
+
+  const days = today.diff(birthMoment, "days");
+
+  return { years, months, days };
 }
 
 const findIndex = (classroom, studentId) => {
@@ -317,6 +333,40 @@ const getUpcomingBirthdays = async (req, res) => {
   }
 };
 
+const getSortedAges = async (req, res) => {
+  const { toSort, classroomName } = req.params
+
+  try {
+    const classroom = await Classroom.findOne({roomName:classroomName});
+    if (!classroom) {
+      return res.status(404).json({ error: "Waitlist not found" });
+    }
+
+    const order = req.query.order === "asc" ? 1 : -1;
+
+    console.log(classroom.students)
+
+    let sortedStudents = classroom.students.sort((a, b) => {
+      const ageA = calculateAge(a[toSort]);
+      const ageB = calculateAge(b[toSort]);
+
+      if (ageA.years !== ageB.years) {
+        return order * (ageA.years - ageB.years);
+      }
+      if (ageA.months !== ageB.months) {
+        return order * (ageA.months - ageB.months);
+      }
+      return order * (ageA.days - ageB.days);
+    });
+
+    console.log(sortedStudents)
+
+    res.status(200).json({students:sortedStudents, roomName:classroomName});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createClassroom,
   getClassrooms,
@@ -328,4 +378,5 @@ module.exports = {
   deleteStudent,
   getStudent,
   getUpcomingBirthdays,
+  getSortedAges
 };
