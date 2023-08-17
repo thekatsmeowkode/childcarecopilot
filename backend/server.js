@@ -11,7 +11,6 @@ const app = express();
 
 //middleware
 app.use(express.json());
-app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
   console.log(req.path, req.method);
@@ -24,6 +23,8 @@ const corsOptions = {
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
   credentials: true, // Allow cookies and headers to be sent in the request
 };
+
+app.use(cors(corsOptions));
 
 const BASE_URL = "https://cccopilot-server.onrender.com"
 const PORT = process.env.PORT || 4000
