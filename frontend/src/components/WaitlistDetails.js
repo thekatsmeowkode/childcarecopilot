@@ -12,9 +12,11 @@ import {
   TableBody,
 } from "@mui/material";
 import UniversalModal from "./UniversalModal";
+import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
+import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
+import { fetchData } from "../hooks/useApi";
 
 const TABLE_HEADINGS = [
-  "Requested Start Date",
   "Child's Name",
   "Birthdate",
   "Allergies",
@@ -33,10 +35,31 @@ const TABLE_HEADINGS = [
 const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [sortButton, setSortButton] = useState("asc");
 
   const handleRowClick = (student) => {
     setIsEditModalOpen(true);
     setSelectedStudent(student);
+  };
+
+  const handleSortClick = async () => {
+    sortButton === "asc" ? setSortButton("desc") : setSortButton("asc");
+    let queryParams = {}
+    
+    if (sortButton === "asc") {
+      queryParams = { order: "asc" };
+    } else {
+      queryParams = { order: "desc" };
+    }
+
+    let sortedStudents = await fetchData(
+      "api/waitlist/sort/data/sorted/get-sorted-ages",
+      "GET",
+      null,
+      queryParams
+    );
+
+    setWaitlistStudents(sortedStudents)
   };
 
   return (
@@ -52,16 +75,24 @@ const WaitlistDetails = ({ setWaitlistStudents, waitlistStudents }) => {
           onClose={() => setIsEditModalOpen(false)}
         />
       )}
-      <TableContainer sx={{ fontSize: ".8rem"}} className="table-container">
+      <TableContainer sx={{ fontSize: ".8rem" }} className="table-container">
         <Table size="small" sx={{ cursor: "pointer" }} stickyHeader={true}>
           <TableHead>
             <TableRow>
+              <TableCell>
+                {sortButton === "asc" ? (
+                  <ArrowCircleUpIcon onClick={handleSortClick} />
+                ) : (
+                  <ArrowCircleDownIcon onClick={handleSortClick} />
+                )}
+              </TableCell>
               {TABLE_HEADINGS.map((heading) => (
-                <TableCell className="waitlist-cell"
+                <TableCell
+                  className="waitlist-cell"
                   sx={{
                     backgroundColor: "var(--soft-peach)",
                     fontSize: ".8rem",
-                    borderTop: '1px dotted lightgray'
+                    borderTop: "1px dotted lightgray",
                   }}
                   size="small"
                 >

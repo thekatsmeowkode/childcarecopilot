@@ -4,8 +4,9 @@ const createHeaders = () => ({
   "Content-Type": "application/json",
 });
 
-export const fetchData = async (endpoint, method, data = null) => {
+export const fetchData = async (endpoint, method, data = null, queryParams = {}) => {
   try {
+    const queryString = new URLSearchParams(queryParams).toString();
     const options = {
       method,
       headers: createHeaders(),
